@@ -1,6 +1,7 @@
 package org.gsh.genidxpage.service.dto;
 
 public class FindBlogPostDto {
+
     private final String year;
     private final String month;
 

@@ -1,10 +1,11 @@
 package org.gsh.genidxpage;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+
 class FakeWebArchiveServer {
+
     WireMockServer instance;
 
     public FakeWebArchiveServer() {

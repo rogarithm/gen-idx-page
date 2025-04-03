@@ -1,5 +1,10 @@
 package org.gsh.genidxpage;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathTemplate;
+
 import com.github.tomakehurst.wiremock.http.Body;
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
@@ -8,25 +13,23 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-
 public class AcceptanceTest {
 
     @DisplayName("요청 연월에 등록된 블로그 글이 web archive에 없으면, 리소스가 존재하지 않음을 응답으로 받는다")
     @Test
     public void receive_not_found_msg_when_send_request() {
         ArchivePageController archivePageController = new ArchivePageController(
-                new WebArchiveApiCaller("http://localhost:8080")
+            new WebArchiveApiCaller("http://localhost:8080")
         );
 
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
         fakeWebArchiveServer.instance.stubFor(get(urlPathTemplate("/posts/{year}/{month}"))
-                .withPathParam("year", equalTo("1999"))
-                .withPathParam("month", equalTo("7"))
-                .willReturn(aResponse().withStatus(500).withResponseBody(
-                        Body.fromOneOf(null, "resource not found", null, null)
-                )));
+            .withPathParam("year", equalTo("1999"))
+            .withPathParam("month", equalTo("7"))
+            .willReturn(aResponse().withStatus(500).withResponseBody(
+                Body.fromOneOf(null, "resource not found", null, null)
+            )));
 
         fakeWebArchiveServer.start();
 
