@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class WebArchiveApiCaller {
+
     private final RestTemplate restTemplate;
 
     public WebArchiveApiCaller(@Value("${webArchive.rootUri}") final String rootUri) {

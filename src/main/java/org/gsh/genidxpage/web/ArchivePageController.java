@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ResponseBody
 @Controller
 public class ArchivePageController {
+
     private final WebArchiveApiCaller webArchiveApiCaller;
 
     public ArchivePageController(final WebArchiveApiCaller webArchiveApiCaller) {
@@ -18,11 +19,12 @@ public class ArchivePageController {
     }
 
     @GetMapping("/posts/{year}/{month}")
-    public ResponseEntity<String> getBlogPost(@PathVariable(value="year") String year,
-                                              @PathVariable(value="month") String month) {
+    public ResponseEntity<String> getBlogPost(@PathVariable(value = "year") String year,
+        @PathVariable(value = "month") String month) {
         FindBlogPostDto dto = new FindBlogPostDto(year, month);
-        ResponseEntity<String> response = webArchiveApiCaller.findBlogPost("/posts/{year}/{month}", dto);
+        ResponseEntity<String> response = webArchiveApiCaller.findBlogPost("/posts/{year}/{month}",
+            dto);
         return ResponseEntity.status(response.getStatusCode())
-                .body(response.getBody());
+            .body(response.getBody());
     }
 }

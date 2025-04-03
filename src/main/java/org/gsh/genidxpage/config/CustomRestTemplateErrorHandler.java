@@ -10,6 +10,7 @@ import java.net.URI;
 public class CustomRestTemplateErrorHandler extends DefaultResponseErrorHandler {
 
     @Override
-    public void handleError(URI url, HttpMethod method, ClientHttpResponse response) throws IOException {
+    public void handleError(URI url, HttpMethod method, ClientHttpResponse response)
+        throws IOException {
     }
 }

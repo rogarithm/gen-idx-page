@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
+
+	id 'checkstyle'
 }
 
 group = 'org.gsh'
@@ -23,6 +25,12 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	testImplementation 'org.wiremock:wiremock-standalone:3.12.1'
+}
+
+checkstyle {
+	maxWarnings = 0 // 설정한 규칙에 맞지 않는 코드가 하나라도 있으면 빌드를 중지한다
+	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+	toolVersion = "10.23.0"
 }
 
 tasks.named('test') {
