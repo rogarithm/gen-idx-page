@@ -33,9 +33,9 @@ class WebArchiveApiCallerTest {
         fakeWebArchiveServer.stop();
     }
 
-    @DisplayName("isArchived() 호출 결과를 ArchivedPageInfo 타입 객체로 직렬화할 수 있다")
+    @DisplayName("isArchived() 호출 결과를 ArchivedPageInfo 타입 객체로 역직렬화할 수 있다")
     @Test
-    public void serialize_response_of_isArchived() throws JsonProcessingException {
+    public void deserialize_response_of_isArchived() throws JsonProcessingException {
         String responseOfIsArchived = """
             {
               "url": "agile.egloos.com/archives/2021/03",
