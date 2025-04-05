@@ -76,10 +76,9 @@ public class FakeWebArchiveServer {
     }
 
     public void respondItHasArchivedPage() {
-        instance.stubFor(get(urlPathTemplate(
-            "wayback/available?url=agile.egloos.com/archives/{year}/{month}&timestamp=20240101"))
-            .withPathParam("year", equalTo("2021"))
-            .withPathParam("month", equalTo("3"))
+        instance.stubFor(get(urlPathTemplate("/wayback/available"))
+            .withQueryParam("url", equalTo("agile.egloos.com/archives/2021/3"))
+            .withQueryParam("timestamp", equalTo("20240101"))
             .willReturn(aResponse().withStatus(200).withBody(
                     """
                         {

@@ -26,7 +26,7 @@ class WebArchiveApiCallerTest {
         fakeWebArchiveServer.start();
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
-        //TODO isArchived에서 json 파싱한 결과를 가지고 아카이빙된 글이 있는지 확인해야 한다
+
         boolean isArchived = caller.isArchived("/wayback/available?url={url}&timestamp={timestamp}", dto);
         assertThat(isArchived).isTrue();
 
