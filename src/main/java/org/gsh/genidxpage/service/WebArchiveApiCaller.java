@@ -1,6 +1,7 @@
 package org.gsh.genidxpage.service;
 
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
+import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.service.dto.FindBlogPostDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -19,5 +20,19 @@ public class WebArchiveApiCaller {
 
     public ResponseEntity<String> findBlogPost(final String restUrl, final FindBlogPostDto dto) {
         return restTemplate.getForEntity(restUrl, String.class, dto.getYear(), dto.getMonth());
+    }
+
+    public boolean isArchived(
+        @Value("${webArchive.checkArchivedUri}") final String checkArchivedUri,
+        final CheckPostArchivedDto dto
+    ) {
+        ResponseEntity<String> forEntity = restTemplate.getForEntity(
+            checkArchivedUri,
+            String.class,
+            dto.getUrl(),
+            dto.getTimestamp()
+        );
+
+        return forEntity.hasBody();
     }
 }

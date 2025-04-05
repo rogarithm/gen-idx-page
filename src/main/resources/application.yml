@@ -3,3 +3,4 @@ spring:
     name: genidxpage
 webArchive:
   rootUri: x
+  checkArchivedUri: /wayback/available?url={url}&timestamp={timestamp}
