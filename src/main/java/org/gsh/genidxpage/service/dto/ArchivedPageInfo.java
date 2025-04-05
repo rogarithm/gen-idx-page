@@ -6,14 +6,14 @@ public class ArchivedPageInfo {
 
     private String url;
     @JsonProperty("archived_snapshots")
-    private Object archivedSnapshots;
+    private ArchivedSnapshots archivedSnapshots;
     @JsonProperty("timestamp")
     private String timestamp;
 
     public ArchivedPageInfo() {
     }
 
-    public ArchivedPageInfo(String url, Object archivedSnapshots, String timestamp) {
+    public ArchivedPageInfo(String url, ArchivedSnapshots archivedSnapshots, String timestamp) {
         this.url = url;
         this.archivedSnapshots = archivedSnapshots;
         this.timestamp = timestamp;
@@ -21,5 +21,66 @@ public class ArchivedPageInfo {
 
     public String getUrl() {
         return url;
+    }
+
+    public ArchivedSnapshots getArchivedSnapshots() {
+        return archivedSnapshots;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    private static class ArchivedSnapshots {
+
+        @JsonProperty("closest")
+        private ClosestSnapshot snapshot;
+
+        public ArchivedSnapshots() {
+        }
+
+        public ArchivedSnapshots(ClosestSnapshot snapshot) {
+            this.snapshot = snapshot;
+        }
+
+        public ClosestSnapshot getSnapshot() {
+            return snapshot;
+        }
+    }
+
+    private static class ClosestSnapshot {
+
+        private String status;
+        private Boolean available;
+        @JsonProperty("url")
+        private String url;
+        @JsonProperty("timestamp")
+        private String timestamp;
+
+        public ClosestSnapshot() {
+        }
+
+        public ClosestSnapshot(String status, Boolean available, String url, String timestamp) {
+            this.status = status;
+            this.available = available;
+            this.url = url;
+            this.timestamp = timestamp;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public Boolean getAvailable() {
+            return available;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public String getTimestamp() {
+            return timestamp;
+        }
     }
 }
