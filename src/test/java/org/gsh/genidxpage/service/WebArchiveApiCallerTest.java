@@ -3,7 +3,11 @@ package org.gsh.genidxpage.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.FakeWebArchiveServer;
+import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,5 +31,32 @@ class WebArchiveApiCallerTest {
         assertThat(isArchived).isTrue();
 
         fakeWebArchiveServer.stop();
+    }
+
+    @DisplayName("isArchived() 호출 결과를 ArchivedPageInfo 타입 객체로 직렬화할 수 있다")
+    @Test
+    public void serialize_response_of_isArchived() throws JsonProcessingException {
+        String responseOfIsArchived = """
+            {
+              "url": "agile.egloos.com/archives/2021/03",
+              "archived_snapshots": {
+                "closest": {
+                  "status": "200",
+                  "available": true,
+                  "url": "http://web.archive.org/web/20230614220926/http://agile.egloos.com/archives/2021/03",
+                  "timestamp": "20230614220926"
+                }
+              },
+              "timestamp": "20240101"
+            }
+            """;
+        ObjectMapper mapper = new ObjectMapper();
+        ArchivedPageInfo obj = mapper.readValue(
+            responseOfIsArchived,
+            ArchivedPageInfo.class
+        );
+
+        Assertions.assertThat(obj.getUrl()).isEqualTo("agile.egloos.com/archives/2021/03");
+        Assertions.assertThat(obj.getArchivedSnapshots()).isNotNull();
     }
 }
