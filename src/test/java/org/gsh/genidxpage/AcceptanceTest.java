@@ -24,12 +24,7 @@ public class AcceptanceTest {
 
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
-        fakeWebArchiveServer.instance.stubFor(get(urlPathTemplate("/posts/{year}/{month}"))
-            .withPathParam("year", equalTo("1999"))
-            .withPathParam("month", equalTo("7"))
-            .willReturn(aResponse().withStatus(500).withResponseBody(
-                Body.fromOneOf(null, "resource not found", null, null)
-            )));
+        fakeWebArchiveServer.respondNotFoundForRequestWithNoResource();
 
         fakeWebArchiveServer.start();
 
