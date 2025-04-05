@@ -9,7 +9,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.http.Body;
 
-class FakeWebArchiveServer {
+public class FakeWebArchiveServer {
 
     WireMockServer instance;
 
@@ -69,6 +69,31 @@ class FakeWebArchiveServer {
                           </td>
                         </table>
                         </html>
+                        """
+                )
+            )
+        );
+    }
+
+    public void respondItHasArchivedPage() {
+        instance.stubFor(get(urlPathTemplate(
+            "wayback/available?url=agile.egloos.com/archives/{year}/{month}&timestamp=20240101"))
+            .withPathParam("year", equalTo("2021"))
+            .withPathParam("month", equalTo("3"))
+            .willReturn(aResponse().withStatus(200).withBody(
+                    """
+                        {
+                          "url": "agile.egloos.com/archives/2021/03",
+                          "archived_snapshots": {
+                            "closest": {
+                              "status": "200",
+                              "available": true,
+                              "url": "http://web.archive.org/web/20230614220926/http://agile.egloos.com/archives/2021/03",
+                              "timestamp": "20230614220926"
+                            }
+                          },
+                          "timestamp": "20240101"
+                        }
                         """
                 )
             )
