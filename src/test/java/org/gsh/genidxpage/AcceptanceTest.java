@@ -38,4 +38,27 @@ public class AcceptanceTest {
 
         fakeWebArchiveServer.stop();
     }
+
+    @DisplayName("요청 연월에 등록된 블로그 글이 web archive에 있으면, 해당 월에 올라온 블로그 글 목록 페이지를 응답으로 받는다")
+    @Test
+    public void receive_post_list_page_when_send_valid_request() {
+        ArchivePageController archivePageController = new ArchivePageController(
+            new WebArchiveApiCaller("http://localhost:8080")
+        );
+
+        FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
+
+        fakeWebArchiveServer.respondBlogPostListInGivenYearMonth("2021", "3");
+
+        fakeWebArchiveServer.start();
+
+        // 서버는 web archive server에 아카이브된 주어진 연월의 블로그 글 목록 페이지를 요청한다
+        ResponseEntity<String> response = archivePageController.getBlogPost("2021", "3");
+
+        // web archive server는 주어진 연월의 블로그 글 목록 페이지를 반환한다
+        Assertions.assertThat(response.getBody()).containsPattern("POST_BODY");
+        Assertions.assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+
+        fakeWebArchiveServer.stop();
+    }
 }
