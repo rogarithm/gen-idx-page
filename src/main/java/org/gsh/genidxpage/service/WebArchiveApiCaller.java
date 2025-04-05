@@ -1,6 +1,10 @@
 package org.gsh.genidxpage.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Objects;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
+import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.service.dto.FindBlogPostDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,13 +30,22 @@ public class WebArchiveApiCaller {
         @Value("${webArchive.checkArchivedUri}") final String checkArchivedUri,
         final CheckPostArchivedDto dto
     ) {
-        ResponseEntity<String> forEntity = restTemplate.getForEntity(
+        ResponseEntity<String> archivedPageInfo = restTemplate.getForEntity(
             checkArchivedUri,
             String.class,
             dto.getUrl(),
             dto.getTimestamp()
         );
 
-        return forEntity.hasBody();
+        String response = archivedPageInfo.getBody();
+        ObjectMapper mapper = new ObjectMapper();
+        ArchivedPageInfo pageInfo = null;
+        try {
+            pageInfo = mapper.readValue(response, ArchivedPageInfo.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return pageInfo.getArchivedSnapshots() != null;
     }
 }
