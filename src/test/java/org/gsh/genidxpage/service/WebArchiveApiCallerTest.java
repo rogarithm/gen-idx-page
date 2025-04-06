@@ -32,6 +32,14 @@ class WebArchiveApiCallerTest {
         );
 
         assertThat(archivedPageInfo.accessibleUrl().contains("2021/03")).isTrue();
+
+        fakeWebArchiveServer.respondItHasNoArchivedPage();
+        ArchivedPageInfo noArchivedPageInfo = caller.findArchivedPageInfo(
+            "/wayback/available?url={url}&timestamp={timestamp}",
+            dto
+        );
+        assertThat(caller.isArchived(noArchivedPageInfo)).isFalse();
+
         fakeWebArchiveServer.stop();
     }
 
@@ -40,10 +48,14 @@ class WebArchiveApiCallerTest {
     public void check_if_a_page_to_find_is_archived_in_web_archive_server() {
         WebArchiveApiCaller caller = new WebArchiveApiCaller("http://localhost:8080", CustomRestTemplateBuilder.get());
         ArchivedPageInfo mockedPageInfo = mock(ArchivedPageInfo.class);
-
-        when(mockedPageInfo.accessibleUrl()).thenReturn("/wayback/available?url={url}&timestamp={timestamp}");
+        when(mockedPageInfo.isAccessible()).thenReturn(true);
 
         assertThat(caller.isArchived(mockedPageInfo)).isTrue();
+
+        ArchivedPageInfo mockedNoPageInfo = mock(ArchivedPageInfo.class);
+        when(mockedNoPageInfo.isAccessible()).thenReturn(false);
+
+        assertThat(caller.isArchived(mockedNoPageInfo)).isFalse();
     }
 
     @DisplayName("isArchived() 호출 결과를 ArchivedPageInfo 타입 객체로 역직렬화할 수 있다")

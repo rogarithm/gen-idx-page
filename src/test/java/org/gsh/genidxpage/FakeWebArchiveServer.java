@@ -98,4 +98,20 @@ public class FakeWebArchiveServer {
             )
         );
     }
+
+    public void respondItHasNoArchivedPage() {
+        instance.stubFor(get(urlPathTemplate("/wayback/available"))
+            .withQueryParam("url", equalTo("agile.egloos.com/archives/2021/3"))
+            .withQueryParam("timestamp", equalTo("20240101"))
+            .willReturn(aResponse().withStatus(200).withBody(
+                """
+                    {
+                      "url": "agile.egloos.com/archives/2021/03",
+                      "archived_snapshots": {}
+                    }
+                    """
+                )
+            )
+        );
+    }
 }
