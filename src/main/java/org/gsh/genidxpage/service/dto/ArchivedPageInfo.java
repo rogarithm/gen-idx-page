@@ -31,6 +31,10 @@ public class ArchivedPageInfo {
         return timestamp;
     }
 
+    public boolean isAccessible() {
+        return archivedSnapshots.getSnapshot() != null;
+    }
+
     public String accessibleUrl() {
         return archivedSnapshots.getSnapshot().getUrl();
     }

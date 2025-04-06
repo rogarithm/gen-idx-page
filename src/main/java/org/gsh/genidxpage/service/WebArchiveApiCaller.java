@@ -45,6 +45,6 @@ public class WebArchiveApiCaller {
     }
 
     public boolean isArchived(final ArchivedPageInfo archivedPageInfo) {
-        return archivedPageInfo.accessibleUrl() != null;
+        return archivedPageInfo.isAccessible();
     }
 }
