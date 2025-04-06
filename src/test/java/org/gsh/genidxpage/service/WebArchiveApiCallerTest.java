@@ -14,6 +14,25 @@ import org.junit.jupiter.api.Test;
 
 class WebArchiveApiCallerTest {
 
+    @DisplayName("찾으려는 페이지가 web archive 서버에 어떻게 아카이빙되어 있는지 확인할 수 있다")
+    @Test
+    public void find_how_a_page_is_archived_in_web_archive_server() {
+        WebArchiveApiCaller caller = new WebArchiveApiCaller("http://localhost:8080", CustomRestTemplateBuilder.get());
+
+        FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
+        fakeWebArchiveServer.respondItHasArchivedPage();
+        fakeWebArchiveServer.start();
+
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+        ArchivedPageInfo archivedPageInfo = caller.findArchivedPageInfo(
+            "/wayback/available?url={url}&timestamp={timestamp}",
+            dto
+        );
+
+        assertThat(archivedPageInfo.accessibleUrl().contains("2021/03")).isTrue();
+        fakeWebArchiveServer.stop();
+    }
+
     @DisplayName("찾으려는 페이지가 web archive 서버에 아카이빙되어 있는지 확인할 수 있다")
     @Test
     public void check_if_a_page_to_find_is_archived_in_web_archive_server() {
