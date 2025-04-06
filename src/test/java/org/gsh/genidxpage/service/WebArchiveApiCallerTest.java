@@ -58,30 +58,21 @@ class WebArchiveApiCallerTest {
         assertThat(caller.isArchived(mockedNoPageInfo)).isFalse();
     }
 
-    @DisplayName("isArchived() 호출 결과를 ArchivedPageInfo 타입 객체로 역직렬화할 수 있다")
+    @DisplayName("web archive 응답 json 데이터를 ArchivedPageInfo 타입 객체로 역직렬화할 수 있다")
     @Test
-    public void deserialize_response_of_isArchived() throws JsonProcessingException {
-        String responseOfIsArchived = """
-            {
-              "url": "agile.egloos.com/archives/2021/03",
-              "archived_snapshots": {
-                "closest": {
-                  "status": "200",
-                  "available": true,
-                  "url": "http://web.archive.org/web/20230614220926/http://agile.egloos.com/archives/2021/03",
-                  "timestamp": "20230614220926"
-                }
-              },
-              "timestamp": "20240101"
-            }
-            """;
-        ObjectMapper mapper = new ObjectMapper();
-        ArchivedPageInfo obj = mapper.readValue(
-            responseOfIsArchived,
-            ArchivedPageInfo.class
-        );
+    public void deserialize_response_from_web_archive_server() throws JsonProcessingException {
+        WebArchiveApiCaller caller = new WebArchiveApiCaller("http://localhost:8080", CustomRestTemplateBuilder.get());
 
-        Assertions.assertThat(obj.getUrl()).isEqualTo("agile.egloos.com/archives/2021/03");
-        Assertions.assertThat(obj.getArchivedSnapshots()).isNotNull();
+        FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
+        fakeWebArchiveServer.respondItHasArchivedPage();
+        fakeWebArchiveServer.start();
+
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+        Assertions.assertThat(caller.findArchivedPageInfo(
+            "/wayback/available?url={url}&timestamp={timestamp}",
+            dto
+        )).isInstanceOf(ArchivedPageInfo.class);
+
+        fakeWebArchiveServer.stop();
     }
 }
