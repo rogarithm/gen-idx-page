@@ -1,12 +1,12 @@
 package org.gsh.genidxpage.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.FakeWebArchiveServer;
+import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +17,7 @@ class WebArchiveApiCallerTest {
     @DisplayName("찾으려는 페이지가 web archive 서버에 아카이빙되어 있는지 확인할 수 있다")
     @Test
     public void check_if_a_page_to_find_is_archived_in_web_archive_server() {
-        WebArchiveApiCaller caller = new WebArchiveApiCaller("http://localhost:8080");
+        WebArchiveApiCaller caller = new WebArchiveApiCaller("http://localhost:8080", CustomRestTemplateBuilder.get());
 
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 

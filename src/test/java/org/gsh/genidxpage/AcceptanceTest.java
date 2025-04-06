@@ -1,12 +1,7 @@
 package org.gsh.genidxpage;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathTemplate;
-
-import com.github.tomakehurst.wiremock.http.Body;
 import org.assertj.core.api.Assertions;
+import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +14,7 @@ public class AcceptanceTest {
     @Test
     public void receive_not_found_msg_when_send_request() {
         ArchivePageController archivePageController = new ArchivePageController(
-            new WebArchiveApiCaller("http://localhost:8080")
+            new WebArchiveApiCaller("http://localhost:8080", CustomRestTemplateBuilder.get())
         );
 
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
@@ -43,7 +38,7 @@ public class AcceptanceTest {
     @Test
     public void receive_post_list_page_when_send_valid_request() {
         ArchivePageController archivePageController = new ArchivePageController(
-            new WebArchiveApiCaller("http://localhost:8080")
+            new WebArchiveApiCaller("http://localhost:8080", CustomRestTemplateBuilder.get())
         );
 
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
