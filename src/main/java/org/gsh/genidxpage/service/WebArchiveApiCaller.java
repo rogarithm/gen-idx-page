@@ -44,26 +44,7 @@ public class WebArchiveApiCaller {
         }
     }
 
-    public boolean isArchived(
-        @Value("${webArchive.checkArchivedUri}") final String checkArchivedUri,
-        final CheckPostArchivedDto dto
-    ) {
-        ResponseEntity<String> archivedPageInfo = restTemplate.getForEntity(
-            checkArchivedUri,
-            String.class,
-            dto.getUrl(),
-            dto.getTimestamp()
-        );
-
-        String response = archivedPageInfo.getBody();
-        ObjectMapper mapper = new ObjectMapper();
-        ArchivedPageInfo pageInfo = null;
-        try {
-            pageInfo = mapper.readValue(response, ArchivedPageInfo.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-
-        return pageInfo.getArchivedSnapshots() != null;
+    public boolean isArchived(final ArchivedPageInfo archivedPageInfo) {
+        return archivedPageInfo.accessibleUrl() != null;
     }
 }
