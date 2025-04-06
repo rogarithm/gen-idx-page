@@ -1,6 +1,8 @@
 package org.gsh.genidxpage.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,19 +39,11 @@ class WebArchiveApiCallerTest {
     @Test
     public void check_if_a_page_to_find_is_archived_in_web_archive_server() {
         WebArchiveApiCaller caller = new WebArchiveApiCaller("http://localhost:8080", CustomRestTemplateBuilder.get());
+        ArchivedPageInfo mockedPageInfo = mock(ArchivedPageInfo.class);
 
-        FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
+        when(mockedPageInfo.accessibleUrl()).thenReturn("/wayback/available?url={url}&timestamp={timestamp}");
 
-        fakeWebArchiveServer.respondItHasArchivedPage();
-
-        fakeWebArchiveServer.start();
-
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
-
-        boolean isArchived = caller.isArchived("/wayback/available?url={url}&timestamp={timestamp}", dto);
-        assertThat(isArchived).isTrue();
-
-        fakeWebArchiveServer.stop();
+        assertThat(caller.isArchived(mockedPageInfo)).isTrue();
     }
 
     @DisplayName("isArchived() 호출 결과를 ArchivedPageInfo 타입 객체로 역직렬화할 수 있다")
