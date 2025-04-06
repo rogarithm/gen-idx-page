@@ -31,6 +31,10 @@ public class ArchivedPageInfo {
         return timestamp;
     }
 
+    public String accessibleUrl() {
+        return archivedSnapshots.getSnapshot().getUrl();
+    }
+
     private static class ArchivedSnapshots {
 
         @JsonProperty("closest")
