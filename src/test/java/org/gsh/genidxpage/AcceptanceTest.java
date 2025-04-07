@@ -14,7 +14,9 @@ public class AcceptanceTest {
     @Test
     public void receive_not_found_msg_when_send_request() {
         ArchivePageController archivePageController = new ArchivePageController(
-            new WebArchiveApiCaller("http://localhost:8080", CustomRestTemplateBuilder.get())
+            new WebArchiveApiCaller("http://localhost:8080",
+                "/wayback/available?url={url}&timestamp={timestamp}",
+                CustomRestTemplateBuilder.get())
         );
 
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
@@ -38,7 +40,9 @@ public class AcceptanceTest {
     @Test
     public void receive_post_list_page_when_send_valid_request() {
         ArchivePageController archivePageController = new ArchivePageController(
-            new WebArchiveApiCaller("http://localhost:8080", CustomRestTemplateBuilder.get())
+            new WebArchiveApiCaller("http://localhost:8080",
+                "/wayback/available?url={url}&timestamp={timestamp}",
+                CustomRestTemplateBuilder.get())
         );
 
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
