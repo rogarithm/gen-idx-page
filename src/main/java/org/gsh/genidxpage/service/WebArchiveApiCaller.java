@@ -50,4 +50,8 @@ public class WebArchiveApiCaller {
     public boolean isArchived(final ArchivedPageInfo archivedPageInfo) {
         return archivedPageInfo.isAccessible();
     }
+
+    public ResponseEntity<String> findBlogPostPage(final ArchivedPageInfo archivedPageInfo) {
+        return restTemplate.getForEntity(archivedPageInfo.accessibleUrl(), String.class);
+    }
 }
