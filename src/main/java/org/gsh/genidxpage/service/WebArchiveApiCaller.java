@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
-import org.gsh.genidxpage.service.dto.FindBlogPostDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +23,6 @@ public class WebArchiveApiCaller {
     ) {
         this.restTemplate = restTemplateBuilder.rootUri(rootUri).build();
         this.checkArchivedUri = checkArchivedUri;
-    }
-
-    public ResponseEntity<String> findBlogPost(final String restUrl, final FindBlogPostDto dto) {
-        return restTemplate.getForEntity(restUrl, String.class, dto.getYear(), dto.getMonth());
     }
 
     public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
