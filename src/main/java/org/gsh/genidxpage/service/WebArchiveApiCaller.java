@@ -15,19 +15,22 @@ import org.springframework.web.client.RestTemplate;
 public class WebArchiveApiCaller {
 
     private final RestTemplate restTemplate;
+    private final String checkArchivedUri;
 
-    public WebArchiveApiCaller(@Value("${webArchive.rootUri}") final String rootUri, RestTemplateBuilder restTemplateBuilder) {
+    public WebArchiveApiCaller(
+        @Value("${webArchive.rootUri}") final String rootUri,
+        @Value("${webArchive.checkArchivedUri}") String checkArchivedUri,
+        RestTemplateBuilder restTemplateBuilder
+    ) {
         this.restTemplate = restTemplateBuilder.rootUri(rootUri).build();
+        this.checkArchivedUri = checkArchivedUri;
     }
 
     public ResponseEntity<String> findBlogPost(final String restUrl, final FindBlogPostDto dto) {
         return restTemplate.getForEntity(restUrl, String.class, dto.getYear(), dto.getMonth());
     }
 
-    public ArchivedPageInfo findArchivedPageInfo(
-        @Value("${webArchive.checkArchivedUri}") final String checkArchivedUri,
-        final CheckPostArchivedDto dto
-    ) {
+    public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
         ResponseEntity<String> archivedPageInfo = restTemplate.getForEntity(
             checkArchivedUri,
             String.class,
