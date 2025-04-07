@@ -69,7 +69,8 @@ class WebArchiveApiCallerTest {
         fakeWebArchiveServer.start();
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
-        Assertions.assertThat(caller.findArchivedPageInfo(dto)).isInstanceOf(ArchivedPageInfo.class);
+        Assertions.assertThat(caller.findArchivedPageInfo(dto))
+            .isInstanceOf(ArchivedPageInfo.class);
 
         fakeWebArchiveServer.stop();
     }
