@@ -21,17 +21,17 @@ public class AcceptanceTest {
 
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
-        fakeWebArchiveServer.respondNotFoundForRequestWithNoResource();
+        fakeWebArchiveServer.respondItHasNoArchivedPage();
 
         fakeWebArchiveServer.start();
 
         // 서버는 web archive server에 아카이브된 블로그 글을 요청한다
-        ResponseEntity<String> response = archivePageController.getBlogPost("1999", "7");
+        ResponseEntity<String> response = archivePageController.getBlogPostListPage("1999", "7");
 
         // web archive server는 처리할 수 없음 메시지를 반환한다
         // 서버는 처리할 수 없는 요청임을 클라이언트에게 알린다
         Assertions.assertThat(response.getBody()).isEqualTo("resource not found");
-        Assertions.assertThat(response.getStatusCode().is5xxServerError()).isTrue();
+        Assertions.assertThat(response.getStatusCode().is4xxClientError()).isTrue();
 
         fakeWebArchiveServer.stop();
     }
@@ -47,12 +47,13 @@ public class AcceptanceTest {
 
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
+        fakeWebArchiveServer.respondItHasArchivedPage();
         fakeWebArchiveServer.respondBlogPostListInGivenYearMonth("2021", "3");
 
         fakeWebArchiveServer.start();
 
         // 서버는 web archive server에 아카이브된 주어진 연월의 블로그 글 목록 페이지를 요청한다
-        ResponseEntity<String> response = archivePageController.getBlogPost("2021", "3");
+        ResponseEntity<String> response = archivePageController.getBlogPostListPage("2021", "3");
 
         // web archive server는 주어진 연월의 블로그 글 목록 페이지를 반환한다
         Assertions.assertThat(response.getBody()).containsPattern("POST_BODY");
