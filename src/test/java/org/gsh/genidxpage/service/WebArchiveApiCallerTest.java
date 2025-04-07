@@ -32,7 +32,9 @@ class WebArchiveApiCallerTest {
         assertThat(archivedPageInfo.accessibleUrl().contains("2021/03")).isTrue();
 
         fakeWebArchiveServer.respondItHasNoArchivedPage();
-        ArchivedPageInfo noArchivedPageInfo = caller.findArchivedPageInfo(dto);
+        CheckPostArchivedDto dto2 = new CheckPostArchivedDto("1999", "7");
+        ArchivedPageInfo noArchivedPageInfo = caller.findArchivedPageInfo(dto2);
+
         assertThat(caller.isArchived(noArchivedPageInfo)).isFalse();
 
         fakeWebArchiveServer.stop();

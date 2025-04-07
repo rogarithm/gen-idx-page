@@ -4,6 +4,7 @@ import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.service.dto.FindBlogPostDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +40,8 @@ public class ArchivePageController {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
 
         if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("resource not found");
         }
 
         ResponseEntity<String> blogPost = webArchiveApiCaller.findBlogPostPage(archivedPageInfo);
