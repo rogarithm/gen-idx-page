@@ -6,7 +6,8 @@ public class CheckPostArchivedDto {
     private final String timestamp;
 
     public CheckPostArchivedDto(String year, String month) {
-        this.url = "agile.egloos.com/archives/" + year + "/" + month;
+        this.url = "agile.egloos.com/archives/" + year + "/" + String.format("%02d",
+            Integer.parseInt(month));
         this.timestamp = "20240101";
     }
 
