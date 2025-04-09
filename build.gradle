@@ -38,3 +38,10 @@ tasks.named('test') {
 	useJUnitPlatform()
 	jvmArgs '-Xshare:off'
 }
+
+editorconfig {
+    includes = ['src/**/*.java', 'build.gradle']  // 자바 파일과 build.gradle 파일을 포함
+    excludes = ['build/**', 'out/**', 'config/**']  // 빌드 및 출력 디렉터리, 포맷터 관련 파일 제외
+}
+
+check.dependsOn editorconfigCheck
