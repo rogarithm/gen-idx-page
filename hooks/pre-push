@@ -10,8 +10,11 @@ if now_branch_nm.match(branch_nm_convention).nil?
 end
 
 checkstyle_result = `./gradlew checkstyleMain checkstyleTest 2>/dev/null`
-is_failed = checkstyle_result.split("\n").select {|l| l.match(/^> Task :checkstyleMain FAILED.*|^> Task :checkstyleTest FAILED.*/)}
-if is_failed != []
+is_checkstyle_failed = checkstyle_result.split("\n")
+  .select {|l|
+    l.match(/^> Task :checkstyleMain FAILED.*|^> Task :checkstyleTest FAILED.*/)
+  } != []
+if is_checkstyle_failed
   puts 'failed to format code as configured in checkstyle!'
   puts 'run ./gradlew check for detail'
   exit 1
