@@ -15,7 +15,8 @@ public class WebPageParserTest {
 	public void find_matching_html_elems_from_post_list_html_page() throws IOException {
 		File input = new File("src/test/resources/2021-03-full-response.html");
 		Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
-		Elements resultDivs = doc.select(".POST_BODY > a");
+		WebPageParser webPageParser = new WebPageParser();
+		Elements resultDivs = webPageParser.findBy(doc, ".POST_BODY > a");
 
 		Assertions.assertThat(resultDivs.get(0).text())
 			.isEqualTo("올해 첫 AC2 과정 40기가 곧 열립니다");
