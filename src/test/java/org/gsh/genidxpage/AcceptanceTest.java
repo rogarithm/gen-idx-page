@@ -36,9 +36,9 @@ public class AcceptanceTest {
         fakeWebArchiveServer.stop();
     }
 
-    @DisplayName("요청 연월에 등록된 블로그 글이 web archive에 있으면, 해당 월에 올라온 블로그 글 목록 페이지를 응답으로 받는다")
+    @DisplayName("요청 연월에 등록된 블로그 글이 web archive에 있으면, 해당 월에 올라온 블로그 글에 접근할 수 있는 링크 목록을 응답으로 받는다")
     @Test
-    public void receive_post_list_page_when_send_valid_request() {
+    public void receive_post_link_list_when_send_valid_request() {
         ArchivePageController archivePageController = new ArchivePageController(
             new WebArchiveApiCaller("http://localhost:8080",
                 "/wayback/available?url={url}&timestamp={timestamp}",
@@ -56,7 +56,9 @@ public class AcceptanceTest {
         ResponseEntity<String> response = archivePageController.getBlogPostListPage("2021", "3");
 
         // web archive server는 주어진 연월의 블로그 글 목록 페이지를 반환한다
-        Assertions.assertThat(response.getBody()).containsPattern("POST_BODY");
+		Assertions.assertThat(response.getBody()).isEqualTo(
+				"<a href=\"https://web.archive.org/web/20230614220926/http://agile.egloos.com/5946833\">올해 첫 AC2 과정 40기가 곧 열립니다</a>"
+		);
         Assertions.assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
 
         fakeWebArchiveServer.stop();
