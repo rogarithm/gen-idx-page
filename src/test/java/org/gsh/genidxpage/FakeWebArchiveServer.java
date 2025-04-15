@@ -25,7 +25,7 @@ public class FakeWebArchiveServer {
     }
 
     public void respondBlogPostListInGivenYearMonth(String year, String month) {
-        instance.stubFor(get(urlPathTemplate("/post-lists/{year}/{month}"))
+        instance.stubFor(get(urlPathTemplate("/post-links/{year}/{month}"))
             .withPathParam("year", equalTo(year))
             .withPathParam("month", equalTo(month))
             .willReturn(aResponse().withStatus(200)

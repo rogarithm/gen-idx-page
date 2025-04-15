@@ -22,8 +22,8 @@ public class ArchivePageController {
         this.webArchiveApiCaller = webArchiveApiCaller;
     }
 
-    @GetMapping("/post-lists/{year}/{month}")
-    public ResponseEntity<String> getBlogPostListPage(
+    @GetMapping("/post-links/{year}/{month}")
+    public ResponseEntity<String> getBlogPostLinks(
         @PathVariable(value = "year") String year,
         @PathVariable(value = "month") String month
     ) {
