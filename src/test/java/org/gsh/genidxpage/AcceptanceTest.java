@@ -56,9 +56,9 @@ public class AcceptanceTest {
         ResponseEntity<String> response = archivePageController.getBlogPostListPage("2021", "3");
 
         // web archive server는 주어진 연월의 블로그 글 목록 페이지를 반환한다
-		Assertions.assertThat(response.getBody()).isEqualTo(
-				"<a href=\"https://web.archive.org/web/20230614220926/http://agile.egloos.com/5946833\">올해 첫 AC2 과정 40기가 곧 열립니다</a>"
-		);
+        Assertions.assertThat(response.getBody()).isEqualTo(
+            "<a href=\"https://web.archive.org/web/20230614220926/http://agile.egloos.com/5946833\">올해 첫 AC2 과정 40기가 곧 열립니다</a>"
+        );
         Assertions.assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
 
         fakeWebArchiveServer.stop();

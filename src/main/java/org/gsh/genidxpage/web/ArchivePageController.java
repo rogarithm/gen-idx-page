@@ -35,18 +35,19 @@ public class ArchivePageController {
                 .body("resource not found");
         }
 
-        ResponseEntity<String> blogPostResponse = webArchiveApiCaller.findBlogPostPage(archivedPageInfo);
-		String blogPost = blogPostResponse.getBody();
+        ResponseEntity<String> blogPostResponse = webArchiveApiCaller.findBlogPostPage(
+            archivedPageInfo);
+        String blogPost = blogPostResponse.getBody();
 
-		WebPageParser webPageParser = new WebPageParser();
-		Elements postLinks = webPageParser.findPostLinks(blogPost);
+        WebPageParser webPageParser = new WebPageParser();
+        Elements postLinks = webPageParser.findPostLinks(blogPost);
 
-		String baseUrl = "https://web.archive.org";
-		String pageUrl = postLinks.get(0).attribute("href").getValue();
-		String pageTitle = postLinks.get(0).text();
-		String pageLink = String.format("<a href=\"%s%s\">%s</a>", baseUrl, pageUrl, pageTitle);
+        String baseUrl = "https://web.archive.org";
+        String pageUrl = postLinks.get(0).attribute("href").getValue();
+        String pageTitle = postLinks.get(0).text();
+        String pageLink = String.format("<a href=\"%s%s\">%s</a>", baseUrl, pageUrl, pageTitle);
 
-		return ResponseEntity.status(blogPostResponse.getStatusCode())
+        return ResponseEntity.status(blogPostResponse.getStatusCode())
             .body(pageLink);
     }
 }
