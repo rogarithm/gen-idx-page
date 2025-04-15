@@ -22,7 +22,13 @@
     <value>
       <package name="" withSubpackages="true" static="true" />
       <emptyLine />
+      <package name="org" withSubpackages="true" static="false" />
+      <package name="net" withSubpackages="true" static="false" />
+      <package name="com" withSubpackages="true" static="false" />
       <package name="" withSubpackages="true" static="false" />
+      <emptyLine />
+      <package name="java" withSubpackages="true" static="false" />
+      <package name="javax" withSubpackages="true" static="false" />
     </value>
   </option>
   <option name="RIGHT_MARGIN" value="100" />
@@ -137,6 +143,7 @@
       <option name="INDENT_SIZE" value="4" />
       <option name="CONTINUATION_INDENT_SIZE" value="4" />
       <option name="TAB_SIZE" value="4" />
+      <option name="USE_TAB_CHARACTER" value="false" />
     </indentOptions>
   </codeStyleSettings>
   <codeStyleSettings language="JSON">

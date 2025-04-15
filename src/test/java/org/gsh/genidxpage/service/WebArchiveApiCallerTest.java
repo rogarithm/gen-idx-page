@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.FakeWebArchiveServer;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
@@ -12,6 +11,7 @@ import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 class WebArchiveApiCallerTest {
 
