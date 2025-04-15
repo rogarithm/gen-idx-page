@@ -1,8 +1,10 @@
 package org.gsh.genidxpage.web;
 
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
+import org.gsh.genidxpage.service.WebPageParser;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.jsoup.select.Elements;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,9 +35,18 @@ public class ArchivePageController {
                 .body("resource not found");
         }
 
-        ResponseEntity<String> blogPost = webArchiveApiCaller.findBlogPostPage(archivedPageInfo);
+        ResponseEntity<String> blogPostResponse = webArchiveApiCaller.findBlogPostPage(archivedPageInfo);
+		String blogPost = blogPostResponse.getBody();
 
-        return ResponseEntity.status(blogPost.getStatusCode())
-            .body(blogPost.getBody());
+		WebPageParser webPageParser = new WebPageParser();
+		Elements postLinks = webPageParser.findPostLinks(blogPost);
+
+		String baseUrl = "https://web.archive.org";
+		String pageUrl = postLinks.get(0).attribute("href").getValue();
+		String pageTitle = postLinks.get(0).text();
+		String pageLink = String.format("<a href=\"%s%s\">%s</a>", baseUrl, pageUrl, pageTitle);
+
+		return ResponseEntity.status(blogPostResponse.getStatusCode())
+            .body(pageLink);
     }
 }
