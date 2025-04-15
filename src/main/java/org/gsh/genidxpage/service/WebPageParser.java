@@ -5,7 +5,7 @@ import org.jsoup.select.Elements;
 
 public class WebPageParser {
 
-	public Elements findBy(Document doc, String cssQuery) {
-		return doc.select(cssQuery);
+	public Elements findPostLinks(Document doc) {
+		return doc.select(".POST_BODY > a");
 	}
 }

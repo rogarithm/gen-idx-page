@@ -16,7 +16,7 @@ public class WebPageParserTest {
 		File input = new File("src/test/resources/2021-03-full-response.html");
 		Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
 		WebPageParser webPageParser = new WebPageParser();
-		Elements resultDivs = webPageParser.findBy(doc, ".POST_BODY > a");
+		Elements resultDivs = webPageParser.findPostLinks(doc);
 
 		Assertions.assertThat(resultDivs.get(0).text())
 			.isEqualTo("올해 첫 AC2 과정 40기가 곧 열립니다");
