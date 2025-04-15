@@ -1,14 +1,15 @@
 package org.gsh.genidxpage.service;
 
+import org.assertj.core.api.Assertions;
+import org.jsoup.select.Elements;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.assertj.core.api.Assertions;
-import org.jsoup.select.Elements;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 public class WebPageParserTest {
 
