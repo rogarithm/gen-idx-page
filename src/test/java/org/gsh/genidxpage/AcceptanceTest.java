@@ -48,7 +48,7 @@ public class AcceptanceTest {
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
         fakeWebArchiveServer.respondItHasArchivedPage();
-        fakeWebArchiveServer.respondBlogPostListInGivenYearMonth("2021", "3");
+        fakeWebArchiveServer.respondBlogPostListInGivenYearMonth("2021", "3", false);
 
         fakeWebArchiveServer.start();
 
