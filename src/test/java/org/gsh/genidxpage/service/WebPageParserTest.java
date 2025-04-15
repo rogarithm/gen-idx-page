@@ -1,7 +1,7 @@
 package org.gsh.genidxpage.service;
 
 import org.assertj.core.api.Assertions;
-import org.jsoup.select.Elements;
+import org.gsh.genidxpage.service.WebPageParser.PostLinkInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,11 +19,11 @@ public class WebPageParserTest {
         Path path = Paths.get("src/test/resources/2021-03-full-response.html");
         String fileContent = Files.readString(path, StandardCharsets.UTF_8);
         WebPageParser webPageParser = new WebPageParser();
-        Elements resultDivs = webPageParser.findPostLinks(fileContent);
+        PostLinkInfo postLinks = webPageParser.findPostLinks(fileContent);
 
-        Assertions.assertThat(resultDivs.get(0).text())
+        Assertions.assertThat(postLinks.getPageTitle())
             .isEqualTo("올해 첫 AC2 과정 40기가 곧 열립니다");
-        Assertions.assertThat(resultDivs.get(0).attribute("href").getValue())
+        Assertions.assertThat(postLinks.getPageUrl())
             .isEqualTo("/web/20230614220926/http://agile.egloos.com/5946833");
     }
 }

@@ -2,9 +2,9 @@ package org.gsh.genidxpage.web;
 
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.WebPageParser;
+import org.gsh.genidxpage.service.WebPageParser.PostLinkInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
-import org.jsoup.select.Elements;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -40,12 +40,8 @@ public class ArchivePageController {
         String blogPost = blogPostResponse.getBody();
 
         WebPageParser webPageParser = new WebPageParser();
-        Elements postLinks = webPageParser.findPostLinks(blogPost);
-
-        String baseUrl = "https://web.archive.org";
-        String pageUrl = postLinks.get(0).attribute("href").getValue();
-        String pageTitle = postLinks.get(0).text();
-        String pageLink = String.format("<a href=\"%s%s\">%s</a>", baseUrl, pageUrl, pageTitle);
+        PostLinkInfo postLinks = webPageParser.findPostLinks(blogPost);
+        String pageLink = postLinks.buildPageLink();
 
         return ResponseEntity.status(blogPostResponse.getStatusCode())
             .body(pageLink);
