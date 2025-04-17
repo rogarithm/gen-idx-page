@@ -17,7 +17,10 @@ public class WebPageParser {
 
         List<PostLinkInfo> result = new ArrayList<>();
         for (Element postLink : postLinks) {
-            result.add(new PostLinkInfo(postLink));
+            result.add(new PostLinkInfo(
+                postLink.attribute("href").getValue(),
+                postLink.text()
+            ));
         }
 
         return Collections.unmodifiableList(result);
@@ -29,9 +32,9 @@ public class WebPageParser {
         private String pageUrl;
         private String pageTitle;
 
-        public PostLinkInfo(Element postLink) {
-            this.pageUrl = postLink.attribute("href").getValue();
-            this.pageTitle = postLink.text();
+        public PostLinkInfo(String pageUrl, String pageTitle) {
+            this.pageUrl = pageUrl;
+            this.pageTitle = pageTitle;
         }
 
         public String getPageUrl() {
