@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @ResponseBody
 @Controller
 public class ArchivePageController {
@@ -40,8 +42,8 @@ public class ArchivePageController {
         String blogPost = blogPostResponse.getBody();
 
         WebPageParser webPageParser = new WebPageParser();
-        PostLinkInfo postLinks = webPageParser.findPostLinks(blogPost);
-        String pageLink = postLinks.buildPageLink();
+        List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
+        String pageLink = postLinks.get(0).buildPageLink();
 
         return ResponseEntity.status(blogPostResponse.getStatusCode())
             .body(pageLink);

@@ -5,12 +5,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class WebPageParser {
 
-    public PostLinkInfo findPostLinks(String stringDoc) {
+    public List<PostLinkInfo> findPostLinks(String stringDoc) {
         Document doc = Jsoup.parse(stringDoc);
         Elements postLinks = doc.select(".POST_BODY > a");
-        return new PostLinkInfo(postLinks.get(0));
+
+        List<PostLinkInfo> result = new ArrayList<>();
+        for (Element postLink : postLinks) {
+            result.add(new PostLinkInfo(postLink));
+        }
+
+        return Collections.unmodifiableList(result);
     }
 
     public class PostLinkInfo {
