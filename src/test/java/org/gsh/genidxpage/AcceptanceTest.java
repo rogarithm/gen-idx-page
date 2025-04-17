@@ -85,8 +85,8 @@ public class AcceptanceTest {
 
         // web archive server는 주어진 연월의 블로그 글 목록 페이지를 반환한다
         Assertions.assertThat(response.getBody()).isEqualTo(
-            "<a href=\"https://web.archive.org/web/20230614220926/http://agile.egloos.com/5946833\">올해 첫 AC2 과정 40기가 곧 열립니다</a>%n"
-                + "<a href=\"https://web.archive.org/web/20230614124528/http://agile.egloos.com/5932600\">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a>%n"
+            "<a href=\"https://web.archive.org/web/20230614220926/http://agile.egloos.com/5946833\">올해 첫 AC2 과정 40기가 곧 열립니다</a>\n"
+                + "<a href=\"https://web.archive.org/web/20230614124528/http://agile.egloos.com/5932600\">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a>\n"
                 + "<a href=\"https://web.archive.org/web/20230614124528/http://agile.egloos.com/5931859\">혹독한 조언이 나를 살릴까?</a>"
         );
         Assertions.assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();

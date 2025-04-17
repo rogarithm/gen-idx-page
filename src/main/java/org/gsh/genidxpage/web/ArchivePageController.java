@@ -43,9 +43,9 @@ public class ArchivePageController {
 
         WebPageParser webPageParser = new WebPageParser();
         List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
-        String pageLink = postLinks.get(0).buildPageLink();
+        String pageLinks = webPageParser.buildPageLinks(postLinks);
 
         return ResponseEntity.status(blogPostResponse.getStatusCode())
-            .body(pageLink);
+            .body(pageLinks);
     }
 }

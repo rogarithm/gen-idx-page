@@ -26,6 +26,16 @@ public class WebPageParser {
         return Collections.unmodifiableList(result);
     }
 
+    public String buildPageLinks(List<PostLinkInfo> postLinks) {
+        StringBuilder result = new StringBuilder();
+        for (PostLinkInfo postLink : postLinks) {
+            result.append(postLink.buildPageLink());
+            result.append("\n");
+        }
+        result.deleteCharAt(result.length() - 1);
+        return result.toString();
+    }
+
     public class PostLinkInfo {
 
         private final String baseUrl = "https://web.archive.org";
