@@ -59,9 +59,8 @@ public class WebPageParserTest {
         String fileContent2 = Files.readString(path2, StandardCharsets.UTF_8);
         List<PostLinkInfo> postLinks2 = webPageParser.findPostLinks(fileContent2);
         Assertions.assertThat(webPageParser.buildPageLinks(postLinks2)).isEqualTo(
-            "<a href=\"https://web.archive.org/web/20230614124528/http://agile.egloos.com/5932600\">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a>"
-                + "\n" +
-                "<a href=\"https://web.archive.org/web/20230614124528/http://agile.egloos.com/5931859\">혹독한 조언이 나를 살릴까?</a>"
+            "<a href=\"https://web.archive.org/web/20230614124528/http://agile.egloos.com/5932600\">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a>\n"
+                + "<a href=\"https://web.archive.org/web/20230614124528/http://agile.egloos.com/5931859\">혹독한 조언이 나를 살릴까?</a>"
         );
     }
 }
