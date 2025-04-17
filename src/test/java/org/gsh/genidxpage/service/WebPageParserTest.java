@@ -1,7 +1,7 @@
 package org.gsh.genidxpage.service;
 
 import org.assertj.core.api.Assertions;
-import org.gsh.genidxpage.service.WebPageParser.PostLinkInfo;
+import org.gsh.genidxpage.web.response.PostLinkInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

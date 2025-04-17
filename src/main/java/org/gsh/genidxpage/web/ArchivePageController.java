@@ -2,9 +2,9 @@ package org.gsh.genidxpage.web;
 
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.WebPageParser;
-import org.gsh.genidxpage.service.WebPageParser.PostLinkInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.web.response.PostLinkInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
