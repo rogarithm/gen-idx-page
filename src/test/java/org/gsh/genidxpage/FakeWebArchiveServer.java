@@ -25,13 +25,13 @@ public class FakeWebArchiveServer {
     }
 
     public void respondBlogPostListInGivenYearMonth(String year, String month, boolean hasManyPost) {
-        instance.stubFor(get(urlPathTemplate("/post-links/{year}/{month}"))
+        instance.stubFor(get(urlPathTemplate("/web/20230614220926/archives/{year}/{month}"))
             .withPathParam("year", equalTo(year))
-            .withPathParam("month", equalTo(month))
+            .withPathParam("month", equalTo(String.format("%02d", Integer.parseInt(month))))
             .willReturn(aResponse().withStatus(200)
                 .withBody(
                     buildPostListPage(hasManyPost)
-                )
+                ).withHeader("Content-Type", "text/html; charset=utf-8")
             )
         );
     }
@@ -95,7 +95,7 @@ public class FakeWebArchiveServer {
                             "closest": {
                               "status": "200",
                               "available": true,
-                              "url": "http://web.archive.org/web/20230614220926/http://agile.egloos.com/archives/2021/03",
+                              "url": "http://localhost:8080/web/20230614220926/archives/2021/03",
                               "timestamp": "20230614220926"
                             }
                           },
