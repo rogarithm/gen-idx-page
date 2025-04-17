@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class WebPageParserTest {
 
@@ -25,5 +26,20 @@ public class WebPageParserTest {
             .isEqualTo("올해 첫 AC2 과정 40기가 곧 열립니다");
         Assertions.assertThat(postLink.getPageUrl())
             .isEqualTo("/web/20230614220926/http://agile.egloos.com/5946833");
+    }
+
+    @DisplayName("태그 규칙에 맞는 하나 이상의 html 요소를 검색할 수 있다")
+    @Test
+    public void find_matching_html_elems_from_post_list_html_page_string() throws IOException {
+        Path path = Paths.get("src/test/resources/2020-02-response.html");
+        String fileContent = Files.readString(path, StandardCharsets.UTF_8);
+        WebPageParser webPageParser = new WebPageParser();
+        List<PostLinkInfo> postLinks = webPageParser.findPostLinks(fileContent);
+
+        Assertions.assertThat(postLinks.size()).isGreaterThan(1);
+        for (PostLinkInfo postLink : postLinks) {
+            Assertions.assertThat(postLink.getPageTitle()).isNotNull();
+            Assertions.assertThat(postLink.getPageUrl()).isNotNull();
+        }
     }
 }
