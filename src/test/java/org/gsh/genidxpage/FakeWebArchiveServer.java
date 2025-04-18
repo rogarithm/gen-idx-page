@@ -24,46 +24,65 @@ public class FakeWebArchiveServer {
         this.instance.stop();
     }
 
-    public void respondBlogPostListInGivenYearMonth(String year, String month) {
-        instance.stubFor(get(urlPathTemplate("/post-lists/{year}/{month}"))
+    public void respondBlogPostListInGivenYearMonth(String year, String month,
+        boolean hasManyPost) {
+        instance.stubFor(get(urlPathTemplate("/web/20230614220926/archives/{year}/{month}"))
             .withPathParam("year", equalTo(year))
-            .withPathParam("month", equalTo(month))
+            .withPathParam("month", equalTo(String.format("%02d", Integer.parseInt(month))))
             .willReturn(aResponse().withStatus(200)
                 .withBody(
-                    """
-                        <html>
-                        <table border="0" cellpadding="0" cellspacing="0" align="CENTER" width="100%">
-                          <tr><td valign="TOP" width="90%">
-                            <div id="LEFT">
-                              <!-- egloos content start -->
-                              <div class="POST">
-                                <div class="POST_HEAD">
-                                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                    <tr><td width="80%"><div class="POST_TTL">2021년 03월 전체 글 목록</div></td>
-                                      <td width="20%" align="RIGHT"></td></tr>
-                                  </table>
-                                </div>
-                                <div class="POST_BODY">
-                                  <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/22</span> &nbsp; <a href="/web/20230614220926/http://agile.egloos.com/5946833">올해 첫 AC2 과정 40기가 곧 열립니다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[3]</span><br/>
-                                  <div style="margin-top:10px;"><a href="/web/20230614220926/http://agile.egloos.com/archives/2021/03/page/1" title="전체보기">"2021년03월" 의 글 내용 전체 보기</a></div>
-                                </div>
-                                <div class="POST_TAIL"></div>
-
-                              </div><!-- egloos content end -->
-                              <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                <tr><td align="RIGHT" width="48%">&lt; 이전페이지</td><td width="4%"></td>
-                                  <td align="LEFT" width="48%">다음페이지 &gt;</td></tr>
-                              </table>
-                              <br><br>
-                            </div>
-                          </td>
-                        </table>
-                        </html>
-                        """
-                )
+                    buildPostListPage(hasManyPost)
+                ).withHeader("Content-Type", "text/html; charset=utf-8")
             )
         );
     }
+
+    private String buildPostListPage(boolean hasManyPost) {
+        String postListPageHead = """
+            <html>
+            <table border="0" cellpadding="0" cellspacing="0" align="CENTER" width="100%">
+              <tr><td valign="TOP" width="90%">
+                <div id="LEFT">
+                  <!-- egloos content start -->
+                  <div class="POST">
+                    <div class="POST_HEAD">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr><td width="80%"><div class="POST_TTL">2021년 03월 전체 글 목록</div></td>
+                          <td width="20%" align="RIGHT"></td></tr>
+                      </table>
+                    </div>
+                    <div class="POST_BODY">
+            """;
+        String postListPageTail = """
+                      <div style="margin-top:10px;"><a href="/web/20230614220926/http://agile.egloos.com/archives/2021/03/page/1" title="전체보기">"2021년03월" 의 글 내용 전체 보기</a></div>
+                    </div>
+                    <div class="POST_TAIL"></div>
+
+                  </div><!-- egloos content end -->
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr><td align="RIGHT" width="48%">&lt; 이전페이지</td><td width="4%"></td>
+                      <td align="LEFT" width="48%">다음페이지 &gt;</td></tr>
+                  </table>
+                  <br><br>
+                </div>
+              </td>
+            </table>
+            </html>
+            """;
+
+        String firstPost = """
+                <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/22</span> &nbsp; <a href="/web/20230614220926/http://agile.egloos.com/5946833">올해 첫 AC2 과정 40기가 곧 열립니다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[3]</span><br/>
+            """;
+        String otherPosts = """
+            <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/25</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5932600">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate"></span><br>
+            <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/27</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5931859">혹독한 조언이 나를 살릴까?</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[13]</span><br>
+            """;
+        if (hasManyPost) {
+            return postListPageHead + firstPost + otherPosts + postListPageTail;
+        }
+        return postListPageHead + firstPost + postListPageTail;
+    }
+
 
     public void respondItHasArchivedPage() {
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
@@ -77,7 +96,7 @@ public class FakeWebArchiveServer {
                             "closest": {
                               "status": "200",
                               "available": true,
-                              "url": "http://web.archive.org/web/20230614220926/http://agile.egloos.com/archives/2021/03",
+                              "url": "http://localhost:8080/web/20230614220926/archives/2021/03",
                               "timestamp": "20230614220926"
                             }
                           },
