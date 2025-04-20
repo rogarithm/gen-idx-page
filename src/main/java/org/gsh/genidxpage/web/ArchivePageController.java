@@ -1,7 +1,6 @@
 package org.gsh.genidxpage.web;
 
-import org.gsh.genidxpage.common.exception.ErrorCode;
-import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
+import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.WebPageParser;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
@@ -31,11 +30,8 @@ public class ArchivePageController {
         @PathVariable(value = "month") String month
     ) {
         CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month);
-        ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
-
-        if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
-            throw new ArchivedPageNotFoundExceptioin(ErrorCode.BAD_REQUEST, "resource not found");
-        }
+        ArchivePageService service = new ArchivePageService(webArchiveApiCaller);
+        ArchivedPageInfo archivedPageInfo = service.findArchivedPageInfo(dto);
 
         ResponseEntity<String> blogPostResponse = webArchiveApiCaller.findBlogPostPage(
             archivedPageInfo);
