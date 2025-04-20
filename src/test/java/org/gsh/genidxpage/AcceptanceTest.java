@@ -5,23 +5,33 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
+import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.web.ArchivePageController;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
 public class AcceptanceTest {
 
+    private ArchivePageController archivePageController;
+
+    @BeforeEach
+    public void setUp() {
+        WebArchiveApiCaller apiCaller = new WebArchiveApiCaller(
+            "http://localhost:8080",
+            "/wayback/available?url={url}&timestamp={timestamp}",
+            CustomRestTemplateBuilder.get()
+        );
+        ArchivePageService service = new ArchivePageService(apiCaller);
+
+        archivePageController = new ArchivePageController(service);
+    }
+
     @DisplayName("요청 연월에 등록된 블로그 글이 web archive에 없으면, 리소스가 존재하지 않음을 응답으로 받는다")
     @Test
     public void receive_not_found_msg_when_send_request() {
-        ArchivePageController archivePageController = new ArchivePageController(
-            new WebArchiveApiCaller("http://localhost:8080",
-                "/wayback/available?url={url}&timestamp={timestamp}",
-                CustomRestTemplateBuilder.get())
-        );
-
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
         fakeWebArchiveServer.respondItHasNoArchivedPage();
@@ -43,12 +53,6 @@ public class AcceptanceTest {
     @DisplayName("요청 연월에 등록된 블로그 글이 web archive에 있으면, 해당 월에 올라온 블로그 글에 접근할 수 있는 링크 목록을 응답으로 받는다")
     @Test
     public void receive_post_link_list_when_send_valid_request() {
-        ArchivePageController archivePageController = new ArchivePageController(
-            new WebArchiveApiCaller("http://localhost:8080",
-                "/wayback/available?url={url}&timestamp={timestamp}",
-                CustomRestTemplateBuilder.get())
-        );
-
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
         fakeWebArchiveServer.respondItHasArchivedPage();
@@ -71,12 +75,6 @@ public class AcceptanceTest {
     @DisplayName("요청 연월에 등록된 블로그 글이 여러 개면, 해당 블로그 글에 접근할 수 있는 링크 목록을 응답으로 받는다")
     @Test
     public void receive_post_link_list_when_multiple_posts_exists() {
-        ArchivePageController archivePageController = new ArchivePageController(
-            new WebArchiveApiCaller("http://localhost:8080",
-                "/wayback/available?url={url}&timestamp={timestamp}",
-                CustomRestTemplateBuilder.get())
-        );
-
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
         fakeWebArchiveServer.respondItHasArchivedPage();
@@ -101,12 +99,6 @@ public class AcceptanceTest {
     @DisplayName("요청 처리 성공 여부를 DB에 기록한다")
     @Test
     public void write_request_result_to_db_when_send_request() {
-        ArchivePageController archivePageController = new ArchivePageController(
-            new WebArchiveApiCaller("http://localhost:8080",
-                "/wayback/available?url={url}&timestamp={timestamp}",
-                CustomRestTemplateBuilder.get())
-        );
-
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
         fakeWebArchiveServer.respondItHasArchivedPage();
