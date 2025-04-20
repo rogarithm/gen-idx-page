@@ -93,4 +93,30 @@ public class AcceptanceTest {
 
         fakeWebArchiveServer.stop();
     }
+
+    @DisplayName("요청 처리 성공 여부를 DB에 기록한다")
+    @Test
+    public void write_request_result_to_db_when_send_request() {
+        ArchivePageController archivePageController = new ArchivePageController(
+            new WebArchiveApiCaller("http://localhost:8080",
+                "/wayback/available?url={url}&timestamp={timestamp}",
+                CustomRestTemplateBuilder.get())
+        );
+
+        FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
+
+        fakeWebArchiveServer.respondItHasNoArchivedPage();
+
+        fakeWebArchiveServer.start();
+
+        // 서버는 web archive server에 아카이브된 블로그 글을 요청한다
+        archivePageController.getBlogPostLinks("1999", "7");
+
+        // db에 요청 실패를 기록한다
+        // 어떻게 하지? requestReporter를 목 객체로 만들어서?
+        // db를 실제로 바꿔서? db의 상태를 롤백하도록 하려면 어떻게 해야하지?
+        // 테스트할 때 쓰는 db를 구분해야 할까?
+
+        fakeWebArchiveServer.stop();
+    }
 }
