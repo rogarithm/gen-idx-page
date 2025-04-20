@@ -6,9 +6,11 @@ import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.response.PostLinkInfo;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ArchivePageService {
 
     public ArchivePageService(WebArchiveApiCaller webArchiveApiCaller) {

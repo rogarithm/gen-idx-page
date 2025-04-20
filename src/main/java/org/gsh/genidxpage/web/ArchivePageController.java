@@ -1,7 +1,6 @@
 package org.gsh.genidxpage.web;
 
 import org.gsh.genidxpage.service.ArchivePageService;
-import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.springframework.http.HttpStatus;
@@ -15,10 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ArchivePageController {
 
-    private final WebArchiveApiCaller webArchiveApiCaller;
+    private final ArchivePageService service;
 
-    public ArchivePageController(final WebArchiveApiCaller webArchiveApiCaller) {
-        this.webArchiveApiCaller = webArchiveApiCaller;
+    public ArchivePageController(final ArchivePageService service) {
+        this.service = service;
     }
 
     @GetMapping("/post-links/{year}/{month}")
@@ -27,7 +26,6 @@ public class ArchivePageController {
         @PathVariable(value = "month") String month
     ) {
         CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month);
-        ArchivePageService service = new ArchivePageService(webArchiveApiCaller);
         ArchivedPageInfo archivedPageInfo = service.findArchivedPageInfo(dto);
 
         String blogPost = service.findBlogPostPage(archivedPageInfo);
