@@ -4,6 +4,7 @@ import org.gsh.genidxpage.common.exception.ErrorCode;
 import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.springframework.http.ResponseEntity;
 
 public class ArchivePageService {
 
@@ -21,5 +22,11 @@ public class ArchivePageService {
         }
 
         return archivedPageInfo;
+    }
+
+    public String findBlogPostPage(ArchivedPageInfo archivedPageInfo) {
+        ResponseEntity<String> blogPostResponse = webArchiveApiCaller.findBlogPostPage(
+            archivedPageInfo);
+        return blogPostResponse.getBody();
     }
 }

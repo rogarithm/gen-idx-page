@@ -6,6 +6,7 @@ import org.gsh.genidxpage.service.WebPageParser;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.response.PostLinkInfo;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,15 +34,13 @@ public class ArchivePageController {
         ArchivePageService service = new ArchivePageService(webArchiveApiCaller);
         ArchivedPageInfo archivedPageInfo = service.findArchivedPageInfo(dto);
 
-        ResponseEntity<String> blogPostResponse = webArchiveApiCaller.findBlogPostPage(
-            archivedPageInfo);
-        String blogPost = blogPostResponse.getBody();
+        String blogPost = service.findBlogPostPage(archivedPageInfo);
 
         WebPageParser webPageParser = new WebPageParser();
         List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
         String pageLinks = webPageParser.buildPageLinks(postLinks);
 
-        return ResponseEntity.status(blogPostResponse.getStatusCode())
+        return ResponseEntity.status(HttpStatus.OK)
             .body(pageLinks);
     }
 }
