@@ -1,11 +1,12 @@
 package org.gsh.genidxpage.web;
 
+import org.gsh.genidxpage.common.exception.ErrorCode;
+import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.WebPageParser;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.response.PostLinkInfo;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +34,7 @@ public class ArchivePageController {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
 
         if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("resource not found");
+            throw new ArchivedPageNotFoundExceptioin(ErrorCode.BAD_REQUEST, "resource not found");
         }
 
         ResponseEntity<String> blogPostResponse = webArchiveApiCaller.findBlogPostPage(

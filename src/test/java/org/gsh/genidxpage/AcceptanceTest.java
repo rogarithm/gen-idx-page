@@ -1,7 +1,10 @@
 package org.gsh.genidxpage;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
+import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.DisplayName;
@@ -26,12 +29,13 @@ public class AcceptanceTest {
         fakeWebArchiveServer.start();
 
         // 서버는 web archive server에 아카이브된 블로그 글을 요청한다
-        ResponseEntity<String> response = archivePageController.getBlogPostLinks("1999", "7");
-
         // web archive server는 처리할 수 없음 메시지를 반환한다
-        // 서버는 처리할 수 없는 요청임을 클라이언트에게 알린다
-        Assertions.assertThat(response.getBody()).isEqualTo("resource not found");
-        Assertions.assertThat(response.getStatusCode().is4xxClientError()).isTrue();
+        // 서버는 처리할 수 없는 요청임을 예외 처리기를 통해 클라이언트에게 알린다
+        assertThrows(
+            ArchivedPageNotFoundExceptioin.class, () -> {
+                archivePageController.getBlogPostLinks("1999", "7");
+            }
+        );
 
         fakeWebArchiveServer.stop();
     }
@@ -105,12 +109,13 @@ public class AcceptanceTest {
 
         FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
-        fakeWebArchiveServer.respondItHasNoArchivedPage();
+        fakeWebArchiveServer.respondItHasArchivedPage();
+        fakeWebArchiveServer.respondBlogPostListInGivenYearMonth("2021", "3", false);
 
         fakeWebArchiveServer.start();
 
         // 서버는 web archive server에 아카이브된 블로그 글을 요청한다
-        archivePageController.getBlogPostLinks("1999", "7");
+        archivePageController.getBlogPostLinks("2021", "3");
 
         // db에 요청 실패를 기록한다
         // 어떻게 하지? requestReporter를 목 객체로 만들어서?
