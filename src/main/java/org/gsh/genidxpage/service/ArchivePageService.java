@@ -14,15 +14,18 @@ import java.util.List;
 public class ArchivePageService {
 
     private final WebArchiveApiCaller webArchiveApiCaller;
+    private final ApiCallReporter reporter;
 
-    public ArchivePageService(WebArchiveApiCaller webArchiveApiCaller) {
+    public ArchivePageService(WebArchiveApiCaller webArchiveApiCaller, ApiCallReporter reporter) {
         this.webArchiveApiCaller = webArchiveApiCaller;
+        this.reporter = reporter;
     }
 
     public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
 
         if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
+            reporter.reportArchivedPageSearch(dto);
             throw new ArchivedPageNotFoundExceptioin(ErrorCode.BAD_REQUEST, "resource not found");
         }
 

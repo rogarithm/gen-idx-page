@@ -39,6 +39,35 @@ public class ArchivedPageInfo {
         return archivedSnapshots.getSnapshot().getUrl();
     }
 
+    public static class ArchivedPageInfoBuilder {
+        private String url;
+        private ArchivedSnapshots archivedSnapshots;
+        private String timestamp;
+
+        public static ArchivedPageInfoBuilder builder() {
+            return new ArchivedPageInfoBuilder();
+        }
+
+        public ArchivedPageInfoBuilder url(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public ArchivedPageInfoBuilder archivedSnapshots(ArchivedSnapshots archivedSnapshots) {
+            this.archivedSnapshots = archivedSnapshots;
+            return this;
+        }
+
+        public ArchivedPageInfoBuilder timestamp(String timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        public ArchivedPageInfo build() {
+            return new ArchivedPageInfo(url, archivedSnapshots, timestamp);
+        }
+    }
+
     private static class ArchivedSnapshots {
 
         @JsonProperty("closest")

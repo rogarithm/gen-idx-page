@@ -1,10 +1,12 @@
 package org.gsh.genidxpage;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
+import org.gsh.genidxpage.service.ApiCallReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.web.ArchivePageController;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 public class AcceptanceTest {
 
     private ArchivePageController archivePageController;
+    private final static ApiCallReporter EMPTY_REPORTER = mock(ApiCallReporter.class);
 
     @BeforeEach
     public void setUp() {
@@ -24,7 +27,7 @@ public class AcceptanceTest {
             "/wayback/available?url={url}&timestamp={timestamp}",
             CustomRestTemplateBuilder.get()
         );
-        ArchivePageService service = new ArchivePageService(apiCaller);
+        ArchivePageService service = new ArchivePageService(apiCaller, EMPTY_REPORTER);
 
         archivePageController = new ArchivePageController(service);
     }
