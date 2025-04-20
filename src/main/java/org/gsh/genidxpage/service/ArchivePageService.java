@@ -4,7 +4,10 @@ import org.gsh.genidxpage.common.exception.ErrorCode;
 import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.web.response.PostLinkInfo;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public class ArchivePageService {
 
@@ -28,5 +31,11 @@ public class ArchivePageService {
         ResponseEntity<String> blogPostResponse = webArchiveApiCaller.findBlogPostPage(
             archivedPageInfo);
         return blogPostResponse.getBody();
+    }
+
+    public String buildPageLinks(String blogPost) {
+        WebPageParser webPageParser = new WebPageParser();
+        List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
+        return webPageParser.buildPageLinks(postLinks);
     }
 }
