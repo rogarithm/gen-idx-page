@@ -13,11 +13,11 @@ import java.util.List;
 @Service
 public class ArchivePageService {
 
+    private final WebArchiveApiCaller webArchiveApiCaller;
+
     public ArchivePageService(WebArchiveApiCaller webArchiveApiCaller) {
         this.webArchiveApiCaller = webArchiveApiCaller;
     }
-
-    private final WebArchiveApiCaller webArchiveApiCaller;
 
     public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
