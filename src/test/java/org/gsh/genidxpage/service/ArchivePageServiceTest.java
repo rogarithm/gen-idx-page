@@ -36,6 +36,6 @@ class ArchivePageServiceTest {
         Assertions.assertThrows(ArchivedPageNotFoundExceptioin.class,
             () -> service.findArchivedPageInfo(dto));
 
-        verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class));
+        verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), any(Boolean.class));
     }
 }

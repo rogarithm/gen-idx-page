@@ -1,7 +1,6 @@
 package org.gsh.genidxpage;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
 
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
@@ -13,12 +12,18 @@ import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
+@SpringBootTest
 public class AcceptanceTest {
 
     private ArchivePageController archivePageController;
-    private final static ApiCallReporter EMPTY_REPORTER = mock(ApiCallReporter.class);
+    @Autowired
+    private ApiCallReporter reporter;
 
     @BeforeEach
     public void setUp() {
@@ -27,7 +32,7 @@ public class AcceptanceTest {
             "/wayback/available?url={url}&timestamp={timestamp}",
             CustomRestTemplateBuilder.get()
         );
-        ArchivePageService service = new ArchivePageService(apiCaller, EMPTY_REPORTER);
+        ArchivePageService service = new ArchivePageService(apiCaller, reporter);
 
         archivePageController = new ArchivePageController(service);
     }
