@@ -1,10 +1,11 @@
-DROP TABLE IF EXISTS page_url;
+DROP TABLE IF EXISTS page_url_report;
 
-CREATE TABLE `page_url`
+CREATE TABLE `page_url_report`
 (
     `id`                bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `year_month`        varchar(255),
-    `url_fetch_success` varchar(255),
+    `year`              varchar(255),
+    `month`             varchar(255),
+    `page_exists`        bool,
     `created_at`        datetime,
     `updated_at`        datetime,
     `deleted_at`        datetime

@@ -25,7 +25,7 @@ public class ArchivePageService {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
 
         if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
-            reporter.reportArchivedPageSearch(dto);
+            reporter.reportArchivedPageSearch(dto, Boolean.FALSE);
             throw new ArchivedPageNotFoundExceptioin(ErrorCode.BAD_REQUEST, "resource not found");
         }
 
