@@ -1,10 +1,8 @@
 package org.gsh.genidxpage.web;
 
-import org.gsh.genidxpage.service.WebArchiveApiCaller;
-import org.gsh.genidxpage.service.WebPageParser;
+import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
-import org.gsh.genidxpage.web.response.PostLinkInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,16 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
 @ResponseBody
 @Controller
 public class ArchivePageController {
 
-    private final WebArchiveApiCaller webArchiveApiCaller;
+    private final ArchivePageService service;
 
-    public ArchivePageController(final WebArchiveApiCaller webArchiveApiCaller) {
-        this.webArchiveApiCaller = webArchiveApiCaller;
+    public ArchivePageController(final ArchivePageService service) {
+        this.service = service;
     }
 
     @GetMapping("/post-links/{year}/{month}")
@@ -30,22 +26,13 @@ public class ArchivePageController {
         @PathVariable(value = "month") String month
     ) {
         CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month);
-        ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
+        ArchivedPageInfo archivedPageInfo = service.findArchivedPageInfo(dto);
 
-        if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("resource not found");
-        }
+        String blogPost = service.findBlogPostPage(archivedPageInfo);
 
-        ResponseEntity<String> blogPostResponse = webArchiveApiCaller.findBlogPostPage(
-            archivedPageInfo);
-        String blogPost = blogPostResponse.getBody();
+        String pageLinks = service.buildPageLinks(blogPost);
 
-        WebPageParser webPageParser = new WebPageParser();
-        List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
-        String pageLinks = webPageParser.buildPageLinks(postLinks);
-
-        return ResponseEntity.status(blogPostResponse.getStatusCode())
+        return ResponseEntity.status(HttpStatus.OK)
             .body(pageLinks);
     }
 }

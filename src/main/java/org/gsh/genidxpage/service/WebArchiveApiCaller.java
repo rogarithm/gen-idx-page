@@ -5,12 +5,12 @@ import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Service
+@Component
 public class WebArchiveApiCaller {
 
     private final RestTemplate restTemplate;

@@ -1,6 +1,34 @@
 spring:
   application:
     name: genidxpage
+  datasource:
+    url: jdbc:mysql://localhost:3306/genidxpage?characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+  sql:
+    init:
+      platform: mysql
+      mode: always
+      schema-locations: classpath:sql/schema.sql
+      data-locations: classpath:sql/data.sql
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    map-underscore-to-camel-case: true
+
 webArchive:
   rootUri: x
   checkArchivedUri: /wayback/available?url={url}&timestamp={timestamp}
+
+logging:
+  file:
+    name: log/app.log
+  level:
+    root: INFO
+    org.mybatis: DEBUG
+    com.mysql.cj.jdbc: DEBUG
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%-5level) %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %msg%n"

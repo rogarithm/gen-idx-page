@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.gsh.genidxpage.dao.WebArchiveReportMapper">
+  <insert id="insertReport" useGeneratedKeys="true" keyProperty="id"
+    parameterType="org.gsh.genidxpage.entity.ArchivedPageUrlReport">
+
+    INSERT INTO page_url_report (year,
+                          month,
+                          page_exists,
+                          created_at)
+    VALUES (#{year},
+            #{month},
+            #{pageExists},
+            #{createdAt})
+  </insert>
+
+  <select id="selectReportByYearMonth" resultType="org.gsh.genidxpage.entity.ArchivedPageUrlReport">
+    SELECT `year`,
+           `month`,
+           page_exists
+    FROM page_url_report
+    WHERE `year` = #{year}
+      AND `month` = #{month}
+      AND deleted_at IS NULL
+  </select>
+</mapper>
