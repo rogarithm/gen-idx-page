@@ -16,6 +16,12 @@ public class ArchivedPageUrlReport {
 
     public ArchivedPageUrlReport() {}
 
+    public ArchivedPageUrlReport(String year, String month, Boolean pageExists) {
+        this.year = year;
+        this.month = month;
+        this.pageExists = pageExists;
+    }
+
     public ArchivedPageUrlReport(String year, String month, Boolean pageExists, LocalDateTime createdAt) {
         this.year = year;
         this.month = month;

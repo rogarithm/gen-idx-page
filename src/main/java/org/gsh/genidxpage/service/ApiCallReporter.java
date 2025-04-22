@@ -18,4 +18,13 @@ public class ApiCallReporter {
         ArchivedPageUrlReport report = ArchivedPageUrlReport.from(dto, pageExists);
         reportMapper.insertReport(report);
     }
+
+    public boolean hasArchivedPage(final CheckPostArchivedDto dto) {
+        ArchivedPageUrlReport report = reportMapper.selectReportByYearMonth(
+            dto.getYear(),
+            dto.getMonth()
+        );
+
+        return report.getPageExists() == Boolean.TRUE;
+    }
 }

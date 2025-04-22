@@ -15,4 +15,15 @@
             #{pageExists},
             #{createdAt})
   </insert>
+
+  <select id="selectReportByYearMonth" resultType="org.gsh.genidxpage.entity.ArchivedPageUrlReport">
+    SELECT id,
+           `year`,
+           `month`,
+           page_exists
+    FROM page_url_report
+    WHERE `year` = #{year}
+      AND `month` = #{month}
+      AND deleted_at = null
+  </select>
 </mapper>
