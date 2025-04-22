@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 
 import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
-import org.gsh.genidxpage.service.dto.ArchivedPageInfo.ArchivedPageInfoBuilder;
+import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
