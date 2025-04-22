@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
+import org.gsh.genidxpage.dao.WebArchiveReportMapper;
 import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
 import org.gsh.genidxpage.service.ApiCallReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
+import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +26,8 @@ public class AcceptanceTest {
     private ArchivePageController archivePageController;
     @Autowired
     private ApiCallReporter reporter;
+    @Autowired
+    private WebArchiveReportMapper mapper;
 
     @BeforeEach
     public void setUp() {
@@ -117,10 +121,9 @@ public class AcceptanceTest {
         // 서버는 web archive server에 아카이브된 블로그 글을 요청한다
         archivePageController.getBlogPostLinks("2021", "3");
 
-        // db에 요청 실패를 기록한다
-        // 어떻게 하지? requestReporter를 목 객체로 만들어서?
-        // db를 실제로 바꿔서? db의 상태를 롤백하도록 하려면 어떻게 해야하지?
-        // 테스트할 때 쓰는 db를 구분해야 할까?
+        // 서버는 db에 요청 성공을 기록한다
+        Assertions.assertThat(reporter.hasArchivedPage(new CheckPostArchivedDto("2021", "03")))
+            .isTrue();
 
         fakeWebArchiveServer.stop();
     }
