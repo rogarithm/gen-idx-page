@@ -29,6 +29,7 @@ public class ArchivePageService {
             throw new ArchivedPageNotFoundExceptioin(ErrorCode.BAD_REQUEST, "resource not found");
         }
 
+        reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
         return archivedPageInfo;
     }
 
