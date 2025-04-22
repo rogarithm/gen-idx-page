@@ -12,7 +12,7 @@
                           created_at)
     VALUES (#{year},
             #{month},
-            #{pageExists}
+            #{pageExists},
             #{createdAt})
   </insert>
 </mapper>
