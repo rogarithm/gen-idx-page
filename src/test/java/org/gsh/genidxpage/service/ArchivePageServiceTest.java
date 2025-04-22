@@ -1,6 +1,7 @@
 package org.gsh.genidxpage.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,5 +38,29 @@ class ArchivePageServiceTest {
             () -> service.findArchivedPageInfo(dto));
 
         verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), any(Boolean.class));
+    }
+
+    @DisplayName("아키이빙된 페이지 정보를 찾았을 때 db에 기록한다")
+    @Test
+    public void write_to_db_when_archived_page_info_found() {
+        ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
+            .url("url")
+            .withAccessibleArchivedSnapshots()
+            .timestamp("20240101")
+            .build();
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+
+        WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
+        when(caller.findArchivedPageInfo(any())).thenReturn(
+            archivedPageInfo
+        );
+        when(caller.isArchived(any())).thenReturn(true);
+        ApiCallReporter reporter = mock(ApiCallReporter.class);
+
+        ArchivePageService service = new ArchivePageService(caller, reporter);
+
+        service.findArchivedPageInfo(dto);
+
+        verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), eq(Boolean.TRUE));
     }
 }

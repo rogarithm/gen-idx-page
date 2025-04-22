@@ -58,6 +58,16 @@ public class ArchivedPageInfo {
             return this;
         }
 
+        public ArchivedPageInfoBuilder withAccessibleArchivedSnapshots() {
+            this.archivedSnapshots = new ArchivedSnapshots(
+                new ClosestSnapshot("200",
+                    true,
+                    "http://localhost:8080/web/20230614220926/archives/2021/03",
+                    "20230614220926")
+            );
+            return this;
+        }
+
         public ArchivedPageInfoBuilder timestamp(String timestamp) {
             this.timestamp = timestamp;
             return this;
