@@ -53,8 +53,8 @@ public class ArchivedPageInfo {
             return this;
         }
 
-        public ArchivedPageInfoBuilder archivedSnapshots(ArchivedSnapshots archivedSnapshots) {
-            this.archivedSnapshots = archivedSnapshots;
+        public ArchivedPageInfoBuilder withEmptyArchivedSnapshots() {
+            this.archivedSnapshots = null;
             return this;
         }
 

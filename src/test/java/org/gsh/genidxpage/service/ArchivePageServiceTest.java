@@ -21,7 +21,7 @@ class ArchivePageServiceTest {
     public void write_to_db_when_archived_page_info_not_found() {
         ArchivedPageInfo noArchivedPageInfo = ArchivedPageInfoBuilder.builder()
             .url("")
-            .archivedSnapshots(null)
+            .withEmptyArchivedSnapshots()
             .timestamp(null)
             .build();
         CheckPostArchivedDto dto = new CheckPostArchivedDto("1999", "7");
