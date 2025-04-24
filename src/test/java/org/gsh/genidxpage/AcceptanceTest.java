@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Transactional
@@ -162,25 +163,21 @@ public class AcceptanceTest {
             // 요청 입력값을 파일로부터 읽어온다
             Path path = Paths.get("src/test/resources/static/year-month-list");
             String fileContent = Files.readString(path, StandardCharsets.UTF_8);
-            String[] split = fileContent.strip().split("\n");
+            List<String> yearMonths = Arrays.stream(fileContent.strip().split("\n"))
+                .collect(ArrayList::new, List::add, List::addAll);
 
-            List<String> yearMonths = new ArrayList<String>();
-            for (String yearMonth : split) {
-                yearMonths.add(yearMonth);
-            }
-
-            for (String yearMonth : yearMonths) {
+            yearMonths.forEach(yearMonth -> {
                 String[] pair = yearMonth.split("/");
                 String year = pair[0];
                 String month = pair[1];
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
                 fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
                 fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
-            }
+            });
 
             fakeWebArchiveServer.start();
 
-            for (String yearMonth : yearMonths) {
+            yearMonths.forEach(yearMonth -> {
                 // 외부 서버에 요청할 수 있게 파일 내용을 정제한다
                 String[] pair = yearMonth.split("/");
                 String year = pair[0];
@@ -192,7 +189,7 @@ public class AcceptanceTest {
 
                 // 결과값은 링크 형식이다
                 Assertions.assertThat(pageLinks).matches("<a href=\".*\">.*</a>");
-            }
+            });
 
             fakeWebArchiveServer.stop();
         }
