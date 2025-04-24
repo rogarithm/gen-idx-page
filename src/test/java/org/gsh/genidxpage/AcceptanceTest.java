@@ -22,12 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Transactional
@@ -149,7 +143,7 @@ public class AcceptanceTest {
     class ArchivePageSchedulingTest {
         @BeforeEach
         public void setUp() {
-            bulkRequestSender = new BulkRequestSender();
+            bulkRequestSender = new BulkRequestSender("src/test/resources/static/year-month-list");
             WebArchiveApiCaller apiCaller = new WebArchiveApiCaller(
                 "http://localhost:8080",
                 "/wayback/available?url={url}&timestamp={timestamp}",
@@ -166,10 +160,7 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             // 요청 입력값을 파일로부터 읽어온다
-            Path path = Paths.get("src/test/resources/static/year-month-list");
-            String fileContent = Files.readString(path, StandardCharsets.UTF_8);
-            List<String> yearMonths = Arrays.stream(fileContent.strip().split("\n"))
-                .collect(ArrayList::new, List::add, List::addAll);
+            List<String> yearMonths = bulkRequestSender.prepareInput();
 
             yearMonths.forEach(yearMonth -> {
                 String[] pair = yearMonth.split("/");

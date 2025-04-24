@@ -1,13 +1,34 @@
 package org.gsh.genidxpage.service;
 
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
 public class BulkRequestSender {
+
+    private final String inputPath;
+
+    public BulkRequestSender(@Value("${bulk-request.input-path}") final String inputPath) {
+        this.inputPath = inputPath;
+    }
+
+    public List<String> prepareInput() throws IOException {
+        Path path = Paths.get(this.inputPath);
+        String fileContent = Files.readString(path, StandardCharsets.UTF_8);
+        List<String> yearMonths = Arrays.stream(fileContent.strip().split("\n"))
+            .collect(ArrayList::new, List::add, List::addAll);
+        return yearMonths;
+    }
 
     public List<String> sendAll(List<String> yearMonths, ArchivePageService sender) {
         ArrayList<String> pageLinksList = new ArrayList<>();
