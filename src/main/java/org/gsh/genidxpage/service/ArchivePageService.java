@@ -21,7 +21,7 @@ public class ArchivePageService {
         this.reporter = reporter;
     }
 
-    public String findBlogPageLink(CheckPostArchivedDto dto) {
+    public String findBlogPageLink(final CheckPostArchivedDto dto) {
         ArchivedPageInfo archivedPageInfo = this.findArchivedPageInfo(dto);
         String blogPost = this.findBlogPostPage(archivedPageInfo);
         return this.buildPageLinks(blogPost);
@@ -39,13 +39,13 @@ public class ArchivePageService {
         return archivedPageInfo;
     }
 
-    public String findBlogPostPage(ArchivedPageInfo archivedPageInfo) {
+    public String findBlogPostPage(final ArchivedPageInfo archivedPageInfo) {
         ResponseEntity<String> blogPostResponse = webArchiveApiCaller.findBlogPostPage(
             archivedPageInfo);
         return blogPostResponse.getBody();
     }
 
-    public String buildPageLinks(String blogPost) {
+    public String buildPageLinks(final String blogPost) {
         WebPageParser webPageParser = new WebPageParser();
         List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
         return webPageParser.buildPageLinks(postLinks);
