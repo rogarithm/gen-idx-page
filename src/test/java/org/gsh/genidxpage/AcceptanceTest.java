@@ -9,7 +9,6 @@ import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
 import org.gsh.genidxpage.service.ApiCallReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
-import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.BeforeEach;
@@ -189,9 +188,7 @@ public class AcceptanceTest {
                 CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month);
 
                 // 외부 서버로부터 블로그 링크를 가져온다
-                ArchivedPageInfo archivedPageInfo = service.findArchivedPageInfo(dto);
-                String blogPost = service.findBlogPostPage(archivedPageInfo);
-                String pageLinks = service.buildPageLinks(blogPost);
+                String pageLinks = service.findBlogPageLink(dto);
 
                 // 결과값은 링크 형식이다
                 Assertions.assertThat(pageLinks).matches("<a href=\".*\">.*</a>");

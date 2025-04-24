@@ -21,6 +21,12 @@ public class ArchivePageService {
         this.reporter = reporter;
     }
 
+    public String findBlogPageLink(CheckPostArchivedDto dto) {
+        ArchivedPageInfo archivedPageInfo = this.findArchivedPageInfo(dto);
+        String blogPost = this.findBlogPostPage(archivedPageInfo);
+        return this.buildPageLinks(blogPost);
+    }
+
     public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
 
