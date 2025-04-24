@@ -161,7 +161,7 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             // 요청 입력값을 파일로부터 읽어온다
-            Path path = Paths.get("src/main/resources/static/year-month-list");
+            Path path = Paths.get("src/test/resources/static/year-month-list");
             String fileContent = Files.readString(path, StandardCharsets.UTF_8);
             String[] split = fileContent.strip().split("\n");
 
