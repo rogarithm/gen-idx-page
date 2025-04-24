@@ -31,13 +31,13 @@ public class FakeWebArchiveServer {
             .withPathParam("month", equalTo(String.format("%02d", Integer.parseInt(month))))
             .willReturn(aResponse().withStatus(200)
                 .withBody(
-                    buildPostListPage(hasManyPost)
+                    buildPostListPage(year, month, hasManyPost)
                 ).withHeader("Content-Type", "text/html; charset=utf-8")
             )
         );
     }
 
-    private String buildPostListPage(boolean hasManyPost) {
+    private String buildPostListPage(String year, String month, boolean hasManyPost) {
         String postListPageHead = """
             <html>
             <table border="0" cellpadding="0" cellspacing="0" align="CENTER" width="100%">
@@ -70,9 +70,11 @@ public class FakeWebArchiveServer {
             </html>
             """;
 
-        String firstPost = """
-                <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/22</span> &nbsp; <a href="/web/20230614220926/http://agile.egloos.com/5946833">올해 첫 AC2 과정 40기가 곧 열립니다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[3]</span><br/>
+        String firstPostTemplate = """
+            <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">YEAR/MONTH/22</span> &nbsp; <a href="/web/20230614220926/http://agile.egloos.com/5946833">올해 첫 AC2 과정 40기가 곧 열립니다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[3]</span><br/>
             """;
+        String firstPost = firstPostTemplate.replace("YEAR", year)
+        .replace("MONTH", month);
         String otherPosts = """
             <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/25</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5932600">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate"></span><br>
             <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/27</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5931859">혹독한 조언이 나를 살릴까?</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[13]</span><br>
@@ -84,28 +86,32 @@ public class FakeWebArchiveServer {
     }
 
 
-    public void respondItHasArchivedPage() {
+    public void respondItHasArchivedPageFor(String year, String month) {
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
-            .withQueryParam("url", equalTo("agile.egloos.com/archives/2021/03"))
+            .withQueryParam("url", equalTo(String.format("agile.egloos.com/archives/%s/%s", year, month)))
             .withQueryParam("timestamp", equalTo("20240101"))
             .willReturn(aResponse().withStatus(200).withBody(
-                    """
+                    String.format("""
                         {
-                          "url": "agile.egloos.com/archives/2021/03",
+                          "url": "agile.egloos.com/archives/%s/%s",
                           "archived_snapshots": {
                             "closest": {
                               "status": "200",
                               "available": true,
-                              "url": "http://localhost:8080/web/20230614220926/archives/2021/03",
+                              "url": "http://localhost:8080/web/20230614220926/archives/%s/%s",
                               "timestamp": "20230614220926"
                             }
                           },
                           "timestamp": "20240101"
                         }
-                        """
+                        """, year, month, year, month)
                 )
             )
         );
+    }
+
+    public void respondItHasArchivedPage() {
+        respondItHasArchivedPageFor("2021", "03");
     }
 
     public void respondItHasNoArchivedPage() {
