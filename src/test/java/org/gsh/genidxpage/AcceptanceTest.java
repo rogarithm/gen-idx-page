@@ -141,5 +141,47 @@ public class AcceptanceTest {
         }
     }
 
+    private ArchivePageService service;
+
+    @Nested
+    class ArchivePageSchedulingTest {
+        @BeforeEach
+        public void setUp() {
+            WebArchiveApiCaller apiCaller = new WebArchiveApiCaller(
+                "http://localhost:8080",
+                "/wayback/available?url={url}&timestamp={timestamp}",
+                CustomRestTemplateBuilder.get()
+            );
+            service = new ArchivePageService(apiCaller, reporter);
+        }
+
+        @DisplayName("두 요청 전달을 스케쥴링한다")
+        @Test
+        public void schedule_sending_two_requests_to_web_archive() throws IOException {
+            // 요청 입력값을 파일로부터 읽어온다
+            Path path = Paths.get("src/main/resources/static/year-month-list");
+            String fileContent = Files.readString(path, StandardCharsets.UTF_8);
+            String[] split = fileContent.strip().split("\n");
+
+            List<String> yearMonths = new ArrayList<String>();
+            for (String yearMonth : split) {
+                yearMonths.add(yearMonth);
+            }
+
+            for (String yearMonth : yearMonths) {
+                // 외부 서버에 요청할 수 있게 파일 내용을 정제한다
+                String[] pair = yearMonth.split("/");
+                String year = pair[0];
+                String month = pair[1];
+                CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month);
+
+                // 외부 서버로부터 블로그 링크를 가져온다
+                System.out.println("request to fake arvhice server with" + year + " and " + month + "...");
+                ArchivedPageInfo archivedPageInfo = service.findArchivedPageInfo(dto);
+                String blogPost = service.findBlogPostPage(archivedPageInfo);
+                String pageLinks = service.buildPageLinks(blogPost);
+                System.out.println(pageLinks);
+            }
+        }
     }
 }
