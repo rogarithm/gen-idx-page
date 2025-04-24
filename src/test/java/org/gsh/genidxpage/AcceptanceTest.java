@@ -6,6 +6,7 @@ import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.dao.WebArchiveReportMapper;
 import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
+import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ApiCallReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.BulkRequestSender;
@@ -43,7 +44,7 @@ public class AcceptanceTest {
                 "/wayback/available?url={url}&timestamp={timestamp}",
                 CustomRestTemplateBuilder.get()
             );
-            ArchivePageService service = new ArchivePageService(apiCaller, reporter);
+            ArchivePageService service = new AgileStoryArchivePageService(apiCaller, reporter);
 
             archivePageController = new ArchivePageController(service);
         }
@@ -137,7 +138,7 @@ public class AcceptanceTest {
     }
 
     private BulkRequestSender bulkRequestSender;
-    private ArchivePageService service;
+    private AgileStoryArchivePageService service;
 
     @Nested
     class ArchivePageSchedulingTest {
@@ -149,7 +150,7 @@ public class AcceptanceTest {
                 "/wayback/available?url={url}&timestamp={timestamp}",
                 CustomRestTemplateBuilder.get()
             );
-            service = new ArchivePageService(apiCaller, reporter);
+            service = new AgileStoryArchivePageService(apiCaller, reporter);
         }
 
         @DisplayName("한 번에 여러 요청을 보낸다")
