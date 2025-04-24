@@ -155,9 +155,11 @@ public class AcceptanceTest {
             service = new ArchivePageService(apiCaller, reporter);
         }
 
-        @DisplayName("두 요청 전달을 스케쥴링한다")
+        @DisplayName("한 번에 여러 요청을 보낸다")
         @Test
         public void schedule_sending_two_requests_to_web_archive() throws IOException {
+            FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
+
             // 요청 입력값을 파일로부터 읽어온다
             Path path = Paths.get("src/main/resources/static/year-month-list");
             String fileContent = Files.readString(path, StandardCharsets.UTF_8);
@@ -169,6 +171,17 @@ public class AcceptanceTest {
             }
 
             for (String yearMonth : yearMonths) {
+                String[] pair = yearMonth.split("/");
+                String year = pair[0];
+                String month = pair[1];
+                // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
+                fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
+                fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
+            }
+
+            fakeWebArchiveServer.start();
+
+            for (String yearMonth : yearMonths) {
                 // 외부 서버에 요청할 수 있게 파일 내용을 정제한다
                 String[] pair = yearMonth.split("/");
                 String year = pair[0];
@@ -176,12 +189,15 @@ public class AcceptanceTest {
                 CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month);
 
                 // 외부 서버로부터 블로그 링크를 가져온다
-                System.out.println("request to fake arvhice server with" + year + " and " + month + "...");
                 ArchivedPageInfo archivedPageInfo = service.findArchivedPageInfo(dto);
                 String blogPost = service.findBlogPostPage(archivedPageInfo);
                 String pageLinks = service.buildPageLinks(blogPost);
-                System.out.println(pageLinks);
+
+                // 결과값은 링크 형식이다
+                Assertions.assertThat(pageLinks).matches("<a href=\".*\">.*</a>");
             }
+
+            fakeWebArchiveServer.stop();
         }
     }
 }
