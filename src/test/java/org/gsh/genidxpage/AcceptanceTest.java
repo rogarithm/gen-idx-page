@@ -8,6 +8,7 @@ import org.gsh.genidxpage.dao.WebArchiveReportMapper;
 import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
 import org.gsh.genidxpage.service.ApiCallReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
+import org.gsh.genidxpage.service.BulkRequestSender;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.ArchivePageController;
@@ -141,12 +142,14 @@ public class AcceptanceTest {
         }
     }
 
+    private BulkRequestSender bulkRequestSender;
     private ArchivePageService service;
 
     @Nested
     class ArchivePageSchedulingTest {
         @BeforeEach
         public void setUp() {
+            bulkRequestSender = new BulkRequestSender();
             WebArchiveApiCaller apiCaller = new WebArchiveApiCaller(
                 "http://localhost:8080",
                 "/wayback/available?url={url}&timestamp={timestamp}",
@@ -158,6 +161,8 @@ public class AcceptanceTest {
         @DisplayName("한 번에 여러 요청을 보낸다")
         @Test
         public void schedule_sending_two_requests_to_web_archive() throws IOException {
+            // 요청할 모든 입력쌍을 만든다
+            // 입력쌍의 갯수만큼 요청을 보낸다
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             // 요청 입력값을 파일로부터 읽어온다
@@ -177,17 +182,10 @@ public class AcceptanceTest {
 
             fakeWebArchiveServer.start();
 
-            yearMonths.forEach(yearMonth -> {
-                // 외부 서버에 요청할 수 있게 파일 내용을 정제한다
-                String[] pair = yearMonth.split("/");
-                String year = pair[0];
-                String month = pair[1];
-                CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month);
+            List<String> pageLinksList = bulkRequestSender.sendAll(yearMonths, service);
 
-                // 외부 서버로부터 블로그 링크를 가져온다
-                String pageLinks = service.findBlogPageLink(dto);
-
-                // 결과값은 링크 형식이다
+            pageLinksList.stream().forEach(pageLinks -> {
+                // 외부 서버로부터 가져온 모든 결과값은 링크 형식이다
                 Assertions.assertThat(pageLinks).matches("<a href=\".*\">.*</a>");
             });
 
