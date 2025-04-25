@@ -3,6 +3,7 @@ package org.gsh.genidxpage;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.matching;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathTemplate;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
@@ -27,8 +28,8 @@ public class FakeWebArchiveServer {
     public void respondBlogPostListInGivenYearMonth(String year, String month,
         boolean hasManyPost) {
         instance.stubFor(get(urlPathTemplate("/web/20230614220926/archives/{year}/{month}"))
-            .withPathParam("year", equalTo(year))
-            .withPathParam("month", equalTo(String.format("%02d", Integer.parseInt(month))))
+            .withPathParam("year", matching("[12][0-9]{3}"))
+            .withPathParam("month", matching("[01][0-9]"))
             .willReturn(aResponse().withStatus(200)
                 .withBody(
                     buildPostListPage(year, month, hasManyPost)
@@ -88,7 +89,7 @@ public class FakeWebArchiveServer {
 
     public void respondItHasArchivedPageFor(String year, String month) {
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
-            .withQueryParam("url", equalTo(String.format("agile.egloos.com/archives/%s/%s", year, month)))
+            .withQueryParam("url", matching("agile.egloos.com/archives/[12][0-9]{3}/[01][0-9]"))
             .withQueryParam("timestamp", equalTo("20240101"))
             .willReturn(aResponse().withStatus(200).withBody(
                     String.format("""
@@ -116,7 +117,7 @@ public class FakeWebArchiveServer {
 
     public void respondItHasNoArchivedPage() {
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
-            .withQueryParam("url", equalTo("agile.egloos.com/archives/1999/07"))
+            .withQueryParam("url", matching("agile.egloos.com/archives/[12][0-9]{3}/[0-9]{2}"))
             .withQueryParam("timestamp", equalTo("20240101"))
             .willReturn(aResponse().withStatus(200).withBody(
                     """
