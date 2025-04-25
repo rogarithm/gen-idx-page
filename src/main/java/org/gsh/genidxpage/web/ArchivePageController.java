@@ -1,7 +1,6 @@
 package org.gsh.genidxpage.web;
 
 import org.gsh.genidxpage.service.ArchivePageService;
-import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +25,7 @@ public class ArchivePageController {
         @PathVariable(value = "month") String month
     ) {
         CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month);
-        ArchivedPageInfo archivedPageInfo = service.findArchivedPageInfo(dto);
-
-        String blogPost = service.findBlogPostPage(archivedPageInfo);
-
-        String pageLinks = service.buildPageLinks(blogPost);
+        String pageLinks = service.findBlogPageLink(dto);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(pageLinks);

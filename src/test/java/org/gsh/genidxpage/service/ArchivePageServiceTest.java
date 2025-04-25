@@ -32,7 +32,7 @@ class ArchivePageServiceTest {
         );
         ApiCallReporter reporter = mock(ApiCallReporter.class);
 
-        ArchivePageService service = new ArchivePageService(caller, reporter);
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter);
 
         Assertions.assertThrows(ArchivedPageNotFoundExceptioin.class,
             () -> service.findArchivedPageInfo(dto));
@@ -57,7 +57,7 @@ class ArchivePageServiceTest {
         when(caller.isArchived(any())).thenReturn(true);
         ApiCallReporter reporter = mock(ApiCallReporter.class);
 
-        ArchivePageService service = new ArchivePageService(caller, reporter);
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter);
 
         service.findArchivedPageInfo(dto);
 
