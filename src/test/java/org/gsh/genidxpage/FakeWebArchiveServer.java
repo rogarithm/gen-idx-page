@@ -74,7 +74,7 @@ public class FakeWebArchiveServer {
             <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">YEAR/MONTH/22</span> &nbsp; <a href="/web/20230614220926/http://agile.egloos.com/5946833">올해 첫 AC2 과정 40기가 곧 열립니다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[3]</span><br/>
             """;
         String firstPost = firstPostTemplate.replace("YEAR", year)
-        .replace("MONTH", month);
+            .replace("MONTH", month);
         String otherPosts = """
             <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/25</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5932600">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate"></span><br>
             <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/27</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5931859">혹독한 조언이 나를 살릴까?</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[13]</span><br>
