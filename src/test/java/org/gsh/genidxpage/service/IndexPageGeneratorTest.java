@@ -3,7 +3,6 @@ package org.gsh.genidxpage.service;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -11,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-@SpringBootTest
 class IndexPageGeneratorTest {
 
     @DisplayName("블로그 링크 목록으로 인덱스 페이지를 만들 수 있다")
