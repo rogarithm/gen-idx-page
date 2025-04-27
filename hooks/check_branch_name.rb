@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-now_branch_nm = `git rev-parse --abbrev-ref HEAD`
+now_branch_nm = ARGV[0]
 branch_nm_convention = /^issue\/[1-9][0-9]*(\w|-)+/
 
 puts "current branch name is #{now_branch_nm}"

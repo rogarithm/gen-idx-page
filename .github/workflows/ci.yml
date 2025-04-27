@@ -21,7 +21,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: check branch name fits convention
-        run: ruby ./hooks/check_branch_name.rb
+        run: ruby ./hooks/check_branch_name.rb ${{ github.head_ref || github.ref_name }}
   code-format:
     runs-on: ubuntu-latest
     permissions:
