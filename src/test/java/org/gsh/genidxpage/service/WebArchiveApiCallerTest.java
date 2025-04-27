@@ -1,13 +1,12 @@
 package org.gsh.genidxpage.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.FakeWebArchiveServer;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
+import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,12 +28,14 @@ class WebArchiveApiCallerTest {
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
         ArchivedPageInfo archivedPageInfo = caller.findArchivedPageInfo(dto);
 
-        assertThat(archivedPageInfo.accessibleUrl().contains("2021/03")).isTrue();
+        // 페이지가 아카이빙되어 있는 경우
+        assertThat(caller.isArchived(archivedPageInfo)).isTrue();
 
         fakeWebArchiveServer.respondItHasNoArchivedPage();
         CheckPostArchivedDto dto2 = new CheckPostArchivedDto("1999", "7");
         ArchivedPageInfo noArchivedPageInfo = caller.findArchivedPageInfo(dto2);
 
+        // 페이지가 아카이빙되어 있지 않은 경우
         assertThat(caller.isArchived(noArchivedPageInfo)).isFalse();
 
         fakeWebArchiveServer.stop();

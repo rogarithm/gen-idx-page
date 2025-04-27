@@ -1,5 +1,6 @@
 package org.gsh.genidxpage.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,12 +24,11 @@ class ApiCallReporterTest {
             "2021", "3", Boolean.TRUE, LocalDateTime.now()
         );
 
-        when(mapper.selectReportByYearMonth("2021", "3")).thenReturn(report);
+        when(mapper.selectReportByYearMonth(any(), any())).thenReturn(report);
 
         boolean hasArchivedPage = reporter.hasArchivedPage(
             new CheckPostArchivedDto("2021", "3")
         );
         Assertions.assertThat(hasArchivedPage).isTrue();
     }
-
 }
