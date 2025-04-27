@@ -10,6 +10,7 @@ import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ApiCallReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.BulkRequestSender;
+import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.ArchivePageController;
@@ -21,8 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import wiremock.com.github.jknack.handlebars.internal.Files;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Transactional
@@ -180,6 +183,41 @@ public class AcceptanceTest {
                 // 외부 서버로부터 가져온 모든 결과값은 링크 형식이다
                 Assertions.assertThat(pageLinks).matches("<a href=\".*\">.*</a>");
             });
+
+            fakeWebArchiveServer.stop();
+        }
+
+        @DisplayName("블로그 글 링크 목록으로 인덱스 파일을 생성한다")
+        @Test
+        public void generate_index_file_using_blog_post_links() throws IOException {
+            FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
+
+            // 요청 입력값을 파일로부터 읽어온다
+            List<String> yearMonths = bulkRequestSender.prepareInput();
+
+            // 요청할 모든 입력쌍을 만든다
+            yearMonths.forEach(yearMonth -> {
+                String[] pair = yearMonth.split("/");
+                String year = pair[0];
+                String month = pair[1];
+                // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
+                fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
+                fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
+            });
+
+            fakeWebArchiveServer.start();
+
+            // 입력쌍의 갯수만큼 요청을 보낸다
+            List<String> pageLinksList = bulkRequestSender.sendAll(yearMonths, service);
+
+            IndexPageGenerator generator = new IndexPageGenerator(
+                "/src/test/resources/static/index.html"
+            );
+            generator.generateIndexPage(pageLinksList);
+
+            Assertions.assertThat(
+                Files.read("/src/test/resources/static/index.html", StandardCharsets.UTF_8)
+            ).isNotNull();
 
             fakeWebArchiveServer.stop();
         }
