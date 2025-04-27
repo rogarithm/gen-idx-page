@@ -16,9 +16,9 @@ import org.junit.jupiter.api.Test;
 
 class ArchivePageServiceTest {
 
-    @DisplayName("아키이빙된 페이지 정보를 찾지 못했을 때 db에 기록한다")
+    @DisplayName("페이지 아키이빙 정보를 찾지 못했을 때 db에 기록한다")
     @Test
-    public void write_to_db_when_archived_page_info_not_found() {
+    public void write_to_db_when_page_archive_info_not_found() {
         ArchivedPageInfo noArchivedPageInfo = ArchivedPageInfoBuilder.builder()
             .url("")
             .withEmptyArchivedSnapshots()
@@ -37,12 +37,12 @@ class ArchivePageServiceTest {
         Assertions.assertThrows(ArchivedPageNotFoundExceptioin.class,
             () -> service.findArchivedPageInfo(dto));
 
-        verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), any(Boolean.class));
+        verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), eq(Boolean.FALSE));
     }
 
-    @DisplayName("아키이빙된 페이지 정보를 찾았을 때 db에 기록한다")
+    @DisplayName("페이지 아키이빙 정보를 찾았을 때 db에 기록한다")
     @Test
-    public void write_to_db_when_archived_page_info_found() {
+    public void write_to_db_when_page_archive_info_found() {
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
             .url("url")
             .withAccessibleArchivedSnapshots()
