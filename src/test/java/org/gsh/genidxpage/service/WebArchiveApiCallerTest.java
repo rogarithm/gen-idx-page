@@ -47,15 +47,17 @@ class WebArchiveApiCallerTest {
         WebArchiveApiCaller caller = new WebArchiveApiCaller("http://localhost:8080",
             "/wayback/available?url={url}&timestamp={timestamp}",
             CustomRestTemplateBuilder.get());
-        ArchivedPageInfo mockedPageInfo = mock(ArchivedPageInfo.class);
-        when(mockedPageInfo.isAccessible()).thenReturn(true);
+        ArchivedPageInfo pageInfo = ArchivedPageInfoBuilder.builder()
+            .withAccessibleArchivedSnapshots()
+            .build();
 
-        assertThat(caller.isArchived(mockedPageInfo)).isTrue();
+        assertThat(caller.isArchived(pageInfo)).isTrue();
 
-        ArchivedPageInfo mockedNoPageInfo = mock(ArchivedPageInfo.class);
-        when(mockedNoPageInfo.isAccessible()).thenReturn(false);
+        ArchivedPageInfo noPageInfo = ArchivedPageInfoBuilder.builder()
+            .withEmptyArchivedSnapshots()
+            .build();
 
-        assertThat(caller.isArchived(mockedNoPageInfo)).isFalse();
+        assertThat(caller.isArchived(noPageInfo)).isFalse();
     }
 
     @DisplayName("web archive 응답 json 데이터를 ArchivedPageInfo 타입 객체로 역직렬화할 수 있다")
