@@ -24,8 +24,7 @@ public class ArchivePageController {
         @PathVariable(value = "year") String year,
         @PathVariable(value = "month") String month
     ) {
-        CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month);
-        String pageLinks = service.findBlogPageLink(dto);
+        CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month); String pageLinks = service.findBlogPageLink(dto);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(pageLinks);
