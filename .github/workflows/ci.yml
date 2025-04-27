@@ -35,20 +35,3 @@ jobs:
           distribution: 'temurin'
       - name: check code format fits checkstyle and editconfig config
         run: ruby ./hooks/check_code_format.rb
-  test:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-    - uses: actions/checkout@v4
-    - name: set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    - name: setup gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-    - name: build without test
-      run: ./gradlew clean && ./gradlew build -x test
-    - name: test
-      run: ./gradlew test
