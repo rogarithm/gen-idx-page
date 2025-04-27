@@ -15,7 +15,7 @@ public class ArchivedPageInfoBuilder {
     }
 
     public ArchivedPageInfoBuilder withEmptyArchivedSnapshots() {
-        this.archivedSnapshots = null;
+        this.archivedSnapshots = new ArchivedSnapshots();
         return this;
     }
 
