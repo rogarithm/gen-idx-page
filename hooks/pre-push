@@ -3,31 +3,34 @@
 now_branch_nm = `git rev-parse --abbrev-ref HEAD`
 branch_nm_convention = /^issue\/[1-9][0-9]*(\w|-)+/
 
-if now_branch_nm.match(branch_nm_convention).nil?
-  puts 'branch name does not follow the convention!'
-  puts 'it should match "issue/80-blah-blah"'
-  exit 1
-end
-
 checkstyle_result = `./gradlew checkstyleMain checkstyleTest 2>/dev/null`
 is_checkstyle_failed = checkstyle_result.split("\n")
   .select {|l|
     l.match(/^> Task :checkstyleMain FAILED.*|^> Task :checkstyleTest FAILED.*/)
   } != []
-if is_checkstyle_failed
-  puts 'failed to format code as configured in checkstyle!'
-  puts 'run ./gradlew check for detail'
-  exit 1
-end
 
 editorconfig_result = `./gradlew editorconfigCheck 2>/dev/null`
 is_editorconfig_failed = editorconfig_result.split("\n")
   .select {|l|
     l.match(/^> Task :editorconfigCheck FAILED.*/)
   } != []
+
+if now_branch_nm.match(branch_nm_convention).nil?
+  puts 'branch name does not follow the convention!'
+  puts 'it should match "issue/80-blah-blah"'
+end
+if is_checkstyle_failed
+  puts 'failed to format code as configured in checkstyle!'
+  puts 'run ./gradlew check for detail'
+end
 if is_editorconfig_failed
   puts 'trying to recover editorconfig failure...'
   puts 'commit before push'
   `./gradlew editorConfigFormat`
+end
+
+if now_branch_nm.match(branch_nm_convention).nil? or
+  is_checkstyle_failed or
+  is_editorconfig_failed
   exit 1
 end
