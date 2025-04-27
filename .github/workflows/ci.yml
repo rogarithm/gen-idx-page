@@ -34,7 +34,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: check code format fits checkstyle and editconfig config
-        run: run ./hooks/check_code_format.rb
+        run: ruby ./hooks/check_code_format.rb
   test:
     runs-on: ubuntu-latest
     permissions:
