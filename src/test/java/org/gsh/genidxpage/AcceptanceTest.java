@@ -22,10 +22,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import wiremock.com.github.jknack.handlebars.internal.Files;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 @Transactional
@@ -211,12 +212,12 @@ public class AcceptanceTest {
             List<String> pageLinksList = bulkRequestSender.sendAll(yearMonths, service);
 
             IndexPageGenerator generator = new IndexPageGenerator(
-                "/src/test/resources/static/index.html"
+                "/tmp/genidxpage/test"
             );
             generator.generateIndexPage(pageLinksList);
 
             Assertions.assertThat(
-                Files.read("/src/test/resources/static/index.html", StandardCharsets.UTF_8)
+                Files.readString(Path.of("/tmp/genidxpage/test/index.html"), StandardCharsets.UTF_8)
             ).isNotNull();
 
             fakeWebArchiveServer.stop();
