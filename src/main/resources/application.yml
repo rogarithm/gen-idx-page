@@ -25,6 +25,8 @@ webArchive:
 
 bulk-request:
   input-path: /src/main/resources/static/year-month-list
+index-page:
+  path: /app/static
 
 logging:
   file:
