@@ -38,18 +38,18 @@ public class IndexPageGenerator {
 
     String generateHeader() {
         return """
-  <html>
-    <head>
-      <meta charset="utf-8">
-    </head>
-    <body>
-  """;
+            <html>
+              <head>
+                <meta charset="utf-8">
+              </head>
+              <body>
+            """;
     }
 
     String generateFooter() {
         return """
-                </body>
-              </html>
-              """;
+              </body>
+            </html>
+            """;
     }
 }
