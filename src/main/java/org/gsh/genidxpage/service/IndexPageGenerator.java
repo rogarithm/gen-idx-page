@@ -23,6 +23,7 @@ public class IndexPageGenerator {
             String[] split = pageLink.split("\n");
             for (String link : split) {
                 builder.append(link);
+                builder.append("<br>");
                 builder.append("\n");
             }
         }

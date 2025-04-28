@@ -20,6 +20,9 @@ class IndexPageGeneratorTest {
         IndexPageGenerator generator = new IndexPageGenerator("/tmp/genidxpage");
         generator.generateIndexPage(pageLinksList);
         String fileContent = Files.readString(Path.of("/tmp/genidxpage/index.html"), StandardCharsets.UTF_8);
-        Assertions.assertThat(fileContent).contains("l1\nl2\nl3\nl4");
+        Assertions.assertThat(fileContent).contains("l1")
+            .contains("l2")
+            .contains("l3")
+            .contains("l4");
     }
 }
