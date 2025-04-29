@@ -29,12 +29,7 @@ public class WebArchiveApiCaller {
     }
 
     public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
-        String uri = UriComponentsBuilder.fromUriString(rootUri)
-            .uriComponents(
-                UriComponentsBuilder.fromUriString(checkArchivedUri)
-                    .buildAndExpand(dto.getUrl(), dto.getTimestamp())
-            )
-            .build().toUriString();
+        String uri = buildUri(dto);
 
         ResponseEntity<String> archivedPageInfo = restTemplate.getForEntity(
             uri,
@@ -48,6 +43,15 @@ public class WebArchiveApiCaller {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    String buildUri(final CheckPostArchivedDto dto) {
+        return UriComponentsBuilder.fromUriString(rootUri)
+            .uriComponents(
+                UriComponentsBuilder.fromUriString(checkArchivedUri)
+                    .buildAndExpand(dto.getUrl(), dto.getTimestamp())
+            )
+            .build().toUriString();
     }
 
     public boolean isArchived(final ArchivedPageInfo archivedPageInfo) {
