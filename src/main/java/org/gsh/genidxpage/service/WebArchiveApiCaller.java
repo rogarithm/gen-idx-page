@@ -16,14 +16,14 @@ public class WebArchiveApiCaller {
 
     private final RestTemplate restTemplate;
     private final String checkArchivedUri;
-    private String rootUri;
+    private final String rootUri;
 
     public WebArchiveApiCaller(
         @Value("${webArchive.rootUri}") final String rootUri,
         @Value("${webArchive.checkArchivedUri}") String checkArchivedUri,
         RestTemplateBuilder restTemplateBuilder
     ) {
-        this.restTemplate = restTemplateBuilder.rootUri(rootUri).build();
+        this.restTemplate = restTemplateBuilder.build();
         this.checkArchivedUri = checkArchivedUri;
         this.rootUri = rootUri;
     }
