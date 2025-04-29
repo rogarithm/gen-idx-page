@@ -10,6 +10,7 @@ import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 class WebArchiveApiCallerTest {
@@ -76,5 +77,22 @@ class WebArchiveApiCallerTest {
             .isInstanceOf(ArchivedPageInfo.class);
 
         fakeWebArchiveServer.stop();
+    }
+
+    @DisplayName("url을 인코딩할 수 있다")
+    @Test
+    public void encode_simple_url() {
+        String rootUri = "http://archive.org";
+        String checkArchivedUri = "/wayback/available?url={url}&timestamp={timestamp}";
+        String uri = UriComponentsBuilder.fromUriString(rootUri)
+            .uriComponents(
+                UriComponentsBuilder.fromUriString(checkArchivedUri)
+                    .buildAndExpand("https://x", "20240101")
+            )
+            .build().toString();
+
+        Assertions.assertThat(uri).isEqualTo(
+            "http://archive.org/wayback/available?url=https://x&timestamp=20240101"
+        );
     }
 }
