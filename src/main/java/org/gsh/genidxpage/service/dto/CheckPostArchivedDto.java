@@ -10,9 +10,9 @@ public class CheckPostArchivedDto {
     public CheckPostArchivedDto(String year, String month) {
         this.year = year;
         this.month = month;
-        this.url = "agile.egloos.com/archives/" + year + "/" + String.format("%02d",
+        this.url = "https://agile.egloos.com/archives/" + year + "/" + String.format("%02d",
             Integer.parseInt(month));
-        this.timestamp = "20240101";
+        this.timestamp = "20230401";
     }
 
     public String getYear() {

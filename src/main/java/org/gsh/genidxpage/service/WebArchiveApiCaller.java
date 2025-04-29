@@ -7,6 +7,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,22 +16,24 @@ public class WebArchiveApiCaller {
 
     private final RestTemplate restTemplate;
     private final String checkArchivedUri;
+    private final String rootUri;
 
     public WebArchiveApiCaller(
         @Value("${webArchive.rootUri}") final String rootUri,
         @Value("${webArchive.checkArchivedUri}") String checkArchivedUri,
         RestTemplateBuilder restTemplateBuilder
     ) {
-        this.restTemplate = restTemplateBuilder.rootUri(rootUri).build();
+        this.restTemplate = restTemplateBuilder.build();
         this.checkArchivedUri = checkArchivedUri;
+        this.rootUri = rootUri;
     }
 
     public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
+        String uri = buildUri(dto);
+
         ResponseEntity<String> archivedPageInfo = restTemplate.getForEntity(
-            checkArchivedUri,
-            String.class,
-            dto.getUrl(),
-            dto.getTimestamp()
+            uri,
+            String.class
         );
 
         String response = archivedPageInfo.getBody();
@@ -40,6 +43,15 @@ public class WebArchiveApiCaller {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    String buildUri(final CheckPostArchivedDto dto) {
+        return UriComponentsBuilder.fromUriString(rootUri)
+            .uriComponents(
+                UriComponentsBuilder.fromUriString(checkArchivedUri)
+                    .buildAndExpand(dto.getUrl(), dto.getTimestamp())
+            )
+            .build().toUriString();
     }
 
     public boolean isArchived(final ArchivedPageInfo archivedPageInfo) {

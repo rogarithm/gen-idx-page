@@ -77,4 +77,17 @@ class WebArchiveApiCallerTest {
 
         fakeWebArchiveServer.stop();
     }
+
+    @DisplayName("url을 인코딩할 수 있다")
+    @Test
+    public void encode_simple_url() {
+        WebArchiveApiCaller caller = new WebArchiveApiCaller("http://localhost:8080",
+            "/wayback/available?url={url}&timestamp={timestamp}",
+            CustomRestTemplateBuilder.get());
+
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2023", "1");
+        Assertions.assertThat(caller.buildUri(dto)).matches(
+            "http://localhost:8080/wayback/available\\?url=https://agile.egloos.com/archives/2023/01&timestamp=\\d{8}"
+        );
+    }
 }
