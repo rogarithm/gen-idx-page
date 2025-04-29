@@ -7,6 +7,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,6 +17,7 @@ public class WebArchiveApiCaller {
 
     private final RestTemplate restTemplate;
     private final String checkArchivedUri;
+    private String rootUri;
 
     public WebArchiveApiCaller(
         @Value("${webArchive.rootUri}") final String rootUri,
@@ -23,14 +26,18 @@ public class WebArchiveApiCaller {
     ) {
         this.restTemplate = restTemplateBuilder.rootUri(rootUri).build();
         this.checkArchivedUri = checkArchivedUri;
+        this.rootUri = rootUri;
     }
 
     public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
+        String checkArchivedUrl = "/wayback/available";
+        UriComponents uri = UriComponentsBuilder.fromUriString(rootUri + checkArchivedUrl)
+            .queryParam("url", dto.getUrl())
+            .queryParam("timestamp", dto.getTimestamp())
+            .build();
         ResponseEntity<String> archivedPageInfo = restTemplate.getForEntity(
-            checkArchivedUri,
-            String.class,
-            dto.getUrl(),
-            dto.getTimestamp()
+            uri.toUriString(),
+            String.class
         );
 
         String response = archivedPageInfo.getBody();

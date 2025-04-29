@@ -20,8 +20,8 @@ mybatis:
     map-underscore-to-camel-case: true
 
 webArchive:
-  rootUri: x
-  checkArchivedUri: /wayback/available?url={url}&timestamp={timestamp}
+  rootUri: https://archive.org
+  checkArchivedUri: /wayback/available?url={url}
 
 bulk-request:
   input-path: /src/main/resources/static/year-month-list
@@ -35,5 +35,6 @@ logging:
     root: INFO
     org.mybatis: DEBUG
     com.mysql.cj.jdbc: DEBUG
+    org.springframework.web.client.RestTemplate: DEBUG
   pattern:
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%-5level) %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %msg%n"
