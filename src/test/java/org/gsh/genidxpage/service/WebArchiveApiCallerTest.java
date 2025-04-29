@@ -10,7 +10,6 @@ import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 class WebArchiveApiCallerTest {
@@ -82,17 +81,13 @@ class WebArchiveApiCallerTest {
     @DisplayName("url을 인코딩할 수 있다")
     @Test
     public void encode_simple_url() {
-        String rootUri = "http://archive.org";
-        String checkArchivedUri = "/wayback/available?url={url}&timestamp={timestamp}";
-        String uri = UriComponentsBuilder.fromUriString(rootUri)
-            .uriComponents(
-                UriComponentsBuilder.fromUriString(checkArchivedUri)
-                    .buildAndExpand("https://x", "20240101")
-            )
-            .build().toString();
+        WebArchiveApiCaller caller = new WebArchiveApiCaller("http://localhost:8080",
+            "/wayback/available?url={url}&timestamp={timestamp}",
+            CustomRestTemplateBuilder.get());
 
-        Assertions.assertThat(uri).isEqualTo(
-            "http://archive.org/wayback/available?url=https://x&timestamp=20240101"
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2023", "1");
+        Assertions.assertThat(caller.buildUri(dto)).matches(
+            "http://localhost:8080/wayback/available\\?url=https://agile.egloos.com/archives/2023/01&timestamp=\\d{8}"
         );
     }
 }
