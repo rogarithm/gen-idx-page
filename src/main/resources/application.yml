@@ -21,7 +21,7 @@ mybatis:
 
 webArchive:
   rootUri: https://archive.org
-  checkArchivedUri: /wayback/available?url={url}
+  checkArchivedUri: /wayback/available?url={url}&timestamp={timestamp}
 
 bulk-request:
   input-path: /src/main/resources/static/year-month-list
