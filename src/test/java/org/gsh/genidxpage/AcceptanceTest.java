@@ -160,7 +160,7 @@ public class AcceptanceTest {
 
         @DisplayName("한 번에 여러 요청을 보낸다")
         @Test
-        public void schedule_sending_two_requests_to_web_archive() throws IOException {
+        public void schedule_sending_two_requests_to_web_archive() {
             // 요청할 모든 입력쌍을 만든다
             // 입력쌍의 갯수만큼 요청을 보낸다
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
@@ -226,7 +226,7 @@ public class AcceptanceTest {
 
         @DisplayName("설정한 일정에 맞춰 여러 요청을 보낸다")
         @Test
-        public void send_scheduled_multiple_requests() throws IOException {
+        public void send_scheduled_multiple_requests() {
             // 요청할 모든 입력쌍을 만든다
             // 입력쌍의 갯수만큼 요청을 보낸다
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();

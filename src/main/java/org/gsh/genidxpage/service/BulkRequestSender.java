@@ -1,5 +1,7 @@
 package org.gsh.genidxpage.service;
 
+import org.gsh.genidxpage.common.exception.ErrorCode;
+import org.gsh.genidxpage.exception.FailToReadRequestInputFileException;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,9 +24,14 @@ public class BulkRequestSender {
         this.inputPath = inputPath;
     }
 
-    public List<String> prepareInput() throws IOException {
+    public List<String> prepareInput() {
         Path path = Paths.get(this.inputPath);
-        String fileContent = Files.readString(path, StandardCharsets.UTF_8);
+        String fileContent = "";
+        try {
+            fileContent = Files.readString(path, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new FailToReadRequestInputFileException(e, ErrorCode.SERVER_FAULT, "fail to read request input file");
+        }
         List<String> yearMonths = Arrays.stream(fileContent.strip().split("\n"))
             .collect(ArrayList::new, List::add, List::addAll);
         return yearMonths;
