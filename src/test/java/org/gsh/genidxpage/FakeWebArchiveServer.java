@@ -2,6 +2,7 @@ package org.gsh.genidxpage;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.matching;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathTemplate;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
@@ -128,5 +129,10 @@ public class FakeWebArchiveServer {
                 )
             )
         );
+    }
+
+    public void hasReceivedMultipleRequests(int requestCount) {
+        instance.verify(requestCount, getRequestedFor(urlPathTemplate("/wayback/available/.*")));
+        instance.verify(requestCount, getRequestedFor(urlPathTemplate("/web/[0-9]+/archives/.*")));
     }
 }

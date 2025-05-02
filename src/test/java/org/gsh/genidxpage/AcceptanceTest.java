@@ -6,6 +6,7 @@ import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.dao.WebArchiveReportMapper;
 import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
+import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ApiCallReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
@@ -219,6 +220,34 @@ public class AcceptanceTest {
             Assertions.assertThat(
                 Files.readString(Path.of("/tmp/genidxpage/test/index.html"), StandardCharsets.UTF_8)
             ).isNotNull();
+
+            fakeWebArchiveServer.stop();
+        }
+
+        @DisplayName("설정한 일정에 맞춰 여러 요청을 보낸다")
+        @Test
+        public void send_scheduled_multiple_requests() throws IOException {
+            // 요청할 모든 입력쌍을 만든다
+            // 입력쌍의 갯수만큼 요청을 보낸다
+            FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
+
+            WebArchiveScheduler scheduler = new WebArchiveScheduler();
+
+            // 요청 입력값을 파일로부터 읽어온다
+            List<String> yearMonths = bulkRequestSender.prepareInput();
+            yearMonths.forEach(yearMonth -> {
+                String[] pair = yearMonth.split("/");
+                String year = pair[0];
+                String month = pair[1];
+                // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
+                fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
+                fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
+            });
+
+            fakeWebArchiveServer.start();
+
+            scheduler.doSend();
+            fakeWebArchiveServer.hasReceivedMultipleRequests(yearMonths.size());
 
             fakeWebArchiveServer.stop();
         }
