@@ -132,7 +132,16 @@ public class FakeWebArchiveServer {
     }
 
     public void hasReceivedMultipleRequests(int requestCount) {
-        instance.verify(requestCount, getRequestedFor(urlPathTemplate("/wayback/available/.*")));
-        instance.verify(requestCount, getRequestedFor(urlPathTemplate("/web/[0-9]+/archives/.*")));
+        instance.verify(requestCount, getRequestedFor(urlPathTemplate("/wayback/available"))
+            .withQueryParam("url",
+                matching("http[s]?://agile.egloos.com/archives/[12][0-9]{3}/[01][0-9]"))
+            .withQueryParam("timestamp", matching("[0-9]{8}"))
+        );
+        instance.verify(requestCount,
+            getRequestedFor(urlPathTemplate("/web/{timestamp}/archives/{year}/{month}"))
+                .withPathParam("timestamp", matching("[0-9]{14}"))
+                .withPathParam("year", matching("[12][0-9]{3}"))
+                .withPathParam("month", matching("[01][0-9]"))
+        );
     }
 }
