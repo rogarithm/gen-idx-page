@@ -231,7 +231,7 @@ public class AcceptanceTest {
             // 입력쌍의 갯수만큼 요청을 보낸다
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
-            WebArchiveScheduler scheduler = new WebArchiveScheduler(bulkRequestSender, service);
+            WebArchiveScheduler scheduler = new WebArchiveScheduler(bulkRequestSender, service, null);
 
             // 요청 입력값을 파일로부터 읽어온다
             List<String> yearMonths = bulkRequestSender.prepareInput();
