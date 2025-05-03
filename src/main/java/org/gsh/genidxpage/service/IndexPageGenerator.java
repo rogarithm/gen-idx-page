@@ -1,6 +1,7 @@
 package org.gsh.genidxpage.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
+@Component
 public class IndexPageGenerator {
 
     private final String inputPath;
