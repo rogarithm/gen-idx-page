@@ -5,7 +5,6 @@ import org.gsh.genidxpage.service.BulkRequestSender;
 import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -31,7 +30,7 @@ public class WebArchiveScheduler {
         return bulkRequestSender.sendAll(yearMonths, archivePageService);
     }
 
-    void doGenerate(List<String> pageLinkList) throws IOException {
+    void doGenerate(List<String> pageLinkList) {
         indexPageGenerator.generateIndexPage(pageLinkList);
     }
 }

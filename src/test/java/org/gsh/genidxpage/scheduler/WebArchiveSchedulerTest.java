@@ -12,7 +12,6 @@ import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,7 +37,7 @@ class WebArchiveSchedulerTest {
 
     @DisplayName("요청 결과로 인덱스 파일을 만든다")
     @Test
-    public void generate_index_file_with_response() throws IOException {
+    public void generate_index_file_with_response() {
         IndexPageGenerator generator = mock(IndexPageGenerator.class);
         List<String> pageLinksList = List.of("l1", "l2", "l3");
 

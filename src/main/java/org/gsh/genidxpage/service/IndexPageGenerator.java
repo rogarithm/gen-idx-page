@@ -1,5 +1,8 @@
 package org.gsh.genidxpage.service;
 
+import org.gsh.genidxpage.common.exception.ErrorCode;
+import org.gsh.genidxpage.exception.FailToCreateDirectoryException;
+import org.gsh.genidxpage.exception.FailToWriteFileException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +21,10 @@ public class IndexPageGenerator {
         this.inputPath = inputPath;
     }
 
-    public void generateIndexPage(List<String> pageLinksList) throws IOException {
+    // TODO
+    //  파일 관련 연산을 별도의 객체로 분리
+    //  예외 발생 상황 테스트를 추가
+    public void generateIndexPage(List<String> pageLinksList) {
         StringBuilder builder = new StringBuilder();
         builder.append(generateHeader());
         for (String pageLink : pageLinksList) {
@@ -32,10 +38,20 @@ public class IndexPageGenerator {
         builder.append(generateFooter());
 
         Path dirPath = Path.of(inputPath);
-        Files.createDirectories(dirPath);
+        try {
+            Files.createDirectories(dirPath);
+        } catch (IOException e) {
+            throw new FailToCreateDirectoryException(e, ErrorCode.SERVER_FAULT,
+                "fail to create directory to store index file");
+        }
 
         Path filePath = Path.of(inputPath + "/index.html");
-        Files.write(filePath, builder.toString().getBytes(), StandardOpenOption.CREATE);
+        try {
+            Files.write(filePath, builder.toString().getBytes(), StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            throw new FailToWriteFileException(e, ErrorCode.SERVER_FAULT,
+                "fail to write index file");
+        }
     }
 
     String generateHeader() {
