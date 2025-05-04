@@ -3,6 +3,7 @@ package org.gsh.genidxpage.scheduler;
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.BulkRequestSender;
 import org.gsh.genidxpage.service.IndexPageGenerator;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,8 +22,10 @@ public class WebArchiveScheduler {
         this.indexPageGenerator = indexPageGenerator;
     }
 
+    @Scheduled(cron = "0 0 * * * *")
     public void scheduleSend() {
-        doSend();
+        List<String> pageLinkList = doSend();
+        doGenerate(pageLinkList);
     }
 
     public List<String> doSend() {
