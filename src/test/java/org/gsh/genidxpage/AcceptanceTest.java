@@ -151,7 +151,7 @@ public class AcceptanceTest {
     class ArchivePageSchedulingTest {
         @BeforeEach
         public void setUp() {
-            bulkRequestSender = new BulkRequestSender("src/test/resources/static/year-month-list");
+            bulkRequestSender = new BulkRequestSender("static/year-month-list");
             WebArchiveApiCaller apiCaller = new WebArchiveApiCaller(
                 "http://localhost:8080",
                 "/wayback/available?url={url}&timestamp={timestamp}",
