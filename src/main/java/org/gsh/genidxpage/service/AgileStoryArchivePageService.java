@@ -1,9 +1,8 @@
 package org.gsh.genidxpage.service;
 
-import org.gsh.genidxpage.common.exception.ErrorCode;
-import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
 import org.gsh.genidxpage.web.response.PostLinkInfo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,9 @@ public class AgileStoryArchivePageService implements ArchivePageService {
 
     public String findBlogPageLink(final CheckPostArchivedDto dto) {
         ArchivedPageInfo archivedPageInfo = this.findArchivedPageInfo(dto);
+        if (archivedPageInfo.isEmpty()) {
+            return "";
+        }
         String blogPost = this.findBlogPostPage(archivedPageInfo);
         return this.buildPageLinks(blogPost);
     }
@@ -32,7 +34,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
 
         if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
             reporter.reportArchivedPageSearch(dto, Boolean.FALSE);
-            throw new ArchivedPageNotFoundExceptioin(ErrorCode.BAD_REQUEST, "resource not found");
+            return new EmptyArchivedPageInfo();
         }
 
         reporter.reportArchivedPageSearch(dto, Boolean.TRUE);

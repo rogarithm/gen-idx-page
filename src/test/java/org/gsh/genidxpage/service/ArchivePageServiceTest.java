@@ -6,11 +6,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
+import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
-import org.junit.jupiter.api.Assertions;
+import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -34,8 +34,8 @@ class ArchivePageServiceTest {
 
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter);
 
-        Assertions.assertThrows(ArchivedPageNotFoundExceptioin.class,
-            () -> service.findArchivedPageInfo(dto));
+        Assertions.assertThat(service.findArchivedPageInfo(dto)).isInstanceOf(
+            EmptyArchivedPageInfo.class);
 
         verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), eq(Boolean.FALSE));
     }
