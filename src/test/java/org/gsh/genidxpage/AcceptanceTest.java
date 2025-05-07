@@ -1,11 +1,9 @@
 package org.gsh.genidxpage;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.dao.WebArchiveReportMapper;
-import org.gsh.genidxpage.exception.ArchivedPageNotFoundExceptioin;
+import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ApiCallReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
@@ -21,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -29,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+@TestPropertySource(properties = "app.scheduling.enable=false")
 @Transactional
 @SpringBootTest
 public class AcceptanceTest {
@@ -53,7 +53,7 @@ public class AcceptanceTest {
             archivePageController = new ArchivePageController(service);
         }
 
-        @DisplayName("요청 연월에 등록된 블로그 글이 web archive에 없으면, 리소스가 존재하지 않음을 응답으로 받는다")
+        @DisplayName("요청 연월에 등록된 블로그 글이 web archive에 없으면, 빈 응답을 받는다")
         @Test
         public void receive_not_found_msg_when_send_request() {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
@@ -63,13 +63,10 @@ public class AcceptanceTest {
             fakeWebArchiveServer.start();
 
             // 서버는 web archive server에 아카이브된 블로그 글을 요청한다
-            // web archive server는 처리할 수 없음 메시지를 반환한다
-            // 서버는 처리할 수 없는 요청임을 예외 처리기를 통해 클라이언트에게 알린다
-            assertThrows(
-                ArchivedPageNotFoundExceptioin.class, () -> {
-                    archivePageController.getBlogPostLinks("1999", "7");
-                }
-            );
+            // web archive server는 등록된 페이지가 없음을 알린다
+            // 서버는 클라이언트에게 빈 문자열로 응답한다
+            Assertions.assertThat(archivePageController.getBlogPostLinks("1999", "7").getBody())
+                .isEqualTo("");
 
             fakeWebArchiveServer.stop();
         }
@@ -148,7 +145,7 @@ public class AcceptanceTest {
     class ArchivePageSchedulingTest {
         @BeforeEach
         public void setUp() {
-            bulkRequestSender = new BulkRequestSender("src/test/resources/static/year-month-list");
+            bulkRequestSender = new BulkRequestSender("static/year-month-list");
             WebArchiveApiCaller apiCaller = new WebArchiveApiCaller(
                 "http://localhost:8080",
                 "/wayback/available?url={url}&timestamp={timestamp}",
@@ -159,7 +156,7 @@ public class AcceptanceTest {
 
         @DisplayName("한 번에 여러 요청을 보낸다")
         @Test
-        public void schedule_sending_two_requests_to_web_archive() throws IOException {
+        public void schedule_sending_two_requests_to_web_archive() {
             // 요청할 모든 입력쌍을 만든다
             // 입력쌍의 갯수만큼 요청을 보낸다
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
@@ -219,6 +216,34 @@ public class AcceptanceTest {
             Assertions.assertThat(
                 Files.readString(Path.of("/tmp/genidxpage/test/index.html"), StandardCharsets.UTF_8)
             ).isNotNull();
+
+            fakeWebArchiveServer.stop();
+        }
+
+        @DisplayName("설정한 일정에 맞춰 여러 요청을 보낸다")
+        @Test
+        public void send_scheduled_multiple_requests() {
+            // 요청할 모든 입력쌍을 만든다
+            // 입력쌍의 갯수만큼 요청을 보낸다
+            FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
+
+            WebArchiveScheduler scheduler = new WebArchiveScheduler(bulkRequestSender, service, null);
+
+            // 요청 입력값을 파일로부터 읽어온다
+            List<String> yearMonths = bulkRequestSender.prepareInput();
+            yearMonths.forEach(yearMonth -> {
+                String[] pair = yearMonth.split("/");
+                String year = pair[0];
+                String month = pair[1];
+                // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
+                fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
+                fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
+            });
+
+            fakeWebArchiveServer.start();
+
+            scheduler.doSend();
+            fakeWebArchiveServer.hasReceivedMultipleRequests(yearMonths.size());
 
             fakeWebArchiveServer.stop();
         }

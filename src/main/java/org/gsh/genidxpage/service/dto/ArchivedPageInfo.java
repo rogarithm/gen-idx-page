@@ -38,4 +38,8 @@ public class ArchivedPageInfo {
     public String accessibleUrl() {
         return archivedSnapshots.getSnapshot().getUrl();
     }
+
+    public boolean isEmpty() {
+        return false;
+    }
 }

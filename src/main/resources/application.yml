@@ -24,7 +24,7 @@ webArchive:
   checkArchivedUri: /wayback/available?url={url}&timestamp={timestamp}
 
 bulk-request:
-  input-path: /src/main/resources/static/year-month-list
+  input-path: static/year-month-list
 index-page:
   path: /app/static
 
