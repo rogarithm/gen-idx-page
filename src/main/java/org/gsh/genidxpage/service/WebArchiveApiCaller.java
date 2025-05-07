@@ -49,7 +49,7 @@ public class WebArchiveApiCaller {
         return UriComponentsBuilder.fromUriString(rootUri)
             .uriComponents(
                 UriComponentsBuilder.fromUriString(checkArchivedUri)
-                    .buildAndExpand(dto.getUrl(), dto.getTimestamp())
+                    .buildAndExpand(dto.getUrl())
             )
             .build().toUriString();
     }
