@@ -19,9 +19,9 @@ mybatis:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
     map-underscore-to-camel-case: true
 
-webArchive:
-  rootUri: https://archive.org
-  checkArchivedUri: /wayback/available?url={url}
+web-archive:
+  root-uri: https://archive.org
+  check-archived-uri: /wayback/available?url={url}
 
 bulk-request:
   input-path: static/year-month-list

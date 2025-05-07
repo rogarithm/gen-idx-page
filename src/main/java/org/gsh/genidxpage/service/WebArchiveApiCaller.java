@@ -19,8 +19,8 @@ public class WebArchiveApiCaller {
     private final String rootUri;
 
     public WebArchiveApiCaller(
-        @Value("${webArchive.rootUri}") final String rootUri,
-        @Value("${webArchive.checkArchivedUri}") String checkArchivedUri,
+        @Value("${web-archive.root-uri}") final String rootUri,
+        @Value("${web-archive.check-archived-uri}") String checkArchivedUri,
         RestTemplateBuilder restTemplateBuilder
     ) {
         this.restTemplate = restTemplateBuilder.build();
