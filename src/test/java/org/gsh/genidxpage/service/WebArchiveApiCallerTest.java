@@ -93,7 +93,7 @@ class WebArchiveApiCallerTest {
 
     @DisplayName("timestamp 쿼리 파리미터 여부에 따라 동적으로 uri를 완성한다")
     @Test
-    public void t() {
+    public void build_uri_dynamically_depending_on_given_query_parameters() {
         WebArchiveApiCaller callerWithTimestamp = new WebArchiveApiCaller("http://localhost:8080",
             "/wayback/available?url={url}&timestamp={timestamp}",
             CustomRestTemplateBuilder.get());
