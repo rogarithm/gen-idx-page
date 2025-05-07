@@ -7,9 +7,13 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class WebArchiveApiCaller {
@@ -46,10 +50,17 @@ public class WebArchiveApiCaller {
     }
 
     String buildUri(final CheckPostArchivedDto dto) {
+        UriComponents uriComponents = UriComponentsBuilder.fromUriString(checkArchivedUri).build();
+
+        List<String> queryParams = new ArrayList<>();
+        queryParams.add(dto.getUrl());
+        if (uriComponents.getQueryParams().get("timestamp") != null) {
+            queryParams.add(dto.getTimestamp());
+        }
+
         return UriComponentsBuilder.fromUriString(rootUri)
             .uriComponents(
-                UriComponentsBuilder.fromUriString(checkArchivedUri)
-                    .buildAndExpand(dto.getUrl())
+                uriComponents.expand(queryParams.toArray())
             )
             .build().toUriString();
     }

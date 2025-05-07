@@ -90,4 +90,24 @@ class WebArchiveApiCallerTest {
             "http://localhost:8080/wayback/available\\?url=https://agile.egloos.com/archives/2023/01&timestamp=\\d{8}"
         );
     }
+
+    @DisplayName("timestamp 쿼리 파리미터 여부에 따라 동적으로 uri를 완성한다")
+    @Test
+    public void t() {
+        WebArchiveApiCaller callerWithTimestamp = new WebArchiveApiCaller("http://localhost:8080",
+            "/wayback/available?url={url}&timestamp={timestamp}",
+            CustomRestTemplateBuilder.get());
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+
+        Assertions.assertThat(callerWithTimestamp.buildUri(dto)).matches(
+            "http://localhost:8080/wayback/available\\?url=[^&]*&timestamp=\\d{8}"
+        );
+
+        WebArchiveApiCaller callerWithoutTimestamp = new WebArchiveApiCaller("http://localhost:8080",
+            "/wayback/available?url={url}",
+            CustomRestTemplateBuilder.get());
+        Assertions.assertThat(callerWithoutTimestamp.buildUri(dto)).matches(
+            "http://localhost:8080/wayback/available\\?url=[^&]*"
+        );
+    }
 }
