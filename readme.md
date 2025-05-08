@@ -21,7 +21,7 @@ web archive에 아카이빙된 페이지를 쉽게 탐색할 수 있도록 인�
 ### 개발 정책
 개발 중 발생할 수 있는 오류를 사전에 방지하거나 쉽게 파악할 수 있도록 하고, 개발 일관성을 지킬 수 있는 정책과 도구를 적용한다. 현재까지 다음과 같은 정책과 도구를 적용했다:
 
-- 브랜치 네이밍 정책: pre-push 훅으로 브랜치 이름 규칙을 강제한다
-- 코드 포맷 일관성 유지: checkstyle, .editorconfig, intelliJ 포맷터를 설정하고, pre-push 훅과 깃헙액션에서 자동 검증한다
-- 테스트 자동화: 테스트를 작성하고, pre-push 훅과 깃헙액션에서 테스트 통과 여부를 확인한다
-- MyBatis SQL 문법 검증: XML에 정의된 SQL 문이 올바른지 검증한다. 루비 스크립트는 XML 내 SQL만 추출해 스키마 SQL 파일을 참고해 sql 문법 검사기인 sqlfluff에서 분석할 수 있는 형태로 바꾸고, pre-commit 훅으로 커밋 전마다 실행한다
+- 브랜치 네이밍 정책: [pre-push 훅으로 브랜치 이름 규칙을 강제한다](https://github.com/rogarithm/gen-idx-page/pull/9)
+- 코드 포맷 일관성 유지: [checkstyle, .editorconfig, intelliJ 포맷터를 설정하고, pre-push 훅과 깃헙액션에서 자동 검증한다](https://github.com/rogarithm/gen-idx-page/pulls?q=is%3Apr+is%3Aclosed+label%3Aformatting)
+- 테스트 자동화: 테스트를 작성하고, [pre-push 훅과 깃헙액션에서 테스트 통과 여부를 확인한다](https://github.com/rogarithm/gen-idx-page/pull/40)
+- MyBatis SQL 문법 검증: [XML에 정의된 SQL 문이 올바른지 검증한다](https://github.com/rogarithm/gen-idx-page/pull/33). 루비 스크립트는 XML 내 SQL만 추출해 스키마 SQL 파일을 참고해 sql 문법 검사기인 sqlfluff에서 분석할 수 있는 형태로 바꾸고, pre-commit 훅으로 커밋 전마다 실행한다
