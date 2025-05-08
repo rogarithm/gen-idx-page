@@ -35,7 +35,7 @@ jobs:
           distribution: 'temurin'
       - name: check code format fits checkstyle and editconfig config
         run: ruby ./hooks/check_code_format.rb
-  build-n-test:
+  run-test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
