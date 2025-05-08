@@ -7,9 +7,13 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class WebArchiveApiCaller {
@@ -19,8 +23,8 @@ public class WebArchiveApiCaller {
     private final String rootUri;
 
     public WebArchiveApiCaller(
-        @Value("${webArchive.rootUri}") final String rootUri,
-        @Value("${webArchive.checkArchivedUri}") String checkArchivedUri,
+        @Value("${web-archive.root-uri}") final String rootUri,
+        @Value("${web-archive.check-archived-uri}") String checkArchivedUri,
         RestTemplateBuilder restTemplateBuilder
     ) {
         this.restTemplate = restTemplateBuilder.build();
@@ -46,10 +50,17 @@ public class WebArchiveApiCaller {
     }
 
     String buildUri(final CheckPostArchivedDto dto) {
+        UriComponents uriComponents = UriComponentsBuilder.fromUriString(checkArchivedUri).build();
+
+        List<String> queryParams = new ArrayList<>();
+        queryParams.add(dto.getUrl());
+        if (uriComponents.getQueryParams().get("timestamp") != null) {
+            queryParams.add(dto.getTimestamp());
+        }
+
         return UriComponentsBuilder.fromUriString(rootUri)
             .uriComponents(
-                UriComponentsBuilder.fromUriString(checkArchivedUri)
-                    .buildAndExpand(dto.getUrl())
+                uriComponents.expand(queryParams.toArray())
             )
             .build().toUriString();
     }
