@@ -17,6 +17,10 @@ is_editorconfig_failed = editorconfig_result.split("\n")
     l.match(/^> Task :editorconfigCheck FAILED.*/)
   } != []
 
+puts 'run test...'
+test_result = `./gradlew test 2>/dev/null`
+is_test_failed = test_result.scan('FAILED') != []
+
 if now_branch_nm.match(branch_nm_convention).nil?
   puts 'branch name does not follow the convention!'
   puts 'it should match "issue/80-blah-blah"'
@@ -36,9 +40,15 @@ if is_editorconfig_failed
 else
   puts 'editorconfig ok'
 end
+if is_test_failed
+  puts 'test failed!'
+else
+  puts 'test ok'
+end
 
 if now_branch_nm.match(branch_nm_convention).nil? or
   is_checkstyle_failed or
-  is_editorconfig_failed
+  is_editorconfig_failed or
+  is_test_failed
   exit 1
 end
