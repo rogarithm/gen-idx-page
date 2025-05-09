@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.gsh.genidxpage.service.ArchivePageService;
-import org.gsh.genidxpage.service.BulkRequestSender;
 import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

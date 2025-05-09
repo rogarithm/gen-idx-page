@@ -1,7 +1,8 @@
-package org.gsh.genidxpage.service;
+package org.gsh.genidxpage.scheduler;
 
 import org.gsh.genidxpage.common.exception.ErrorCode;
 import org.gsh.genidxpage.exception.FailToReadRequestInputFileException;
+import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;

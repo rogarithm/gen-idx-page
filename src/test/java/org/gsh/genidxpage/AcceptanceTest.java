@@ -7,7 +7,7 @@ import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ApiCallReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
-import org.gsh.genidxpage.service.BulkRequestSender;
+import org.gsh.genidxpage.scheduler.BulkRequestSender;
 import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
