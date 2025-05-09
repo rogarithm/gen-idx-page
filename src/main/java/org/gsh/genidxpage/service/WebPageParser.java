@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class WebPageParser {
+class WebPageParser {
 
-    public List<PostLinkInfo> findPostLinks(String stringDoc) {
+    List<PostLinkInfo> findPostLinks(String stringDoc) {
         Document doc = Jsoup.parse(stringDoc);
         Elements postLinks = doc.select(".POST_BODY > a");
 
@@ -27,7 +27,7 @@ public class WebPageParser {
         return Collections.unmodifiableList(result);
     }
 
-    public String buildPageLinks(List<PostLinkInfo> postLinks) {
+    String buildPageLinks(List<PostLinkInfo> postLinks) {
         StringBuilder result = new StringBuilder();
         for (PostLinkInfo postLink : postLinks) {
             result.append(postLink.buildPageLink());
