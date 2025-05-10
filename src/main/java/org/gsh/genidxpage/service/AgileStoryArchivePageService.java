@@ -36,7 +36,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         return this.buildPageLinks(blogPost);
     }
 
-    public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
+    ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
 
         if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
@@ -48,13 +48,13 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         return archivedPageInfo;
     }
 
-    public String findBlogPostPage(final ArchivedPageInfo archivedPageInfo) {
+    String findBlogPostPage(final ArchivedPageInfo archivedPageInfo) {
         ResponseEntity<String> blogPostResponse = webArchiveApiCaller.findBlogPostPage(
             archivedPageInfo);
         return blogPostResponse.getBody();
     }
 
-    public String buildPageLinks(final String blogPost) {
+    String buildPageLinks(final String blogPost) {
         WebPageParser webPageParser = new WebPageParser();
         List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
         return webPageParser.buildPageLinks(postLinks);

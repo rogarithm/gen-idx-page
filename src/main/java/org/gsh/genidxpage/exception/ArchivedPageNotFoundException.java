@@ -2,12 +2,12 @@ package org.gsh.genidxpage.exception;
 
 import org.gsh.genidxpage.common.exception.ErrorCode;
 
-public class ArchivedPageNotFoundExceptioin extends RuntimeException {
+public class ArchivedPageNotFoundException extends RuntimeException {
 
     private final ErrorCode errorCode;
     private final String message;
 
-    public ArchivedPageNotFoundExceptioin(ErrorCode errorCode, String message) {
+    public ArchivedPageNotFoundException(ErrorCode errorCode, String message) {
         super(errorCode.getReason());
         this.errorCode = errorCode;
         this.message = message;

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.exception.FailToReadRequestInputFileException;
+import org.gsh.genidxpage.scheduler.BulkRequestSender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

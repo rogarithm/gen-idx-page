@@ -56,7 +56,7 @@ public class IndexPageGenerator {
         }
     }
 
-    String generateHeader() {
+    private String generateHeader() {
         return """
             <html>
               <head>
@@ -66,7 +66,7 @@ public class IndexPageGenerator {
             """;
     }
 
-    String generateFooter() {
+    private String generateFooter() {
         return """
               </body>
             </html>

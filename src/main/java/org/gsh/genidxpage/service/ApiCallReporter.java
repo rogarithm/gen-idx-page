@@ -14,7 +14,7 @@ public class ApiCallReporter {
         this.reportMapper = reportMapper;
     }
 
-    public void reportArchivedPageSearch(final CheckPostArchivedDto dto, final Boolean pageExists) {
+    void reportArchivedPageSearch(final CheckPostArchivedDto dto, final Boolean pageExists) {
         ArchivedPageUrlReport report = ArchivedPageUrlReport.from(dto, pageExists);
         reportMapper.insertReport(report);
     }

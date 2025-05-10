@@ -1,7 +1,6 @@
 package org.gsh.genidxpage.scheduler;
 
 import org.gsh.genidxpage.service.ArchivePageService;
-import org.gsh.genidxpage.service.BulkRequestSender;
 import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
