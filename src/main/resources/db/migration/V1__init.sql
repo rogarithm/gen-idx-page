@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS page_url_report;
-
 CREATE TABLE `page_url_report`
 (
     `id`                bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,

@@ -6,12 +6,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
-  sql:
-    init:
-      platform: mysql
-      mode: always
-      schema-locations: classpath:sql/schema.sql
-      data-locations: classpath:sql/data.sql
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
 
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
