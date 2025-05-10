@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
 
+require_relative './lib/branch_name_checker'
+
 now_branch_nm = `git rev-parse --abbrev-ref HEAD`
-branch_nm_convention = /^issue-[1-9][0-9]*\/\w{1}(\w|-)*/
+branch_nm_report = BranchNameChecker.new.check(now_branch_nm)
 
 puts 'checking checkstyle...'
 checkstyle_result = `./gradlew checkstyleMain checkstyleTest 2>/dev/null`
@@ -21,12 +23,12 @@ puts 'run test...'
 test_result = `./gradlew test 2>/dev/null`
 is_test_failed = test_result.scan('FAILED') != []
 
-if now_branch_nm.match(branch_nm_convention).nil?
-  puts 'branch name does not follow the convention!'
-  puts 'it should match "issue-80/blah-blah"'
+if branch_nm_report.status == 'FAIL'
+  puts branch_nm_report.msgs.join("\n")
 else
   puts 'branch naming convention ok'
 end
+
 if is_checkstyle_failed
   puts 'failed to format code as configured in checkstyle!'
   puts 'run ./gradlew check for detail'
@@ -46,7 +48,7 @@ else
   puts 'test ok'
 end
 
-if now_branch_nm.match(branch_nm_convention).nil? or
+if branch_nm_report.status == 'FAIL' or
   is_checkstyle_failed or
   is_editorconfig_failed or
   is_test_failed
