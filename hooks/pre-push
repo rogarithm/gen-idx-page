@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 now_branch_nm = `git rev-parse --abbrev-ref HEAD`
-branch_nm_convention = /^issue\/[1-9][0-9]*(\w|-)+/
+branch_nm_convention = /^issue-[1-9][0-9]*\/\w{1}(\w|-)*/
 
 puts 'checking checkstyle...'
 checkstyle_result = `./gradlew checkstyleMain checkstyleTest 2>/dev/null`
@@ -23,7 +23,7 @@ is_test_failed = test_result.scan('FAILED') != []
 
 if now_branch_nm.match(branch_nm_convention).nil?
   puts 'branch name does not follow the convention!'
-  puts 'it should match "issue/80-blah-blah"'
+  puts 'it should match "issue-80/blah-blah"'
 else
   puts 'branch naming convention ok'
 end
