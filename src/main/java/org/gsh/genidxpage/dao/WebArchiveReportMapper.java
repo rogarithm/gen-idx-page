@@ -10,4 +10,6 @@ public interface WebArchiveReportMapper {
     Long insertReport(ArchivedPageUrlReport report);
 
     ArchivedPageUrlReport selectReportByYearMonth(@Param("year") String year, @Param("month") String month);
+
+    void updateReport(ArchivedPageUrlReport report);
 }

@@ -1,7 +1,9 @@
 package org.gsh.genidxpage.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.assertj.core.api.Assertions;
@@ -30,5 +32,25 @@ class ApiCallReporterTest {
             new CheckPostArchivedDto("2021", "3")
         );
         Assertions.assertThat(hasArchivedPage).isTrue();
+    }
+
+    @DisplayName("이미 db에 기록된 경우, 새로운 행을 추가하지 않는다")
+    @Test
+    public void only_update_status_when_page_status_already_inserted() {
+        WebArchiveReportMapper mapper = mock(WebArchiveReportMapper.class);
+        ApiCallReporter reporter = new ApiCallReporter(mapper);
+        ArchivedPageUrlReport report = new ArchivedPageUrlReport(
+            "2021", "3", Boolean.TRUE, LocalDateTime.now()
+        );
+
+        when(mapper.selectReportByYearMonth(any(), any())).thenReturn(
+            report);
+        doNothing().when(mapper).updateReport(report);
+
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+        reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
+
+        verify(mapper).selectReportByYearMonth(any(), any());
+        verify(mapper).updateReport(any(ArchivedPageUrlReport.class));
     }
 }
