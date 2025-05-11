@@ -1,4 +1,6 @@
 require 'nokogiri'
+require 'mysql2'
+require 'dotenv/load'
 
 # 컬럼 타입에 따른 리터럴 값을 설정한다
 def dummy_value_for(mysql_type)
@@ -13,15 +15,19 @@ def dummy_value_for(mysql_type)
 end
 
 # DB 테이블 스키마 파일로부터 컬럼별 필드를 알아낸다
-def fetch_column_types(schema_path, table_name)
-  schema = File.read(schema_path)
+def fetch_column_types(table_name)
+  db_config = {
+    host: "localhost",
+    username: ENV['MYSQL_USERNAME'],
+    password: ENV['MYSQL_PASSWORD'],
+    database: "genidxpage"
+  }
 
-  table_def = schema[/CREATE TABLE `#{table_name}`.*?\);/m]
-  return {} unless table_def
-
+  client = Mysql2::Client.new(db_config)
+  table_def = client.query("DESCRIBE #{table_name}")
   types = {}
-  table_def.scan(/\s*`?(\w+)`?\s+(\w+),?/) do |col, type|
-    types[col] = type
+  table_def.each do |col|
+    types[col["Field"]] = col["Type"]
   end
   types
 end
@@ -29,7 +35,7 @@ end
 # XML에서 SQL 추출 후 리터럴을 대입한다
 def extract_and_substitute(xml_path, table_name)
   doc = Nokogiri::XML(File.read(xml_path))
-  types = fetch_column_types("./src/main/resources/sql/schema.sql", table_name)
+  types = fetch_column_types(table_name)
 
   sqls = doc.xpath("//insert | //update | //select | //delete").map do |node|
     raw_sql = node.text.strip
@@ -50,8 +56,11 @@ def extract_and_substitute(xml_path, table_name)
   sqls
 end
 
-sqls = extract_and_substitute("./src/main/resources/mapper/WebArchiveReportMapper.xml", "page_url_report")
+sqls = extract_and_substitute(
+  "./src/main/resources/mapper/WebArchiveReportMapper.xml",
+  "post_list_page_status"
+)
 sqls.each_with_index do |sql, idx|
   File.write("./hooks/.sql_check/sql_#{idx + 1}.sql", sql)
-  puts `sqlfluff lint ./hooks/.sql_check/sql_#{idx + 1}.sql --dialect mysql --rules PRS`
+  puts `sqlfluff lint ./hooks/.sql_check/sql_#{idx + 1}.sql --dialect mysql | grep PRS`
 end
