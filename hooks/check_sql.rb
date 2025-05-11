@@ -62,5 +62,5 @@ sqls = extract_and_substitute(
 )
 sqls.each_with_index do |sql, idx|
   File.write("./hooks/.sql_check/sql_#{idx + 1}.sql", sql)
-  puts `sqlfluff lint ./hooks/.sql_check/sql_#{idx + 1}.sql --dialect mysql --rules PRS`
+  puts `sqlfluff lint ./hooks/.sql_check/sql_#{idx + 1}.sql --dialect mysql | grep PRS`
 end
