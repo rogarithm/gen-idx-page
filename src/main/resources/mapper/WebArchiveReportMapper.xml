@@ -25,4 +25,13 @@
       AND `month` = #{month}
       AND deleted_at IS NULL
   </select>
+
+  <update id="updateReport" useGeneratedKeys="true" keyProperty="id"
+    parameterType="org.gsh.genidxpage.entity.ArchivedPageUrlReport">
+    UPDATE post_list_page_status
+    SET page_exists = #{pageExists},
+        updated_at  = #{updatedAt}
+    WHERE `year` = #{year}
+      AND `month` = #{month}
+  </update>
 </mapper>
