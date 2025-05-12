@@ -83,7 +83,7 @@ class ArchivePageServiceTest {
 
         PostListPageRecorder recorder = mock(PostListPageRecorder.class);
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller,
-            null, recorder);
+            mock(ApiCallReporter.class), recorder);
 
         service.findArchivedPageInfo(dto);
 
