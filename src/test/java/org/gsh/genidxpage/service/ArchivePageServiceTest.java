@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.assertj.core.api.Assertions;
-import org.gsh.genidxpage.entity.PostListPage;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
@@ -87,6 +86,6 @@ class ArchivePageServiceTest {
 
         service.findArchivedPageInfo(dto);
 
-        verify(recorder).record(any(PostListPage.class));
+        verify(recorder).record(any(CheckPostArchivedDto.class), any(ArchivedPageInfo.class));
     }
 }

@@ -2,6 +2,8 @@ package org.gsh.genidxpage.service;
 
 import org.gsh.genidxpage.dao.PostListPageMapper;
 import org.gsh.genidxpage.entity.PostListPage;
+import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
+import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -13,17 +15,17 @@ public class PostListPageRecorder {
         this.mapper = mapper;
     }
 
-    void record(PostListPage postListPage) {
+    void record(final CheckPostArchivedDto dto, final ArchivedPageInfo archivedPageInfo) {
         PostListPage hasPostListPage = mapper.selectPostListPageByYearMonth(
-            postListPage.getYear(),
-            postListPage.getMonth()
+            dto.getYear(),
+            dto.getMonth()
         );
 
         if (hasPostListPage != null) {
-            mapper.updatePostListPage(postListPage);
+            mapper.updatePostListPage(PostListPage.of(dto, archivedPageInfo));
             return;
         }
 
-        mapper.insertPostListPage(postListPage);
+        mapper.insertPostListPage(PostListPage.of(dto, archivedPageInfo));
     }
 }

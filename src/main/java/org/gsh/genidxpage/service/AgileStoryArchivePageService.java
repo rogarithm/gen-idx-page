@@ -1,6 +1,5 @@
 package org.gsh.genidxpage.service;
 
-import org.gsh.genidxpage.entity.PostListPage;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
@@ -48,7 +47,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         }
 
         reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
-        recorder.record(PostListPage.of(dto, archivedPageInfo));
+        recorder.record(dto, archivedPageInfo);
         return archivedPageInfo;
     }
 

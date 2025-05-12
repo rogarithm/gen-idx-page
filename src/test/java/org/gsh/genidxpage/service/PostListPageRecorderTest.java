@@ -7,6 +7,9 @@ import static org.mockito.Mockito.when;
 
 import org.gsh.genidxpage.dao.PostListPageMapper;
 import org.gsh.genidxpage.entity.PostListPage;
+import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
+import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
+import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -20,9 +23,11 @@ class PostListPageRecorderTest {
         PostListPageMapper mapper = mock(PostListPageMapper.class);
         PostListPageRecorder recorder = new PostListPageRecorder(mapper);
 
-        PostListPage postListPage = new PostListPage("2021", "3", "url", LocalDateTime.now());
-
-        recorder.record(postListPage);
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+        ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
+            .withAccessibleArchivedSnapshots()
+            .build();
+        recorder.record(dto, archivedPageInfo);
 
         verify(mapper).insertPostListPage(any(PostListPage.class));
     }
@@ -33,10 +38,19 @@ class PostListPageRecorderTest {
         PostListPageMapper mapper = mock(PostListPageMapper.class);
         PostListPageRecorder recorder = new PostListPageRecorder(mapper);
 
-        PostListPage postListPage = new PostListPage("2021", "3", "url", LocalDateTime.now());
+        PostListPage postListPage = new PostListPage(
+            "2021",
+            "3",
+            "http://localhost:8080/web/20230614220926/archives/2021/03",
+            LocalDateTime.now()
+        );
         when(mapper.selectPostListPageByYearMonth(any(), any())).thenReturn(postListPage);
 
-        recorder.record(postListPage);
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+        ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
+            .withAccessibleArchivedSnapshots()
+            .build();
+        recorder.record(dto, archivedPageInfo);
 
         verify(mapper).updatePostListPage(any(PostListPage.class));
     }
