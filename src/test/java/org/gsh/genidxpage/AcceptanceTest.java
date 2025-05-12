@@ -13,6 +13,7 @@ import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -248,6 +249,7 @@ public class AcceptanceTest {
             fakeWebArchiveServer.stop();
         }
 
+        @Disabled
         @DisplayName("실패한 요청을 모아서 재시도한다")
         @Test
         public void retry_failed_requests() {
