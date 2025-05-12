@@ -115,20 +115,24 @@ public class FakeWebArchiveServer {
         respondItHasArchivedPageFor("2021", "03");
     }
 
-    public void respondItHasNoArchivedPage() {
+    public void respondItHasNoArchivedPageFor(String year, String month) {
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
             .withQueryParam("url", matching("http[s]?://agile.egloos.com/archives/[12][0-9]{3}/[0-9]{2}"))
             .withQueryParam("timestamp", matching("[0-9]{8}"))
             .willReturn(aResponse().withStatus(200).withBody(
-                    """
-                        {
-                          "url": "agile.egloos.com/archives/1999/07",
-                          "archived_snapshots": {}
-                        }
-                        """
+                String.format("""
+                    {
+                      "url": "agile.egloos.com/archives/%s/%s",
+                      "archived_snapshots": {}
+                    }
+                    """, year, month)
                 )
             )
         );
+    }
+
+    public void respondItHasNoArchivedPage() {
+        respondItHasNoArchivedPageFor("1999","07");
     }
 
     public void hasReceivedMultipleRequests(int requestCount) {
