@@ -14,6 +14,16 @@ public class PostListPageRecorder {
     }
 
     void record(PostListPage postListPage) {
+        PostListPage hasPostListPage = mapper.selectPostListPageByYearMonth(
+            postListPage.getYear(),
+            postListPage.getMonth()
+        );
+
+        if (hasPostListPage != null) {
+            mapper.updatePostListPage(postListPage);
+            return;
+        }
+
         mapper.insertPostListPage(postListPage);
     }
 }

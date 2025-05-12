@@ -30,4 +30,16 @@ public class PostListPage {
             LocalDateTime.now()
         );
     }
+
+    public String getYear() {
+        return year;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public String getUrl() {
+        return url;
+    }
 }
