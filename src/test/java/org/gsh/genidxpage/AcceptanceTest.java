@@ -259,9 +259,6 @@ public class AcceptanceTest {
 
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
-            WebArchiveScheduler scheduler = new WebArchiveScheduler(bulkRequestSender, service,
-                null);
-
             // 요청할 모든 입력쌍을 만든다
             List<String> yearMonths = bulkRequestSender.prepareInput();
             List<String> passRequests = yearMonths.stream()
@@ -288,6 +285,9 @@ public class AcceptanceTest {
 
             fakeWebArchiveServer.start();
 
+            WebArchiveScheduler scheduler = new WebArchiveScheduler(
+                bulkRequestSender, service, null
+            );
             scheduler.doSend();
             fakeWebArchiveServer.hasReceivedMultipleRequests(
                 passRequests.size() + failRequests.size() * 2 // 비정상 응답받은 경우는 재시도한다

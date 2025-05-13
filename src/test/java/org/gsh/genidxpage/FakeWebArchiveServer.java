@@ -132,7 +132,7 @@ public class FakeWebArchiveServer {
     }
 
     public void respondItHasNoArchivedPage() {
-        respondItHasNoArchivedPageFor("1999","07");
+        respondItHasNoArchivedPageFor("1999", "07");
     }
 
     public void hasReceivedMultipleRequests(int requestCount) {
