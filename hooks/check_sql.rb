@@ -57,9 +57,13 @@ def extract_and_substitute(xml_path, table_name)
 end
 
 sqls = extract_and_substitute(
-  "./src/main/resources/mapper/WebArchiveReportMapper.xml",
+  File.join(
+    File.dirname(__FILE__),
+    %w[.. src main resources mapper WebArchiveReportMapper.xml]
+  ),
   "post_list_page_status"
 )
+
 sqls.each_with_index do |sql, idx|
   File.write("./hooks/.sql_check/sql_#{idx + 1}.sql", sql)
   puts `sqlfluff lint ./hooks/.sql_check/sql_#{idx + 1}.sql --dialect mysql | grep PRS`
