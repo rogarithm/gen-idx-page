@@ -32,9 +32,22 @@ def fetch_column_types(table_name)
   types
 end
 
+def find_table_name(doc)
+  doc.xpath("//insert | //update | //select | //delete").map do |node|
+    raw_sql = node.text.strip
+
+    if raw_sql =~ /\b(?:INSERT\s+INTO|UPDATE|FROM)\s+[`"]?(\w+)[`"]?/i
+      return $1
+    end
+  end
+end
+
 # XML에서 SQL 추출 후 리터럴을 대입한다
-def extract_and_substitute(xml_path, table_name)
+def extract_and_substitute(xml_path)
   doc = Nokogiri::XML(File.read(xml_path))
+
+  table_name = find_table_name(doc)
+
   types = fetch_column_types(table_name)
 
   sqls = doc.xpath("//insert | //update | //select | //delete").map do |node|
@@ -56,11 +69,21 @@ def extract_and_substitute(xml_path, table_name)
   sqls
 end
 
-sqls = extract_and_substitute(
-  "./src/main/resources/mapper/WebArchiveReportMapper.xml",
-  "post_list_page_status"
-)
-sqls.each_with_index do |sql, idx|
-  File.write("./hooks/.sql_check/sql_#{idx + 1}.sql", sql)
-  puts `sqlfluff lint ./hooks/.sql_check/sql_#{idx + 1}.sql --dialect mysql | grep PRS`
-end
+mapper_xml_nms = Dir.entries(File.join(File.dirname(__FILE__), *%W[.. src main resources mapper]))
+                    .reject { |entry| entry.match?(/^\..*$/) }
+                    .map { |mapper_xml| mapper_xml.split(".").first }
+
+mapper_xml_nms.each {|mapper_xml_nm|
+  sqls = extract_and_substitute(
+    File.join(
+      File.dirname(__FILE__),
+      %W[.. src main resources mapper #{mapper_xml_nm}.xml]
+    )
+  )
+
+  sqls.each_with_index do |sql, idx|
+    file_to_check = "#{mapper_xml_nm}_#{idx + 1}.sql"
+    File.write("./hooks/.sql_check/#{file_to_check}", sql)
+    puts `sqlfluff lint ./hooks/.sql_check/#{file_to_check} --dialect mysql | grep PRS`
+  end
+}

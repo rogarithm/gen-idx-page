@@ -32,7 +32,7 @@ class ArchivePageServiceTest {
         );
         ApiCallReporter reporter = mock(ApiCallReporter.class);
 
-        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter);
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null);
 
         Assertions.assertThat(service.findArchivedPageInfo(dto)).isInstanceOf(
             EmptyArchivedPageInfo.class);
@@ -57,10 +57,36 @@ class ArchivePageServiceTest {
         when(caller.isArchived(any())).thenReturn(true);
         ApiCallReporter reporter = mock(ApiCallReporter.class);
 
-        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter);
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
+            mock(PostListPageRecorder.class));
 
         service.findArchivedPageInfo(dto);
 
         verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), eq(Boolean.TRUE));
+    }
+
+    @DisplayName("페이지 아키이빙 정보를 찾았을 때, 접근 url을 db에 기록한다")
+    @Test
+    public void write_access_url_to_db_when_page_archive_info_found() {
+        ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
+            .url("url")
+            .withAccessibleArchivedSnapshots()
+            .timestamp("20240101")
+            .build();
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+
+        WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
+        when(caller.findArchivedPageInfo(any())).thenReturn(
+            archivedPageInfo
+        );
+        when(caller.isArchived(any())).thenReturn(true);
+
+        PostListPageRecorder recorder = mock(PostListPageRecorder.class);
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller,
+            mock(ApiCallReporter.class), recorder);
+
+        service.findArchivedPageInfo(dto);
+
+        verify(recorder).record(any(CheckPostArchivedDto.class), any(ArchivedPageInfo.class));
     }
 }

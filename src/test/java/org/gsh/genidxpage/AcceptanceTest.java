@@ -3,16 +3,18 @@ package org.gsh.genidxpage;
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.dao.WebArchiveReportMapper;
+import org.gsh.genidxpage.scheduler.BulkRequestSender;
 import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ApiCallReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
-import org.gsh.genidxpage.scheduler.BulkRequestSender;
 import org.gsh.genidxpage.service.IndexPageGenerator;
+import org.gsh.genidxpage.service.PostListPageRecorder;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -37,6 +39,8 @@ public class AcceptanceTest {
     @Autowired
     private ApiCallReporter reporter;
     @Autowired
+    private PostListPageRecorder recorder;
+    @Autowired
     private WebArchiveReportMapper mapper;
 
     @Nested
@@ -48,7 +52,7 @@ public class AcceptanceTest {
                 "/wayback/available?url={url}&timestamp={timestamp}",
                 CustomRestTemplateBuilder.get()
             );
-            ArchivePageService service = new AgileStoryArchivePageService(apiCaller, reporter);
+            ArchivePageService service = new AgileStoryArchivePageService(apiCaller, reporter, recorder);
 
             archivePageController = new ArchivePageController(service);
         }
@@ -151,7 +155,7 @@ public class AcceptanceTest {
                 "/wayback/available?url={url}&timestamp={timestamp}",
                 CustomRestTemplateBuilder.get()
             );
-            service = new AgileStoryArchivePageService(apiCaller, reporter);
+            service = new AgileStoryArchivePageService(apiCaller, reporter, recorder);
         }
 
         @DisplayName("한 번에 여러 요청을 보낸다")
@@ -244,6 +248,50 @@ public class AcceptanceTest {
 
             scheduler.doSend();
             fakeWebArchiveServer.hasReceivedMultipleRequests(yearMonths.size());
+
+            fakeWebArchiveServer.stop();
+        }
+
+        @Disabled
+        @DisplayName("실패한 요청을 모아서 재시도한다")
+        @Test
+        public void retry_failed_requests() {
+
+            FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
+
+            // 요청할 모든 입력쌍을 만든다
+            List<String> yearMonths = bulkRequestSender.prepareInput();
+            List<String> passRequests = yearMonths.stream()
+                .filter(ym -> ym.split("/")[0].equals("2021"))
+                .toList();
+            passRequests.forEach(yearMonth -> {
+                String[] pair = yearMonth.split("/");
+                String year = pair[0];
+                String month = pair[1];
+                // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 정상 응답한다
+                fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
+                fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
+            });
+            List<String> failRequests = yearMonths.stream()
+                .filter(ym -> !ym.split("/")[0].equals("2021"))
+                .toList();
+            failRequests.forEach(yearMonth -> {
+                String[] pair = yearMonth.split("/");
+                String year = pair[0];
+                String month = pair[1];
+                // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 비정상 응답한다
+                fakeWebArchiveServer.respondItHasNoArchivedPageFor(year, month);
+            });
+
+            fakeWebArchiveServer.start();
+
+            WebArchiveScheduler scheduler = new WebArchiveScheduler(
+                bulkRequestSender, service, null
+            );
+            scheduler.doSend();
+            fakeWebArchiveServer.hasReceivedMultipleRequests(
+                passRequests.size() + failRequests.size() * 2 // 비정상 응답받은 경우는 재시도한다
+            );
 
             fakeWebArchiveServer.stop();
         }
