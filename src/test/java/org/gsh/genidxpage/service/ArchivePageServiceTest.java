@@ -57,7 +57,8 @@ class ArchivePageServiceTest {
         when(caller.isArchived(any())).thenReturn(true);
         ApiCallReporter reporter = mock(ApiCallReporter.class);
 
-        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null);
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
+            mock(PostListPageRecorder.class));
 
         service.findArchivedPageInfo(dto);
 
