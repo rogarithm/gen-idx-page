@@ -4,7 +4,7 @@ added_path_list = `git diff-index --cached HEAD --name-only`
 added_path_list.split("\n").each do |added_path|
   if added_path.split("/")[0...-1].join("/") == "src/main/resources/mapper"
     sql_syntax_err = `ruby ./hooks/check_sql.rb`
-    if sql_syntax_err != ""
+    if sql_syntax_err.split("\n").reject{|x| x == ""} != []
       puts "current index includes invalid sql edit"
       puts sql_syntax_err
       exit 1
