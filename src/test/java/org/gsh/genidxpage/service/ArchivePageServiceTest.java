@@ -13,6 +13,7 @@ import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 
 class ArchivePageServiceTest {
 
@@ -80,12 +81,19 @@ class ArchivePageServiceTest {
             archivedPageInfo
         );
         when(caller.isArchived(any())).thenReturn(true);
+        when(caller.findBlogPostPage(any())).thenReturn(ResponseEntity.ok().body("""
+              <div class="POST_BODY">
+              <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2020/02/25</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5932600">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate"></span><br>
+              <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2020/02/14</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5931859">혹독한 조언이 나를 살릴까?</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[13]</span><br>
+              <div style="margin-top:10px;"><a href="/web/20230614124528/http://agile.egloos.com/archives/2020/02/page/1" title="전체보기">"2020년02월" 의 글 내용 전체 보기</a></div>
+            </div>
+            """));
 
         PostListPageRecorder listPageRecorder = mock(PostListPageRecorder.class);
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller,
-            mock(ApiCallReporter.class), listPageRecorder, null);
+            mock(ApiCallReporter.class), listPageRecorder, mock(PostRecorder.class));
 
-        service.findArchivedPageInfo(dto);
+        service.findBlogPageLink(dto);
 
         verify(listPageRecorder).record(any(CheckPostArchivedDto.class), any(ArchivedPageInfo.class));
     }
