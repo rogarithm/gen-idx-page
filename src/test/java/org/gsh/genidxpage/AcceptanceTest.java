@@ -10,6 +10,7 @@ import org.gsh.genidxpage.service.ApiCallReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.gsh.genidxpage.service.PostListPageRecorder;
+import org.gsh.genidxpage.service.PostRecorder;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.ArchivePageController;
@@ -41,6 +42,8 @@ public class AcceptanceTest {
     @Autowired
     private PostListPageRecorder listPageRecorder;
     @Autowired
+    private PostRecorder postRecorder;
+    @Autowired
     private WebArchiveReportMapper mapper;
 
     @Nested
@@ -53,7 +56,7 @@ public class AcceptanceTest {
                 CustomRestTemplateBuilder.get()
             );
             ArchivePageService service = new AgileStoryArchivePageService(apiCaller, reporter,
-                listPageRecorder, null);
+                listPageRecorder, postRecorder);
 
             archivePageController = new ArchivePageController(service);
         }
@@ -156,7 +159,7 @@ public class AcceptanceTest {
                 "/wayback/available?url={url}&timestamp={timestamp}",
                 CustomRestTemplateBuilder.get()
             );
-            service = new AgileStoryArchivePageService(apiCaller, reporter, listPageRecorder, null);
+            service = new AgileStoryArchivePageService(apiCaller, reporter, listPageRecorder, postRecorder);
         }
 
         @DisplayName("한 번에 여러 요청을 보낸다")
