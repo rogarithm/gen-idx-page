@@ -81,12 +81,12 @@ class ArchivePageServiceTest {
         );
         when(caller.isArchived(any())).thenReturn(true);
 
-        PostListPageRecorder recorder = mock(PostListPageRecorder.class);
+        PostListPageRecorder listPageRecorder = mock(PostListPageRecorder.class);
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller,
-            mock(ApiCallReporter.class), recorder);
+            mock(ApiCallReporter.class), listPageRecorder);
 
         service.findArchivedPageInfo(dto);
 
-        verify(recorder).record(any(CheckPostArchivedDto.class), any(ArchivedPageInfo.class));
+        verify(listPageRecorder).record(any(CheckPostArchivedDto.class), any(ArchivedPageInfo.class));
     }
 }

@@ -16,13 +16,13 @@ public class AgileStoryArchivePageService implements ArchivePageService {
 
     private final WebArchiveApiCaller webArchiveApiCaller;
     private final ApiCallReporter reporter;
-    private final PostListPageRecorder recorder;
+    private final PostListPageRecorder listPageRecorder;
 
     public AgileStoryArchivePageService(WebArchiveApiCaller webArchiveApiCaller,
-        ApiCallReporter reporter, PostListPageRecorder recorder) {
+        ApiCallReporter reporter, PostListPageRecorder listPageRecorder) {
         this.webArchiveApiCaller = webArchiveApiCaller;
         this.reporter = reporter;
-        this.recorder = recorder;
+        this.listPageRecorder = listPageRecorder;
     }
 
     public String findBlogPageLink(final CheckPostArchivedDto dto) {
@@ -47,7 +47,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         }
 
         reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
-        recorder.record(dto, archivedPageInfo);
+        listPageRecorder.record(dto, archivedPageInfo);
         return archivedPageInfo;
     }
 
