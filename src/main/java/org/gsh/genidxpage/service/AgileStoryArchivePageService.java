@@ -39,6 +39,8 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         String blogPost = this.findBlogPostPage(archivedPageInfo);
         log.info(String.format("blog page link for %s/%s: %s", dto.getYear(), dto.getMonth(),
             this.buildPageLinks(blogPost)));
+        postRecorder.record(this.buildPageLinks(blogPost), listPageId);
+
         return this.buildPageLinks(blogPost);
     }
 
@@ -65,7 +67,6 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
 
         String pageLinksConcat = webPageParser.buildPageLinks(postLinks);
-        postRecorder.record(pageLinksConcat);
 
         return pageLinksConcat;
     }
