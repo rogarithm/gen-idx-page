@@ -11,5 +11,5 @@ public interface PostListPageMapper {
 
     PostListPage selectPostListPageByYearMonth(@Param("year") String year, @Param("month") String month);
 
-    void updatePostListPage(PostListPage postListPage);
+    Long updatePostListPage(PostListPage postListPage);
 }

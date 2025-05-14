@@ -34,7 +34,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
                 String.format("empty blog page link for %s/%s", dto.getYear(), dto.getMonth()));
             return "";
         }
-        listPageRecorder.record(dto, archivedPageInfo);
+        Long listPageId = listPageRecorder.record(dto, archivedPageInfo);
 
         String blogPost = this.findBlogPostPage(archivedPageInfo);
         log.info(String.format("blog page link for %s/%s: %s", dto.getYear(), dto.getMonth(),

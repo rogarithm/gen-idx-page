@@ -15,17 +15,18 @@ public class PostListPageRecorder {
         this.mapper = mapper;
     }
 
-    void record(final CheckPostArchivedDto dto, final ArchivedPageInfo archivedPageInfo) {
+    Long record(final CheckPostArchivedDto dto, final ArchivedPageInfo archivedPageInfo) {
         PostListPage hasPostListPage = mapper.selectPostListPageByYearMonth(
             dto.getYear(),
             dto.getMonth()
         );
 
         if (hasPostListPage != null) {
-            mapper.updatePostListPage(PostListPage.of(dto, archivedPageInfo));
-            return;
+            Long updateId = mapper.updatePostListPage(PostListPage.of(dto, archivedPageInfo));
+            return updateId;
         }
 
-        mapper.insertPostListPage(PostListPage.of(dto, archivedPageInfo));
+        Long insertId = mapper.insertPostListPage(PostListPage.of(dto, archivedPageInfo));
+        return insertId;
     }
 }
