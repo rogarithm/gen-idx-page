@@ -15,6 +15,8 @@ public class PostListPage {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
+    public PostListPage() {}
+
     public PostListPage(String year, String month, String url, LocalDateTime createdAt) {
         this.year = year;
         this.month = month;
