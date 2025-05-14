@@ -32,7 +32,7 @@ class ArchivePageServiceTest {
         );
         ApiCallReporter reporter = mock(ApiCallReporter.class);
 
-        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null);
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null, null);
 
         Assertions.assertThat(service.findArchivedPageInfo(dto)).isInstanceOf(
             EmptyArchivedPageInfo.class);
@@ -58,7 +58,7 @@ class ArchivePageServiceTest {
         ApiCallReporter reporter = mock(ApiCallReporter.class);
 
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
-            mock(PostListPageRecorder.class));
+            mock(PostListPageRecorder.class), null);
 
         service.findArchivedPageInfo(dto);
 
@@ -83,10 +83,33 @@ class ArchivePageServiceTest {
 
         PostListPageRecorder listPageRecorder = mock(PostListPageRecorder.class);
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller,
-            mock(ApiCallReporter.class), listPageRecorder);
+            mock(ApiCallReporter.class), listPageRecorder, null);
 
         service.findArchivedPageInfo(dto);
 
         verify(listPageRecorder).record(any(CheckPostArchivedDto.class), any(ArchivedPageInfo.class));
+    }
+
+    @DisplayName("블로그 글 목록 페이지로부터 파싱한 블로그 링크 목록을 db에 기록한다")
+    @Test
+    public void write_post_link_parsed_from_list_page_to_db() {
+        PostRecorder postRecorder = mock(PostRecorder.class);
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(
+            mock(WebArchiveApiCaller.class),
+            mock(ApiCallReporter.class),
+            mock(PostListPageRecorder.class),
+            postRecorder
+        );
+
+        service.buildPageLinks(
+            """
+                  <div class="POST_BODY">
+                  <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2020/02/25</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5932600">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate"></span><br>
+                  <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2020/02/14</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5931859">혹독한 조언이 나를 살릴까?</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[13]</span><br>
+                  <div style="margin-top:10px;"><a href="/web/20230614124528/http://agile.egloos.com/archives/2020/02/page/1" title="전체보기">"2020년02월" 의 글 내용 전체 보기</a></div>
+                </div>
+                """);
+
+        verify(postRecorder).record(any());
     }
 }

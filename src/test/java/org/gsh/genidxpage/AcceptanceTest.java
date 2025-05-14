@@ -53,7 +53,7 @@ public class AcceptanceTest {
                 CustomRestTemplateBuilder.get()
             );
             ArchivePageService service = new AgileStoryArchivePageService(apiCaller, reporter,
-                listPageRecorder);
+                listPageRecorder, null);
 
             archivePageController = new ArchivePageController(service);
         }
@@ -156,7 +156,7 @@ public class AcceptanceTest {
                 "/wayback/available?url={url}&timestamp={timestamp}",
                 CustomRestTemplateBuilder.get()
             );
-            service = new AgileStoryArchivePageService(apiCaller, reporter, listPageRecorder);
+            service = new AgileStoryArchivePageService(apiCaller, reporter, listPageRecorder, null);
         }
 
         @DisplayName("한 번에 여러 요청을 보낸다")
