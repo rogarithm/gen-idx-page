@@ -3,6 +3,7 @@ package org.gsh.genidxpage.service;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.gsh.genidxpage.dao.PostMapper;
 import org.gsh.genidxpage.entity.Post;
@@ -20,5 +21,17 @@ class PostRecorderTest {
         recorder.record("", 0L);
 
         verify(mapper).insertPost(any(Post.class));
+    }
+
+    @DisplayName("db에 부모 페이지 아이디에 연결된 html이 이미 기록되어 있으면, 업데이트한다")
+    @Test
+    public void only_update_when_raw_html_for_given_parent_page_already_written() {
+        PostMapper mapper = mock(PostMapper.class);
+        PostRecorder recorder = new PostRecorder(mapper);
+
+        when(mapper.selectByParentPageId(any())).thenReturn(Post.of("", 0L));
+        recorder.record("", 0L);
+
+        verify(mapper).updatePost(any(Post.class));
     }
 }
