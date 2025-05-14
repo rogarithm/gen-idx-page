@@ -1,45 +1,41 @@
 package org.gsh.genidxpage.entity;
 
-import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
-
 import java.time.LocalDateTime;
 
-public class PostListPage {
+public class Post {
 
     private Long id;
-    private String year;
-    private String month;
-    private String url;
+    private Long parentPageId;
+    private String rawHtml;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-    public PostListPage(String year, String month, String url, LocalDateTime createdAt) {
-        this.year = year;
-        this.month = month;
-        this.url = url;
+    public Post() {}
+
+    public Post(Long parentPageId, String rawHtml, LocalDateTime createdAt) {
+        this.parentPageId = parentPageId;
+        this.rawHtml = rawHtml;
         this.createdAt = createdAt;
     }
 
-    public static PostListPage of(CheckPostArchivedDto dto, ArchivedPageInfo archivedPageInfo) {
-        return new PostListPage(
-            dto.getYear(),
-            dto.getMonth(),
-            archivedPageInfo.accessibleUrl(),
+    public static Post of(String postLinkInfoList, Long listPageId) {
+        return new Post(
+            listPageId,
+            postLinkInfoList,
             LocalDateTime.now()
         );
     }
 
-    public String getYear() {
-        return year;
+    public Long getParentPageId() {
+        return parentPageId;
     }
 
-    public String getMonth() {
-        return month;
+    public String getRawHtml() {
+        return rawHtml;
     }
 
-    public String getUrl() {
-        return url;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }
