@@ -28,8 +28,8 @@ public class FakeWebArchiveServer {
     public void respondBlogPostListInGivenYearMonth(String year, String month,
         boolean hasManyPost) {
         instance.stubFor(get(urlPathTemplate("/web/20230614220926/archives/{year}/{month}"))
-            .withPathParam("year", matching("[12][0-9]{3}"))
-            .withPathParam("month", matching("[01][0-9]"))
+            .withPathParam("year", matching(year))
+            .withPathParam("month", matching(month))
             .willReturn(aResponse().withStatus(200)
                 .withBody(
                     buildPostListPage(year, month, hasManyPost)
@@ -72,10 +72,10 @@ public class FakeWebArchiveServer {
             """;
 
         String firstPostTemplate = """
-            <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">YEAR/MONTH/22</span> &nbsp; <a href="/web/20230614220926/http://agile.egloos.com/5946833">올해 첫 AC2 과정 40기가 곧 열립니다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[3]</span><br/>
+            <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">YEAR/MONTH/22</span> &nbsp; <a href="/web/20230614220926/http://agile.egloos.com/5946833">YEAR년 MONTH월 첫 AC2 과정 40기가 곧 열립니다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[3]</span><br/>
             """;
-        String firstPost = firstPostTemplate.replace("YEAR", year)
-            .replace("MONTH", month);
+        String firstPost = firstPostTemplate.replaceAll("YEAR", year)
+            .replaceAll("MONTH", month);
         String otherPosts = """
             <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/25</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5932600">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate"></span><br>
             <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/27</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5931859">혹독한 조언이 나를 살릴까?</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[13]</span><br>
@@ -89,7 +89,7 @@ public class FakeWebArchiveServer {
 
     public void respondItHasArchivedPageFor(String year, String month) {
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
-            .withQueryParam("url", matching("http[s]?://agile.egloos.com/archives/[12][0-9]{3}/[01][0-9]"))
+            .withQueryParam("url", matching(String.format("http[s]?://agile.egloos.com/archives/%s/%s", year, month)))
             .withQueryParam("timestamp", matching("[0-9]{8}"))
             .willReturn(aResponse().withStatus(200).withBody(
                     String.format("""
