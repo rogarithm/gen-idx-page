@@ -62,6 +62,10 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     String buildPageLinks(final String blogPost) {
         WebPageParser webPageParser = new WebPageParser();
         List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
-        return webPageParser.buildPageLinks(postLinks);
+
+        String pageLinksConcat = webPageParser.buildPageLinks(postLinks);
+        postRecorder.record(pageLinksConcat);
+
+        return pageLinksConcat;
     }
 }
