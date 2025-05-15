@@ -42,8 +42,7 @@ public class BulkRequestSender {
         return yearMonths;
     }
 
-    public List<String> sendAll(List<String> yearMonths, ArchivePageService sender) {
-        ArrayList<String> pageLinksList = new ArrayList<>();
+    public void sendAll(List<String> yearMonths, ArchivePageService sender) {
         yearMonths.forEach(yearMonth -> {
             // 외부 서버에 요청할 입력 형식으로 파일 내용을 정제한다
             String[] pair = yearMonth.split("/");
@@ -51,10 +50,7 @@ public class BulkRequestSender {
             String month = pair[1];
             CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month);
 
-            String pageLinks = sender.findBlogPageLink(dto);
-            pageLinksList.add(pageLinks);
+            sender.findBlogPageLink(dto);
         });
-
-        return pageLinksList;
     }
 }

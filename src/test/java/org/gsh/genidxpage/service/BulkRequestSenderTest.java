@@ -3,9 +3,10 @@ package org.gsh.genidxpage.service;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.exception.FailToReadRequestInputFileException;
 import org.gsh.genidxpage.scheduler.BulkRequestSender;
 import org.junit.jupiter.api.DisplayName;
@@ -25,9 +26,9 @@ class BulkRequestSenderTest {
 
         when(sender.findBlogPageLink(any())).thenReturn("link");
 
-        Assertions.assertThat(
-            bulkRequestSender.sendAll(List.of("2021/03", "2020/05"), sender)
-        ).isEqualTo(List.of("link", "link"));
+        bulkRequestSender.sendAll(List.of("2021/03", "2020/05"), sender);
+
+        verify(sender, times(2)).findBlogPageLink(any());
     }
 
     @DisplayName("요청 입력 파일을 읽는 데 실패했을 경우를 처리할 수 있다")

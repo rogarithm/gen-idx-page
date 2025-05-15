@@ -25,7 +25,7 @@ class WebArchiveSchedulerTest {
         ArchivePageService service = mock(ArchivePageService.class);
 
         when(sender.prepareInput()).thenReturn(IGNORE_REQUEST_INPUT);
-        when(sender.sendAll(any(), any(ArchivePageService.class))).thenReturn(List.of("l1", "l2", "l3"));
+        doNothing().when(sender).sendAll(any(), any(ArchivePageService.class));
 
         WebArchiveScheduler scheduler = new WebArchiveScheduler(sender, service, null);
 

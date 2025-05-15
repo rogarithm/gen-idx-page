@@ -28,9 +28,9 @@ public class WebArchiveScheduler {
         doGenerate(pageLinkList);
     }
 
-    public List<String> doSend() {
+    public void doSend() {
         List<String> yearMonths = bulkRequestSender.prepareInput();
-        return bulkRequestSender.sendAll(yearMonths, archivePageService);
+        bulkRequestSender.sendAll(yearMonths, archivePageService);
     }
 
     List<String> readIndexContent() {
