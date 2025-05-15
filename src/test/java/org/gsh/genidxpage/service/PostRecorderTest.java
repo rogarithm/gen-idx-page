@@ -5,10 +5,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.dao.PostMapper;
 import org.gsh.genidxpage.entity.Post;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 class PostRecorderTest {
 
@@ -33,5 +36,29 @@ class PostRecorderTest {
         recorder.record("", 0L);
 
         verify(mapper).updatePost(any(Post.class));
+    }
+
+    @DisplayName("기록된 모든 html을 읽어온다")
+    @Test
+    public void read_all_raw_html() {
+        PostMapper mapper = mock(PostMapper.class);
+        PostRecorder recorder = new PostRecorder(mapper);
+
+        List<Post> posts = List.of(
+            Post.of("blogUrl1", 0L),
+            Post.of("blogUrl2", 1L)
+        );
+        when(mapper.selectAll()).thenReturn(
+            posts
+        );
+
+        Assertions.assertThat(recorder.readAllRawHtml())
+            .isEqualTo(
+                posts.stream()
+                    .map(p -> p.getRawHtml())
+                    .toList()
+            );
+
+        verify(mapper).selectAll();
     }
 }
