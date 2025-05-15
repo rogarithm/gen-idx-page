@@ -47,7 +47,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
 
     @Override
     public List<String> readIndexContent() {
-        return List.of();
+        return postRecorder.readAllRawHtml();
     }
 
     ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
