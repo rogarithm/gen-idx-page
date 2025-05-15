@@ -167,6 +167,12 @@ public class AcceptanceTest {
         public void generate_index_file_using_blog_post_links() throws IOException {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
+            WebArchiveScheduler scheduler = new WebArchiveScheduler(
+                bulkRequestSender,
+                service,
+                new IndexPageGenerator("/tmp/genidxpage/test")
+            );
+
             // 요청 입력값을 파일로부터 읽어온다
             List<String> yearMonths = bulkRequestSender.prepareInput();
 
@@ -183,13 +189,7 @@ public class AcceptanceTest {
             fakeWebArchiveServer.start();
 
             // 입력쌍의 갯수만큼 요청을 보낸다
-            bulkRequestSender.sendAll(yearMonths, service);
-            List<String> pageLinksList = service.readIndexContent(); // db에서 인덱스에 쓸 내용을 가져온다
-
-            IndexPageGenerator generator = new IndexPageGenerator(
-                "/tmp/genidxpage/test"
-            );
-            generator.generateIndexPage(pageLinksList);
+            scheduler.scheduleSend();
 
             Assertions.assertThat(
                 Files.readString(Path.of("/tmp/genidxpage/test/index.html"), StandardCharsets.UTF_8)
