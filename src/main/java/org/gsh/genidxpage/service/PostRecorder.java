@@ -18,14 +18,14 @@ public class PostRecorder {
         this.mapper = mapper;
     }
 
-    public void record(String postLinkInfoList, Long listPageId) {
+    public void record(String rawHtml, Long listPageId) {
         Post hasPost = mapper.selectByParentPageId(listPageId);
         if (hasPost != null) {
-            mapper.updatePost(Post.of(postLinkInfoList, listPageId));
+            mapper.updatePost(Post.of(rawHtml, listPageId));
             return;
         }
 
-        mapper.insertPost(Post.of(postLinkInfoList, listPageId));
+        mapper.insertPost(Post.of(rawHtml, listPageId));
     }
 
     public List<String> readAllRawHtml() {
