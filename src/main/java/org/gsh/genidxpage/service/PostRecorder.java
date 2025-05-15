@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -28,6 +29,9 @@ public class PostRecorder {
     }
 
     public List<String> readAllRawHtml() {
-        return null;
+        return mapper.selectAll()
+            .stream()
+            .map(post -> post.getRawHtml())
+            .collect(Collectors.toList());
     }
 }

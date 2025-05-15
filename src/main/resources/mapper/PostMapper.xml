@@ -30,4 +30,13 @@
         updated_at = #{updatedAt}
     WHERE parent_page_id = #{parentPageId}
   </update>
+
+  <select id="selectAll" resultType="org.gsh.genidxpage.entity.Post">
+    SELECT parent_page_id,
+           raw_html,
+           created_at
+    FROM post
+    WHERE raw_html IS NOT NULL
+      AND deleted_at IS NULL
+  </select>
 </mapper>
