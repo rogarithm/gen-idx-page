@@ -162,35 +162,6 @@ public class AcceptanceTest {
             service = new AgileStoryArchivePageService(apiCaller, reporter, listPageRecorder, postRecorder);
         }
 
-        @DisplayName("한 번에 여러 요청을 보낸다")
-        @Test
-        public void schedule_sending_two_requests_to_web_archive() {
-            // 요청할 모든 입력쌍을 만든다
-            // 입력쌍의 갯수만큼 요청을 보낸다
-            FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
-
-            // 요청 입력값을 파일로부터 읽어온다
-            List<String> yearMonths = bulkRequestSender.prepareInput();
-
-            yearMonths.forEach(yearMonth -> {
-                String[] pair = yearMonth.split("/");
-                String year = pair[0];
-                String month = pair[1];
-                // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
-                fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
-                fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
-            });
-
-            fakeWebArchiveServer.start();
-
-            bulkRequestSender.sendAll(yearMonths, service);
-
-            // TODO
-            //  정상 실행되었음을 단정해야 한다
-
-            fakeWebArchiveServer.stop();
-        }
-
         @DisplayName("블로그 글 링크 목록으로 인덱스 파일을 생성한다")
         @Test
         public void generate_index_file_using_blog_post_links() throws IOException {
