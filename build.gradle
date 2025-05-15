@@ -29,6 +29,7 @@ dependencies {
 
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
+    implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16' // jdbc 로그 출력
 
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
