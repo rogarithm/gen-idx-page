@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.gsh.genidxpage.dao.PostMapper">
+  <insert id="insertPost" useGeneratedKeys="true" keyProperty="id"
+    parameterType="org.gsh.genidxpage.entity.Post">
+    INSERT INTO post (parent_page_id,
+                      raw_html,
+                      created_at)
+    VALUES (#{parentPageId},
+            #{rawHtml},
+            #{createdAt})
+  </insert>
+
+  <select id="selectByParentPageId" resultType="org.gsh.genidxpage.entity.Post">
+    SELECT parent_page_id,
+           raw_html,
+           created_at
+    FROM post
+    WHERE parent_page_id = #{parentPageId}
+      AND deleted_at IS NULL
+  </select>
+
+  <update id="updatePost" useGeneratedKeys="true" keyProperty="id"
+    parameterType="org.gsh.genidxpage.entity.Post">
+    UPDATE post
+    SET raw_html = #{rawHtml},
+        updated_at = #{updatedAt}
+    WHERE parent_page_id = #{parentPageId}
+  </update>
+</mapper>

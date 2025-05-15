@@ -7,4 +7,8 @@ import org.gsh.genidxpage.entity.Post;
 public interface PostMapper {
 
     Long insertPost(Post post);
+
+    Post selectByParentPageId(Long parentPageId);
+
+    Long updatePost(Post post);
 }

@@ -3,7 +3,9 @@ package org.gsh.genidxpage.service;
 import org.gsh.genidxpage.dao.PostMapper;
 import org.gsh.genidxpage.entity.Post;
 import org.springframework.stereotype.Repository;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 public class PostRecorder {
 
@@ -14,7 +16,12 @@ public class PostRecorder {
     }
 
     public void record(String postLinkInfoList, Long listPageId) {
-        Post post = Post.of(postLinkInfoList, listPageId);
-        mapper.insertPost(post);
+        Post hasPost = mapper.selectByParentPageId(listPageId);
+        if (hasPost != null) {
+            mapper.updatePost(Post.of(postLinkInfoList, listPageId));
+            return;
+        }
+
+        mapper.insertPost(Post.of(postLinkInfoList, listPageId));
     }
 }
