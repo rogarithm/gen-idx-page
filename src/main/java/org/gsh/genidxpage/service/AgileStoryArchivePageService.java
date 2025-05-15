@@ -6,6 +6,7 @@ import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
 import org.gsh.genidxpage.web.response.PostLinkInfo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -16,15 +17,18 @@ public class AgileStoryArchivePageService implements ArchivePageService {
 
     private final WebArchiveApiCaller webArchiveApiCaller;
     private final ApiCallReporter reporter;
-    private final PostListPageRecorder recorder;
+    private final PostListPageRecorder listPageRecorder;
+    private final PostRecorder postRecorder;
 
     public AgileStoryArchivePageService(WebArchiveApiCaller webArchiveApiCaller,
-        ApiCallReporter reporter, PostListPageRecorder recorder) {
+        ApiCallReporter reporter, PostListPageRecorder listPageRecorder, PostRecorder postRecorder) {
         this.webArchiveApiCaller = webArchiveApiCaller;
         this.reporter = reporter;
-        this.recorder = recorder;
+        this.listPageRecorder = listPageRecorder;
+        this.postRecorder = postRecorder;
     }
 
+    @Transactional
     public String findBlogPageLink(final CheckPostArchivedDto dto) {
         ArchivedPageInfo archivedPageInfo = this.findArchivedPageInfo(dto);
         if (archivedPageInfo.isEmpty()) {
@@ -32,9 +36,12 @@ public class AgileStoryArchivePageService implements ArchivePageService {
                 String.format("empty blog page link for %s/%s", dto.getYear(), dto.getMonth()));
             return "";
         }
+        Long listPageId = listPageRecorder.record(dto, archivedPageInfo);
+        log.info("id of post list page inserted/updated now is {" + listPageId + "}");
+
         String blogPost = this.findBlogPostPage(archivedPageInfo);
-        log.info(String.format("blog page link for %s/%s: %s", dto.getYear(), dto.getMonth(),
-            this.buildPageLinks(blogPost)));
+        postRecorder.record(this.buildPageLinks(blogPost), listPageId);
+
         return this.buildPageLinks(blogPost);
     }
 
@@ -47,7 +54,6 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         }
 
         reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
-        recorder.record(dto, archivedPageInfo);
         return archivedPageInfo;
     }
 
@@ -60,6 +66,9 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     String buildPageLinks(final String blogPost) {
         WebPageParser webPageParser = new WebPageParser();
         List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
-        return webPageParser.buildPageLinks(postLinks);
+
+        String pageLinksConcat = webPageParser.buildPageLinks(postLinks);
+
+        return pageLinksConcat;
     }
 }

@@ -18,7 +18,8 @@
   </insert>
 
   <select id="selectPostListPageByYearMonth" resultType="org.gsh.genidxpage.entity.PostListPage">
-    SELECT year,
+    SELECT id,
+           year,
            month,
            url
     FROM post_list_page

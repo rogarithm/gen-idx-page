@@ -15,6 +15,16 @@ public class PostListPage {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
+    public PostListPage() {}
+
+    public PostListPage(Long id, String year, String month, String url, LocalDateTime createdAt) {
+        this.id = id;
+        this.year = year;
+        this.month = month;
+        this.url = url;
+        this.createdAt = createdAt;
+    }
+
     public PostListPage(String year, String month, String url, LocalDateTime createdAt) {
         this.year = year;
         this.month = month;
@@ -29,6 +39,10 @@ public class PostListPage {
             archivedPageInfo.accessibleUrl(),
             LocalDateTime.now()
         );
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getYear() {
