@@ -214,7 +214,8 @@ public class AcceptanceTest {
             fakeWebArchiveServer.start();
 
             // 입력쌍의 갯수만큼 요청을 보낸다
-            List<String> pageLinksList = bulkRequestSender.sendAll(yearMonths, service);
+            bulkRequestSender.sendAll(yearMonths, service);
+            List<String> pageLinksList = service.readIndexContent(); // db에서 인덱스에 쓸 내용을 가져온다
 
             IndexPageGenerator generator = new IndexPageGenerator(
                 "/tmp/genidxpage/test"
