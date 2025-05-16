@@ -55,8 +55,9 @@ public class AcceptanceTest {
                 "/wayback/available?url={url}&timestamp={timestamp}",
                 CustomRestTemplateBuilder.get()
             );
-            ArchivePageService service = new AgileStoryArchivePageService(apiCaller, reporter,
-                listPageRecorder, postRecorder);
+            ArchivePageService service = new AgileStoryArchivePageService(
+                apiCaller, reporter, listPageRecorder, postRecorder
+            );
 
             archivePageController = new ArchivePageController(service);
         }
@@ -73,8 +74,9 @@ public class AcceptanceTest {
             // 서버는 web archive server에 아카이브된 블로그 글을 요청한다
             // web archive server는 등록된 페이지가 없음을 알린다
             // 서버는 클라이언트에게 빈 문자열로 응답한다
-            Assertions.assertThat(archivePageController.getBlogPostLinks("1999", "7").getBody())
-                .isEqualTo("");
+            Assertions.assertThat(
+                archivePageController.getBlogPostLinks("1999", "7").getBody()
+            ).isEqualTo("");
 
             fakeWebArchiveServer.stop();
         }
@@ -85,12 +87,16 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             fakeWebArchiveServer.respondItHasArchivedPage();
-            fakeWebArchiveServer.respondBlogPostListInGivenYearMonth("2021", "03", false);
+            fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(
+                "2021", "03", false
+            );
 
             fakeWebArchiveServer.start();
 
             // 서버는 web archive server에 아카이브된 주어진 연월의 블로그 글 목록 페이지를 요청한다
-            ResponseEntity<String> response = archivePageController.getBlogPostLinks("2021", "3");
+            ResponseEntity<String> response = archivePageController.getBlogPostLinks(
+                "2021", "3"
+            );
 
             // web archive server는 주어진 연월의 블로그 글 목록 페이지를 반환한다
             Assertions.assertThat(response.getBody()).matches(
@@ -107,12 +113,16 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             fakeWebArchiveServer.respondItHasArchivedPage();
-            fakeWebArchiveServer.respondBlogPostListInGivenYearMonth("2021", "03", true);
+            fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(
+                "2021", "03", true
+            );
 
             fakeWebArchiveServer.start();
 
             // 서버는 web archive server에 아카이브된 주어진 연월의 블로그 글 목록 페이지를 요청한다
-            ResponseEntity<String> response = archivePageController.getBlogPostLinks("2021", "3");
+            ResponseEntity<String> response = archivePageController.getBlogPostLinks(
+                "2021", "3"
+            );
 
             // web archive server는 주어진 연월의 블로그 글 목록 페이지를 반환한다
             Assertions.assertThat(response.getBody()).isEqualTo(
@@ -131,16 +141,18 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             fakeWebArchiveServer.respondItHasArchivedPage();
-            fakeWebArchiveServer.respondBlogPostListInGivenYearMonth("2021", "03", false);
-
+            fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(
+                "2021", "03", false
+            );
             fakeWebArchiveServer.start();
 
             // 서버는 web archive server에 아카이브된 블로그 글을 요청한다
             archivePageController.getBlogPostLinks("2021", "3");
 
             // 서버는 db에 요청 성공을 기록한다
-            Assertions.assertThat(reporter.hasArchivedPage(new CheckPostArchivedDto("2021", "3")))
-                .isTrue();
+            Assertions.assertThat(
+                reporter.hasArchivedPage(new CheckPostArchivedDto("2021", "3"))
+            ).isTrue();
 
             fakeWebArchiveServer.stop();
         }
@@ -159,7 +171,9 @@ public class AcceptanceTest {
                 "/wayback/available?url={url}&timestamp={timestamp}",
                 CustomRestTemplateBuilder.get()
             );
-            service = new AgileStoryArchivePageService(apiCaller, reporter, listPageRecorder, postRecorder);
+            service = new AgileStoryArchivePageService(
+                apiCaller, reporter, listPageRecorder, postRecorder
+            );
         }
 
         @DisplayName("블로그 글 링크 목록으로 인덱스 파일을 생성한다")
@@ -168,9 +182,7 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             WebArchiveScheduler scheduler = new WebArchiveScheduler(
-                bulkRequestSender,
-                service,
-                new IndexPageGenerator("/tmp/genidxpage/test")
+                bulkRequestSender, service, new IndexPageGenerator("/tmp/genidxpage/test")
             );
 
             // 요청할 모든 입력쌍을 만든다
@@ -203,9 +215,7 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             WebArchiveScheduler scheduler = new WebArchiveScheduler(
-                bulkRequestSender,
-                service,
-                null
+                bulkRequestSender, service, null
             );
 
             // 요청 입력값을 파일로부터 읽어온다
@@ -218,12 +228,11 @@ public class AcceptanceTest {
                 fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
                 fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
             });
-
             fakeWebArchiveServer.start();
 
             scheduler.doSend();
-            fakeWebArchiveServer.hasReceivedMultipleRequests(requestInput.size());
 
+            fakeWebArchiveServer.hasReceivedMultipleRequests(requestInput.size());
             fakeWebArchiveServer.stop();
         }
 
@@ -231,8 +240,11 @@ public class AcceptanceTest {
         @DisplayName("실패한 요청을 모아서 재시도한다")
         @Test
         public void retry_failed_requests() {
-
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
+
+            WebArchiveScheduler scheduler = new WebArchiveScheduler(
+                bulkRequestSender, service, null
+            );
 
             // 요청할 모든 입력쌍을 만든다
             List<String> requestInput = List.of("2021/03", "2020/05");
@@ -257,12 +269,8 @@ public class AcceptanceTest {
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 비정상 응답한다
                 fakeWebArchiveServer.respondItHasNoArchivedPageFor(year, month);
             });
-
             fakeWebArchiveServer.start();
 
-            WebArchiveScheduler scheduler = new WebArchiveScheduler(
-                bulkRequestSender, service, null
-            );
             scheduler.doSend();
             fakeWebArchiveServer.hasReceivedMultipleRequests(
                 passRequests.size() + failRequests.size() * 2 // 비정상 응답받은 경우는 재시도한다
