@@ -64,4 +64,22 @@ class WebArchiveSchedulerTest {
 
         verify(service).readIndexContent();
     }
+
+    @DisplayName("실패한 요청에 대해 재시도한다")
+    @Test
+    public void retry_failed_requests() {
+        BulkRequestSender sender = mock(BulkRequestSender.class);
+        ArchivePageService service = mock(ArchivePageService.class);
+
+        doNothing().when(sender).sendAll(any(), any(ArchivePageService.class));
+
+        WebArchiveScheduler scheduler = new WebArchiveScheduler(
+            sender, service, null
+        );
+
+        scheduler.doRetry();
+
+        verify(service).findFailedRequests();
+        verify(sender).sendAll(any(), any(ArchivePageService.class));
+    }
 }
