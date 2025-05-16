@@ -194,10 +194,9 @@ public class AcceptanceTest {
                 fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
                 fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
             });
-
             fakeWebArchiveServer.start();
 
-            // 입력쌍의 갯수만큼 요청을 보낸다
+            // 입력쌍의 갯수만큼 요청을 보내고, 응답으로 인덱스 파일을 만든다
             scheduler.scheduleSend();
 
             Assertions.assertThat(
@@ -210,16 +209,16 @@ public class AcceptanceTest {
         @DisplayName("설정한 일정에 맞춰 여러 요청을 보낸다")
         @Test
         public void send_scheduled_multiple_requests() {
-            // 요청할 모든 입력쌍을 만든다
-            // 입력쌍의 갯수만큼 요청을 보낸다
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             WebArchiveScheduler scheduler = new WebArchiveScheduler(
                 bulkRequestSender, service, null
             );
 
-            // 요청 입력값을 파일로부터 읽어온다
+            // 요청할 모든 입력쌍을 만든다
             List<String> requestInput = List.of("2021/03", "2020/05");
+
+            // 입력쌍의 갯수만큼 요청을 보낸다
             requestInput.forEach(yearMonth -> {
                 String[] pair = yearMonth.split("/");
                 String year = pair[0];
@@ -248,6 +247,8 @@ public class AcceptanceTest {
 
             // 요청할 모든 입력쌍을 만든다
             List<String> requestInput = List.of("2021/03", "2020/05");
+
+            // 정상 응답할 입력을 설정한다
             List<String> passRequests = requestInput.stream()
                 .filter(ym -> ym.split("/")[0].equals("2021"))
                 .toList();
@@ -259,6 +260,7 @@ public class AcceptanceTest {
                 fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
                 fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
             });
+            // 비정상 응답할 입력을 설정한다
             List<String> failRequests = requestInput.stream()
                 .filter(ym -> !ym.split("/")[0].equals("2021"))
                 .toList();
