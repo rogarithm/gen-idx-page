@@ -179,7 +179,7 @@ public class AcceptanceTest {
         public void generate_index_file_using_blog_post_links() throws IOException {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
-            WebArchiveScheduler scheduler = new WebArchiveScheduler(
+            final WebArchiveScheduler scheduler = new WebArchiveScheduler(
                 bulkRequestSender, service, new IndexPageGenerator("/tmp/genidxpage/test")
             );
 
@@ -209,7 +209,7 @@ public class AcceptanceTest {
         public void send_scheduled_multiple_requests() {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
-            WebArchiveScheduler scheduler = new WebArchiveScheduler(
+            final WebArchiveScheduler scheduler = new WebArchiveScheduler(
                 bulkRequestSender, service, null
             );
 
@@ -239,7 +239,7 @@ public class AcceptanceTest {
         public void retry_failed_requests() {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
-            WebArchiveScheduler scheduler = new WebArchiveScheduler(
+            final WebArchiveScheduler scheduler = new WebArchiveScheduler(
                 bulkRequestSender, service, null
             );
 
