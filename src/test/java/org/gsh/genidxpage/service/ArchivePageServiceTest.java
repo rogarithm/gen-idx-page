@@ -102,6 +102,25 @@ class ArchivePageServiceTest {
         verify(postRecorder).record(any(), any());
     }
 
+    @DisplayName("기록된 블로그 링크 html 전체를 db에서 읽어온다")
+    @Test
+    public void read_all_raw_html_from_db() {
+        PostRecorder postRecorder = mock(PostRecorder.class);
+        WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
+        respondsValidBlogPostPage(caller);
+
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(
+            caller,
+            mock(ApiCallReporter.class),
+            mock(PostListPageRecorder.class),
+            postRecorder
+        );
+
+        service.readIndexContent();
+
+        verify(postRecorder).readAllRawHtml();
+    }
+
     private void respondsValidBlogPostPage(WebArchiveApiCaller caller) {
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
             .url("url")

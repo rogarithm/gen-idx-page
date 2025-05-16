@@ -2,8 +2,8 @@ spring:
   application:
     name: genidxpage
   datasource:
-    url: jdbc:h2:mem:test;MODE=MySQL;NON_KEYWORDS=YEAR,MONTH
-    driver-class-name: org.h2.Driver
+    url: jdbc:log4jdbc:h2:mem:test;MODE=MySQL;NON_KEYWORDS=YEAR,MONTH # jdbc:h2:mem:test;MODE=MySQL;NON_KEYWORDS=YEAR,MONTH
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy # org.h2.Driver
     username: sa
   h2:
     console:
@@ -36,5 +36,12 @@ logging:
     org.mybatis: DEBUG
     com.mysql.cj.jdbc: DEBUG
     org.springframework.web.client.RestTemplate: DEBUG
+    jdbc:
+      sqlonly: off # sql문 출력
+      sqltiming: info # sql문과 이 sql문을 수행하는 시간(ms)
+      resultsettable: info # sql 결과로 조회된 데이터를 테이블 형태로 출력
+      audit: off # resultset을 제외한 모든 jdbc 호출 정보
+      resultset: off # resultset을 포함한 모든 jdbc 호출 정보
+      connection: off # db 연결, 연결 해제와 관련된 로그
   pattern:
     console: "%highlight(%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %-5level %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %msg%n)"

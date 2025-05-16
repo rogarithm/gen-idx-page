@@ -25,7 +25,7 @@ class WebArchiveSchedulerTest {
         ArchivePageService service = mock(ArchivePageService.class);
 
         when(sender.prepareInput()).thenReturn(IGNORE_REQUEST_INPUT);
-        when(sender.sendAll(any(), any(ArchivePageService.class))).thenReturn(List.of("l1", "l2", "l3"));
+        doNothing().when(sender).sendAll(any(), any(ArchivePageService.class));
 
         WebArchiveScheduler scheduler = new WebArchiveScheduler(sender, service, null);
 
@@ -47,5 +47,21 @@ class WebArchiveSchedulerTest {
         scheduler.doGenerate(pageLinksList);
 
         verify(generator).generateIndexPage(any());
+    }
+
+    @DisplayName("db에서 인덱스 파일 생성에 쓸 블로그 링크 html을 가져온다")
+    @Test
+    public void read_index_content_from_db() {
+        ArchivePageService service = mock(ArchivePageService.class);
+
+        WebArchiveScheduler scheduler = new WebArchiveScheduler(
+            mock(BulkRequestSender.class),
+            service,
+            null
+        );
+
+        scheduler.readIndexContent();
+
+        verify(service).readIndexContent();
     }
 }

@@ -19,10 +19,10 @@ public class Post {
         this.createdAt = createdAt;
     }
 
-    public static Post of(String postLinkInfoList, Long listPageId) {
+    public static Post of(String rawHtml, Long listPageId) {
         return new Post(
             listPageId,
-            postLinkInfoList,
+            rawHtml,
             LocalDateTime.now()
         );
     }

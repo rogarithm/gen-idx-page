@@ -147,7 +147,7 @@ public class AcceptanceTest {
     }
 
     private BulkRequestSender bulkRequestSender;
-    private AgileStoryArchivePageService service;
+    private ArchivePageService service;
 
     @Nested
     class ArchivePageSchedulingTest {
@@ -162,47 +162,19 @@ public class AcceptanceTest {
             service = new AgileStoryArchivePageService(apiCaller, reporter, listPageRecorder, postRecorder);
         }
 
-        @DisplayName("한 번에 여러 요청을 보낸다")
-        @Test
-        public void schedule_sending_two_requests_to_web_archive() {
-            // 요청할 모든 입력쌍을 만든다
-            // 입력쌍의 갯수만큼 요청을 보낸다
-            FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
-
-            // 요청 입력값을 파일로부터 읽어온다
-            List<String> yearMonths = bulkRequestSender.prepareInput();
-
-            yearMonths.forEach(yearMonth -> {
-                String[] pair = yearMonth.split("/");
-                String year = pair[0];
-                String month = pair[1];
-                // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
-                fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
-                fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
-            });
-
-            fakeWebArchiveServer.start();
-
-            List<String> pageLinksList = bulkRequestSender.sendAll(yearMonths, service);
-
-            pageLinksList.stream().forEach(pageLinks -> {
-                // 외부 서버로부터 가져온 모든 결과값은 링크 형식이다
-                Assertions.assertThat(pageLinks).matches("<a href=\".*\">.*</a>");
-            });
-
-            fakeWebArchiveServer.stop();
-        }
-
         @DisplayName("블로그 글 링크 목록으로 인덱스 파일을 생성한다")
         @Test
         public void generate_index_file_using_blog_post_links() throws IOException {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
-            // 요청 입력값을 파일로부터 읽어온다
-            List<String> yearMonths = bulkRequestSender.prepareInput();
+            WebArchiveScheduler scheduler = new WebArchiveScheduler(
+                bulkRequestSender,
+                service,
+                new IndexPageGenerator("/tmp/genidxpage/test")
+            );
 
             // 요청할 모든 입력쌍을 만든다
-            yearMonths.forEach(yearMonth -> {
+            List.of("2021/03", "2020/05").forEach(yearMonth -> {
                 String[] pair = yearMonth.split("/");
                 String year = pair[0];
                 String month = pair[1];
@@ -214,12 +186,7 @@ public class AcceptanceTest {
             fakeWebArchiveServer.start();
 
             // 입력쌍의 갯수만큼 요청을 보낸다
-            List<String> pageLinksList = bulkRequestSender.sendAll(yearMonths, service);
-
-            IndexPageGenerator generator = new IndexPageGenerator(
-                "/tmp/genidxpage/test"
-            );
-            generator.generateIndexPage(pageLinksList);
+            scheduler.scheduleSend();
 
             Assertions.assertThat(
                 Files.readString(Path.of("/tmp/genidxpage/test/index.html"), StandardCharsets.UTF_8)
@@ -235,11 +202,15 @@ public class AcceptanceTest {
             // 입력쌍의 갯수만큼 요청을 보낸다
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
-            WebArchiveScheduler scheduler = new WebArchiveScheduler(bulkRequestSender, service, null);
+            WebArchiveScheduler scheduler = new WebArchiveScheduler(
+                bulkRequestSender,
+                service,
+                null
+            );
 
             // 요청 입력값을 파일로부터 읽어온다
-            List<String> yearMonths = bulkRequestSender.prepareInput();
-            yearMonths.forEach(yearMonth -> {
+            List<String> requestInput = List.of("2021/03", "2020/05");
+            requestInput.forEach(yearMonth -> {
                 String[] pair = yearMonth.split("/");
                 String year = pair[0];
                 String month = pair[1];
@@ -251,7 +222,7 @@ public class AcceptanceTest {
             fakeWebArchiveServer.start();
 
             scheduler.doSend();
-            fakeWebArchiveServer.hasReceivedMultipleRequests(yearMonths.size());
+            fakeWebArchiveServer.hasReceivedMultipleRequests(requestInput.size());
 
             fakeWebArchiveServer.stop();
         }
@@ -264,8 +235,8 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             // 요청할 모든 입력쌍을 만든다
-            List<String> yearMonths = bulkRequestSender.prepareInput();
-            List<String> passRequests = yearMonths.stream()
+            List<String> requestInput = List.of("2021/03", "2020/05");
+            List<String> passRequests = requestInput.stream()
                 .filter(ym -> ym.split("/")[0].equals("2021"))
                 .toList();
             passRequests.forEach(yearMonth -> {
@@ -276,7 +247,7 @@ public class AcceptanceTest {
                 fakeWebArchiveServer.respondItHasArchivedPageFor(year, month);
                 fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(year, month, false);
             });
-            List<String> failRequests = yearMonths.stream()
+            List<String> failRequests = requestInput.stream()
                 .filter(ym -> !ym.split("/")[0].equals("2021"))
                 .toList();
             failRequests.forEach(yearMonth -> {

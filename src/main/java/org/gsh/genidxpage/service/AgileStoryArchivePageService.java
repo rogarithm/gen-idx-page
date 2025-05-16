@@ -45,6 +45,11 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         return this.buildPageLinks(blogPost);
     }
 
+    @Override
+    public List<String> readIndexContent() {
+        return postRecorder.readAllRawHtml();
+    }
+
     ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
 
