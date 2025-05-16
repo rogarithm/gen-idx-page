@@ -5,6 +5,8 @@ import org.gsh.genidxpage.entity.ArchivedPageUrlReport;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ApiCallReporter {
 
@@ -34,5 +36,9 @@ public class ApiCallReporter {
         );
 
         return report.getPageExists() == Boolean.TRUE;
+    }
+
+    List<String> readAllFailedRequestInput() {
+        return null;
     }
 }
