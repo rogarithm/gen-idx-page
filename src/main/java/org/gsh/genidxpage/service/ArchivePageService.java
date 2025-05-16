@@ -8,5 +8,7 @@ public interface ArchivePageService {
 
     String findBlogPageLink(final CheckPostArchivedDto dto);
 
+    List<String> findFailedRequests();
+
     List<String> readIndexContent();
 }

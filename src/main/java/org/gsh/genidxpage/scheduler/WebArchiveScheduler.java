@@ -33,6 +33,11 @@ public class WebArchiveScheduler {
         bulkRequestSender.sendAll(yearMonths, archivePageService);
     }
 
+    public void doRetry() {
+        List<String> yearMonths = archivePageService.findFailedRequests();
+        bulkRequestSender.sendAll(yearMonths, archivePageService);
+    }
+
     List<String> readIndexContent() {
         return archivePageService.readIndexContent();
     }
