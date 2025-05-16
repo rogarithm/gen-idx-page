@@ -34,4 +34,13 @@
     WHERE `year` = #{year}
       AND `month` = #{month}
   </update>
+
+  <select id="selectByPageExists" resultType="org.gsh.genidxpage.entity.ArchivedPageUrlReport">
+    SELECT year,
+           month,
+           page_exists
+    FROM post_list_page_status
+    WHERE page_exists = #{pageExists}
+      AND deleted_at IS NULL
+  </select>
 </mapper>

@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.gsh.genidxpage.entity.ArchivedPageUrlReport;
 
+import java.util.List;
+
 @Mapper
 public interface WebArchiveReportMapper {
 
@@ -12,4 +14,6 @@ public interface WebArchiveReportMapper {
     ArchivedPageUrlReport selectReportByYearMonth(@Param("year") String year, @Param("month") String month);
 
     void updateReport(ArchivedPageUrlReport report);
+
+    List<ArchivedPageUrlReport> selectByPageExists(Boolean pageExists);
 }

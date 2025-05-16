@@ -39,6 +39,9 @@ public class ApiCallReporter {
     }
 
     List<String> readAllFailedRequestInput() {
-        return null;
+        return reportMapper.selectByPageExists(Boolean.FALSE)
+            .stream()
+            .map(report -> report.getYear() + "/" + report.getMonth())
+            .toList();
     }
 }
