@@ -24,6 +24,7 @@ public class WebArchiveScheduler {
     @Scheduled(cron = "0 0 * * * *")
     public void scheduleSend() {
         doSend();
+        doRetry();
         List<String> pageLinkList = readIndexContent();
         doGenerate(pageLinkList);
     }
