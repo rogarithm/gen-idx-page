@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 class ApiCallReporterTest {
 
@@ -52,5 +53,23 @@ class ApiCallReporterTest {
 
         verify(mapper).selectReportByYearMonth(any(), any());
         verify(mapper).updateReport(any(ArchivedPageUrlReport.class));
+    }
+
+    @DisplayName("실패한 요청 정보를 db로부터 읽어온다")
+    @Test
+    public void read_all_failed_request_info_from_db() {
+        WebArchiveReportMapper mapper = mock(WebArchiveReportMapper.class);
+        ApiCallReporter reporter = new ApiCallReporter(mapper);
+        List<ArchivedPageUrlReport> failRequestReports = List.of(
+            new ArchivedPageUrlReport("2020", "05", Boolean.FALSE, LocalDateTime.now()),
+            new ArchivedPageUrlReport("2021", "03", Boolean.FALSE, LocalDateTime.now())
+        );
+
+        when(mapper.selectByPageExists(any())).thenReturn(failRequestReports);
+
+        Assertions.assertThat(reporter.readAllFailedRequestInput())
+            .isEqualTo(List.of("2020/05", "2021/03"));
+
+        verify(mapper).selectByPageExists(any());
     }
 }
