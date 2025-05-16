@@ -2,7 +2,6 @@ package org.gsh.genidxpage;
 
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
-import org.gsh.genidxpage.dao.WebArchiveReportMapper;
 import org.gsh.genidxpage.scheduler.BulkRequestSender;
 import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
@@ -43,8 +42,6 @@ public class AcceptanceTest {
     private PostListPageRecorder listPageRecorder;
     @Autowired
     private PostRecorder postRecorder;
-    @Autowired
-    private WebArchiveReportMapper mapper;
 
     @Nested
     class ArchivePageControllerTest {
@@ -160,12 +157,13 @@ public class AcceptanceTest {
 
     private BulkRequestSender bulkRequestSender;
     private ArchivePageService service;
+    private static final String IGNORE_INPUT_PATH = "static/year-month-list";
 
     @Nested
     class ArchivePageSchedulingTest {
         @BeforeEach
         public void setUp() {
-            bulkRequestSender = new BulkRequestSender("static/year-month-list");
+            bulkRequestSender = new BulkRequestSender(IGNORE_INPUT_PATH);
             WebArchiveApiCaller apiCaller = new WebArchiveApiCaller(
                 "http://localhost:8080",
                 "/wayback/available?url={url}&timestamp={timestamp}",
