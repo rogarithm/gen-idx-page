@@ -141,4 +141,19 @@ class ArchivePageServiceTest {
             """));
     }
 
+    @DisplayName("실패한 요청 정보를 db로부터 읽어온다")
+    @Test
+    public void read_all_failed_request_info_from_db() {
+        ApiCallReporter reporter = mock(ApiCallReporter.class);
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(
+            mock(WebArchiveApiCaller.class),
+            reporter,
+            mock(PostListPageRecorder.class),
+            mock(PostRecorder.class)
+        );
+
+        service.findFailedRequests();
+
+        verify(reporter).readAllFailedRequestInput();
+    }
 }
