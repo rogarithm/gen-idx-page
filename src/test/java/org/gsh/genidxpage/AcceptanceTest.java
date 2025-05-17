@@ -273,8 +273,10 @@ public class AcceptanceTest {
             scheduler.doRetry();
 
             fakeWebArchiveServer.hasReceivedMultipleRequests(
-                passRequests.size() + failRequests.size() * 2, // 비정상 응답받은 경우는 재시도한다
-                passRequests.size() // 재시도한 요청은 또 다시 실패한다
+                // 접근 url을 가져오는 요청 중 비정상 응답받은 경우는 재시도한다
+                passRequests.size() + failRequests.size() * 2,
+                // 블로그 목록 페이지를 가져오는 요청 중 재시도한 요청은 또 다시 실패한다
+                passRequests.size()
             );
 
             fakeWebArchiveServer.stop();
