@@ -24,12 +24,18 @@ public class WebArchiveScheduler {
     @Scheduled(cron = "0 0 * * * *")
     public void scheduleSend() {
         doSend();
+        doRetry();
         List<String> pageLinkList = readIndexContent();
         doGenerate(pageLinkList);
     }
 
     public void doSend() {
         List<String> yearMonths = bulkRequestSender.prepareInput();
+        bulkRequestSender.sendAll(yearMonths, archivePageService);
+    }
+
+    public void doRetry() {
+        List<String> yearMonths = archivePageService.findFailedRequests();
         bulkRequestSender.sendAll(yearMonths, archivePageService);
     }
 

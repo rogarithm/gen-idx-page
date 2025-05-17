@@ -117,7 +117,12 @@ public class FakeWebArchiveServer {
 
     public void respondItHasNoArchivedPageFor(String year, String month) {
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
-            .withQueryParam("url", matching("http[s]?://agile.egloos.com/archives/[12][0-9]{3}/[0-9]{2}"))
+            .withQueryParam("url", matching(
+                String.format("http[s]?://agile.egloos.com/archives/%s/%s",
+                    year,
+                    month
+                )
+            ))
             .withQueryParam("timestamp", matching("[0-9]{8}"))
             .willReturn(aResponse().withStatus(200).withBody(
                 String.format("""
@@ -136,11 +141,24 @@ public class FakeWebArchiveServer {
     }
 
     public void hasReceivedMultipleRequests(int requestCount) {
+        hasReceivedMultipleAccessUrlRequests(requestCount);
+        hasReceivedMultiplePostListPageRequests(requestCount);
+    }
+
+    public void hasReceivedMultipleRequests(int accessUrlReqCnt, int listPageReqCnt) {
+        hasReceivedMultipleAccessUrlRequests(accessUrlReqCnt);
+        hasReceivedMultiplePostListPageRequests(listPageReqCnt);
+    }
+
+    public void hasReceivedMultipleAccessUrlRequests(int requestCount) {
         instance.verify(requestCount, getRequestedFor(urlPathTemplate("/wayback/available"))
             .withQueryParam("url",
                 matching("http[s]?://agile.egloos.com/archives/[12][0-9]{3}/[01][0-9]"))
             .withQueryParam("timestamp", matching("[0-9]{8}"))
         );
+    }
+
+    public void hasReceivedMultiplePostListPageRequests(int requestCount) {
         instance.verify(requestCount,
             getRequestedFor(urlPathTemplate("/web/{timestamp}/archives/{year}/{month}"))
                 .withPathParam("timestamp", matching("[0-9]{14}"))

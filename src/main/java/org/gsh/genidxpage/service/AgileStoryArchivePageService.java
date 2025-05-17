@@ -46,6 +46,11 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     }
 
     @Override
+    public List<String> findFailedRequests() {
+        return reporter.readAllFailedRequestInput();
+    }
+
+    @Override
     public List<String> readIndexContent() {
         return postRecorder.readAllRawHtml();
     }

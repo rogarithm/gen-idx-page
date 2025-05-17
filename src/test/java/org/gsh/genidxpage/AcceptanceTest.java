@@ -14,7 +14,6 @@ import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -233,7 +232,6 @@ public class AcceptanceTest {
             fakeWebArchiveServer.stop();
         }
 
-        @Disabled
         @DisplayName("실패한 요청을 모아서 재시도한다")
         @Test
         public void retry_failed_requests() {
@@ -272,8 +270,13 @@ public class AcceptanceTest {
             fakeWebArchiveServer.start();
 
             scheduler.doSend();
+            scheduler.doRetry();
+
             fakeWebArchiveServer.hasReceivedMultipleRequests(
-                passRequests.size() + failRequests.size() * 2 // 비정상 응답받은 경우는 재시도한다
+                // 접근 url을 가져오는 요청 중 비정상 응답받은 경우는 재시도한다
+                passRequests.size() + failRequests.size() * 2,
+                // 블로그 목록 페이지를 가져오는 요청 중 재시도한 요청은 또 다시 실패한다
+                passRequests.size()
             );
 
             fakeWebArchiveServer.stop();
