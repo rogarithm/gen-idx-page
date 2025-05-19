@@ -18,7 +18,7 @@ public class PostListPageRecorder {
     }
 
     Long record(final CheckPostArchivedDto dto, final ArchivedPageInfo archivedPageInfo) {
-        PostListPage hasPostListPage = mapper.selectPostListPageByYearMonth(
+        PostListPage hasPostListPage = mapper.selectByYearMonth(
             dto.getYear(),
             dto.getMonth()
         );
@@ -27,13 +27,13 @@ public class PostListPageRecorder {
             log.info(
                 "updating access url with id of " + hasPostListPage.getId() + " with content of "
                     + archivedPageInfo.accessibleUrl());
-            mapper.updatePostListPage(PostListPage.of(dto, archivedPageInfo));
+            mapper.update(PostListPage.of(dto, archivedPageInfo));
             return hasPostListPage.getId();
         }
 
         log.info("inserting access url of " + archivedPageInfo.accessibleUrl());
         PostListPage postListPage = PostListPage.of(dto, archivedPageInfo);
-        mapper.insertPostListPage(postListPage);
+        mapper.insert(postListPage);
         return postListPage.getId();
     }
 }

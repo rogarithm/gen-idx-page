@@ -4,7 +4,7 @@ import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 
 import java.time.LocalDateTime;
 
-public class ArchivedPageUrlReport {
+public class ArchiveStatus {
 
     private Long id;
     private String year;
@@ -14,23 +14,23 @@ public class ArchivedPageUrlReport {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-    public ArchivedPageUrlReport() {}
+    public ArchiveStatus() {}
 
-    public ArchivedPageUrlReport(String year, String month, Boolean pageExists) {
+    public ArchiveStatus(String year, String month, Boolean pageExists) {
         this.year = year;
         this.month = month;
         this.pageExists = pageExists;
     }
 
-    public ArchivedPageUrlReport(String year, String month, Boolean pageExists, LocalDateTime createdAt) {
+    public ArchiveStatus(String year, String month, Boolean pageExists, LocalDateTime createdAt) {
         this.year = year;
         this.month = month;
         this.pageExists = pageExists;
         this.createdAt = createdAt;
     }
 
-    public static ArchivedPageUrlReport from(CheckPostArchivedDto dto, Boolean pageExists) {
-        return new ArchivedPageUrlReport(
+    public static ArchiveStatus from(CheckPostArchivedDto dto, Boolean pageExists) {
+        return new ArchiveStatus(
             dto.getYear(),
             dto.getMonth(),
             pageExists,

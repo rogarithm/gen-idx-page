@@ -8,11 +8,11 @@ import java.util.List;
 @Mapper
 public interface PostMapper {
 
-    Long insertPost(Post post);
+    Long insert(Post post);
 
     Post selectByParentPageId(Long parentPageId);
 
-    Long updatePost(Post post);
+    Long update(Post post);
 
     List<Post> selectAll();
 }

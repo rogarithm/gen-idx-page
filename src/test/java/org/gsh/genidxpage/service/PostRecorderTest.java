@@ -23,7 +23,7 @@ class PostRecorderTest {
 
         recorder.record("", 0L);
 
-        verify(mapper).insertPost(any(Post.class));
+        verify(mapper).insert(any(Post.class));
     }
 
     @DisplayName("db에 부모 페이지 아이디에 연결된 html이 이미 기록되어 있으면, 업데이트한다")
@@ -35,7 +35,7 @@ class PostRecorderTest {
         when(mapper.selectByParentPageId(any())).thenReturn(Post.of("", 0L));
         recorder.record("", 0L);
 
-        verify(mapper).updatePost(any(Post.class));
+        verify(mapper).update(any(Post.class));
     }
 
     @DisplayName("기록된 모든 html을 읽어온다")

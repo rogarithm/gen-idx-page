@@ -5,7 +5,7 @@ import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.scheduler.BulkRequestSender;
 import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
-import org.gsh.genidxpage.service.ApiCallReporter;
+import org.gsh.genidxpage.service.ArchiveStatusReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.gsh.genidxpage.service.PostListPageRecorder;
@@ -36,7 +36,7 @@ public class AcceptanceTest {
 
     private ArchivePageController archivePageController;
     @Autowired
-    private ApiCallReporter reporter;
+    private ArchiveStatusReporter reporter;
     @Autowired
     private PostListPageRecorder listPageRecorder;
     @Autowired
