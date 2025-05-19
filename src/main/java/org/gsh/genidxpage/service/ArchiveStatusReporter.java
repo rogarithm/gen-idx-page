@@ -17,20 +17,20 @@ public class ArchiveStatusReporter {
     }
 
     void reportArchivedPageSearch(final CheckPostArchivedDto dto, final Boolean pageExists) {
-        ArchiveStatus hasReport = reportMapper.selectReportByYearMonth(dto.getYear(),
+        ArchiveStatus hasReport = reportMapper.selectByYearMonth(dto.getYear(),
             dto.getMonth());
 
         if (hasReport != null) {
-            reportMapper.updateReport(ArchiveStatus.from(dto, pageExists));
+            reportMapper.update(ArchiveStatus.from(dto, pageExists));
             return;
         }
 
         ArchiveStatus report = ArchiveStatus.from(dto, pageExists);
-        reportMapper.insertReport(report);
+        reportMapper.insert(report);
     }
 
     public boolean hasArchivedPage(final CheckPostArchivedDto dto) {
-        ArchiveStatus report = reportMapper.selectReportByYearMonth(
+        ArchiveStatus report = reportMapper.selectByYearMonth(
             dto.getYear(),
             dto.getMonth()
         );

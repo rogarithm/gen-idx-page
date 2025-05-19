@@ -9,11 +9,11 @@ import java.util.List;
 @Mapper
 public interface ArchiveStatusMapper {
 
-    Long insertReport(ArchiveStatus report);
+    Long insert(ArchiveStatus report);
 
-    ArchiveStatus selectReportByYearMonth(@Param("year") String year, @Param("month") String month);
+    ArchiveStatus selectByYearMonth(@Param("year") String year, @Param("month") String month);
 
-    void updateReport(ArchiveStatus report);
+    void update(ArchiveStatus report);
 
     List<ArchiveStatus> selectByPageExists(Boolean pageExists);
 }

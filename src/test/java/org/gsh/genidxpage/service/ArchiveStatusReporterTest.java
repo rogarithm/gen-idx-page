@@ -27,7 +27,7 @@ class ArchiveStatusReporterTest {
             "2021", "3", Boolean.TRUE, LocalDateTime.now()
         );
 
-        when(mapper.selectReportByYearMonth(any(), any())).thenReturn(report);
+        when(mapper.selectByYearMonth(any(), any())).thenReturn(report);
 
         boolean hasArchivedPage = reporter.hasArchivedPage(
             new CheckPostArchivedDto("2021", "3")
@@ -44,15 +44,15 @@ class ArchiveStatusReporterTest {
             "2021", "3", Boolean.TRUE, LocalDateTime.now()
         );
 
-        when(mapper.selectReportByYearMonth(any(), any())).thenReturn(
+        when(mapper.selectByYearMonth(any(), any())).thenReturn(
             report);
-        doNothing().when(mapper).updateReport(report);
+        doNothing().when(mapper).update(report);
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
         reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
 
-        verify(mapper).selectReportByYearMonth(any(), any());
-        verify(mapper).updateReport(any(ArchiveStatus.class));
+        verify(mapper).selectByYearMonth(any(), any());
+        verify(mapper).update(any(ArchiveStatus.class));
     }
 
     @DisplayName("실패한 요청 정보를 db로부터 읽어온다")

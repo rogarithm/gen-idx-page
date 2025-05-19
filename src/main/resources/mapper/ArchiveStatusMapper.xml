@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.gsh.genidxpage.dao.ArchiveStatusMapper">
-  <insert id="insertReport" useGeneratedKeys="true" keyProperty="id"
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"
     parameterType="org.gsh.genidxpage.entity.ArchiveStatus">
 
     INSERT INTO post_list_page_status (year,
@@ -16,7 +16,7 @@
             #{createdAt})
   </insert>
 
-  <select id="selectReportByYearMonth" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
+  <select id="selectByYearMonth" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
     SELECT `year`,
            `month`,
            page_exists
@@ -26,7 +26,7 @@
       AND deleted_at IS NULL
   </select>
 
-  <update id="updateReport" useGeneratedKeys="true" keyProperty="id"
+  <update id="update" useGeneratedKeys="true" keyProperty="id"
     parameterType="org.gsh.genidxpage.entity.ArchiveStatus">
     UPDATE post_list_page_status
     SET page_exists = #{pageExists},
