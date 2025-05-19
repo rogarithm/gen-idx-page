@@ -23,7 +23,7 @@ web-archive:
 bulk-request:
   input-path: static/year-month-list
 index-page:
-  path: /app/static
+  path: ${INDEX_PAGE_PATH}
 
 logging:
   file:
