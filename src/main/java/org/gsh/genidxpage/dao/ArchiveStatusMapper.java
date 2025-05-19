@@ -7,7 +7,7 @@ import org.gsh.genidxpage.entity.ArchiveStatus;
 import java.util.List;
 
 @Mapper
-public interface WebArchiveReportMapper {
+public interface ArchiveStatusMapper {
 
     Long insertReport(ArchiveStatus report);
 

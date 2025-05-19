@@ -1,6 +1,6 @@
 package org.gsh.genidxpage.service;
 
-import org.gsh.genidxpage.dao.WebArchiveReportMapper;
+import org.gsh.genidxpage.dao.ArchiveStatusMapper;
 import org.gsh.genidxpage.entity.ArchiveStatus;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.springframework.stereotype.Component;
@@ -10,9 +10,9 @@ import java.util.List;
 @Component
 public class ArchiveStatusReporter {
 
-    private final WebArchiveReportMapper reportMapper;
+    private final ArchiveStatusMapper reportMapper;
 
-    public ArchiveStatusReporter(WebArchiveReportMapper reportMapper) {
+    public ArchiveStatusReporter(ArchiveStatusMapper reportMapper) {
         this.reportMapper = reportMapper;
     }
 

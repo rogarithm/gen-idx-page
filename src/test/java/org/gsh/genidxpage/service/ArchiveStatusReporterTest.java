@@ -7,7 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.assertj.core.api.Assertions;
-import org.gsh.genidxpage.dao.WebArchiveReportMapper;
+import org.gsh.genidxpage.dao.ArchiveStatusMapper;
 import org.gsh.genidxpage.entity.ArchiveStatus;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +21,7 @@ class ArchiveStatusReporterTest {
     @DisplayName("web archive로부터 url을 받아온 연월인지 확인할 수 있다")
     @Test
     public void check_url_exists_in_web_archive_for_given_year_month() {
-        WebArchiveReportMapper mapper = mock(WebArchiveReportMapper.class);
+        ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
         ArchiveStatus report = new ArchiveStatus(
             "2021", "3", Boolean.TRUE, LocalDateTime.now()
@@ -38,7 +38,7 @@ class ArchiveStatusReporterTest {
     @DisplayName("이미 db에 기록된 경우, 새로운 행을 추가하지 않는다")
     @Test
     public void only_update_status_when_page_status_already_inserted() {
-        WebArchiveReportMapper mapper = mock(WebArchiveReportMapper.class);
+        ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
         ArchiveStatus report = new ArchiveStatus(
             "2021", "3", Boolean.TRUE, LocalDateTime.now()
@@ -58,7 +58,7 @@ class ArchiveStatusReporterTest {
     @DisplayName("실패한 요청 정보를 db로부터 읽어온다")
     @Test
     public void read_all_failed_request_info_from_db() {
-        WebArchiveReportMapper mapper = mock(WebArchiveReportMapper.class);
+        ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
         List<ArchiveStatus> failRequestReports = List.of(
             new ArchiveStatus("2020", "05", Boolean.FALSE, LocalDateTime.now()),
