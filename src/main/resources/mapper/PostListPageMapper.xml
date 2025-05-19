@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.gsh.genidxpage.dao.PostListPageMapper">
-  <insert id="insertPostListPage" useGeneratedKeys="true" keyProperty="id"
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"
     parameterType="org.gsh.genidxpage.entity.PostListPage">
 
     INSERT INTO post_list_page (year,
@@ -17,7 +17,7 @@
             #{createdAt})
   </insert>
 
-  <select id="selectPostListPageByYearMonth" resultType="org.gsh.genidxpage.entity.PostListPage">
+  <select id="selectByYearMonth" resultType="org.gsh.genidxpage.entity.PostListPage">
     SELECT id,
            year,
            month,
@@ -28,7 +28,7 @@
       AND deleted_at IS NULL
   </select>
 
-  <update id="updatePostListPage" useGeneratedKeys="true" keyProperty="id"
+  <update id="update" useGeneratedKeys="true" keyProperty="id"
     parameterType="org.gsh.genidxpage.entity.PostListPage">
     UPDATE post_list_page
     SET url        = #{url},

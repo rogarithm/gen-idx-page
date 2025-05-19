@@ -29,7 +29,7 @@ class PostListPageRecorderTest {
             .build();
         recorder.record(dto, archivedPageInfo);
 
-        verify(mapper).insertPostListPage(any(PostListPage.class));
+        verify(mapper).insert(any(PostListPage.class));
     }
 
     @DisplayName("이미 등록된 연월의 url이면 업데이트만 한다")
@@ -44,7 +44,7 @@ class PostListPageRecorderTest {
             "http://localhost:8080/web/20230614220926/archives/2021/03",
             LocalDateTime.now()
         );
-        when(mapper.selectPostListPageByYearMonth(any(), any())).thenReturn(postListPage);
+        when(mapper.selectByYearMonth(any(), any())).thenReturn(postListPage);
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
@@ -52,6 +52,6 @@ class PostListPageRecorderTest {
             .build();
         recorder.record(dto, archivedPageInfo);
 
-        verify(mapper).updatePostListPage(any(PostListPage.class));
+        verify(mapper).update(any(PostListPage.class));
     }
 }

@@ -7,9 +7,9 @@ import org.gsh.genidxpage.entity.PostListPage;
 @Mapper
 public interface PostListPageMapper {
 
-    Long insertPostListPage(PostListPage postListPage);
+    Long insert(PostListPage postListPage);
 
-    PostListPage selectPostListPageByYearMonth(@Param("year") String year, @Param("month") String month);
+    PostListPage selectByYearMonth(@Param("year") String year, @Param("month") String month);
 
-    Long updatePostListPage(PostListPage postListPage);
+    Long update(PostListPage postListPage);
 }
