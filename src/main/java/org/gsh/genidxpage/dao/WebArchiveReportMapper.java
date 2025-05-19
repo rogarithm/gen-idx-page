@@ -2,18 +2,18 @@ package org.gsh.genidxpage.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.gsh.genidxpage.entity.ArchivedPageUrlReport;
+import org.gsh.genidxpage.entity.ArchiveStatus;
 
 import java.util.List;
 
 @Mapper
 public interface WebArchiveReportMapper {
 
-    Long insertReport(ArchivedPageUrlReport report);
+    Long insertReport(ArchiveStatus report);
 
-    ArchivedPageUrlReport selectReportByYearMonth(@Param("year") String year, @Param("month") String month);
+    ArchiveStatus selectReportByYearMonth(@Param("year") String year, @Param("month") String month);
 
-    void updateReport(ArchivedPageUrlReport report);
+    void updateReport(ArchiveStatus report);
 
-    List<ArchivedPageUrlReport> selectByPageExists(Boolean pageExists);
+    List<ArchiveStatus> selectByPageExists(Boolean pageExists);
 }

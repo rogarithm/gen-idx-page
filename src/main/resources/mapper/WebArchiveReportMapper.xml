@@ -4,7 +4,7 @@
 
 <mapper namespace="org.gsh.genidxpage.dao.WebArchiveReportMapper">
   <insert id="insertReport" useGeneratedKeys="true" keyProperty="id"
-    parameterType="org.gsh.genidxpage.entity.ArchivedPageUrlReport">
+    parameterType="org.gsh.genidxpage.entity.ArchiveStatus">
 
     INSERT INTO post_list_page_status (year,
                           month,
@@ -16,7 +16,7 @@
             #{createdAt})
   </insert>
 
-  <select id="selectReportByYearMonth" resultType="org.gsh.genidxpage.entity.ArchivedPageUrlReport">
+  <select id="selectReportByYearMonth" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
     SELECT `year`,
            `month`,
            page_exists
@@ -27,7 +27,7 @@
   </select>
 
   <update id="updateReport" useGeneratedKeys="true" keyProperty="id"
-    parameterType="org.gsh.genidxpage.entity.ArchivedPageUrlReport">
+    parameterType="org.gsh.genidxpage.entity.ArchiveStatus">
     UPDATE post_list_page_status
     SET page_exists = #{pageExists},
         updated_at  = #{updatedAt}
@@ -35,7 +35,7 @@
       AND `month` = #{month}
   </update>
 
-  <select id="selectByPageExists" resultType="org.gsh.genidxpage.entity.ArchivedPageUrlReport">
+  <select id="selectByPageExists" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
     SELECT year,
            month,
            page_exists

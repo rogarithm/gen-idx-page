@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.dao.WebArchiveReportMapper;
-import org.gsh.genidxpage.entity.ArchivedPageUrlReport;
+import org.gsh.genidxpage.entity.ArchiveStatus;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class ArchiveStatusReporterTest {
     public void check_url_exists_in_web_archive_for_given_year_month() {
         WebArchiveReportMapper mapper = mock(WebArchiveReportMapper.class);
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
-        ArchivedPageUrlReport report = new ArchivedPageUrlReport(
+        ArchiveStatus report = new ArchiveStatus(
             "2021", "3", Boolean.TRUE, LocalDateTime.now()
         );
 
@@ -40,7 +40,7 @@ class ArchiveStatusReporterTest {
     public void only_update_status_when_page_status_already_inserted() {
         WebArchiveReportMapper mapper = mock(WebArchiveReportMapper.class);
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
-        ArchivedPageUrlReport report = new ArchivedPageUrlReport(
+        ArchiveStatus report = new ArchiveStatus(
             "2021", "3", Boolean.TRUE, LocalDateTime.now()
         );
 
@@ -52,7 +52,7 @@ class ArchiveStatusReporterTest {
         reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
 
         verify(mapper).selectReportByYearMonth(any(), any());
-        verify(mapper).updateReport(any(ArchivedPageUrlReport.class));
+        verify(mapper).updateReport(any(ArchiveStatus.class));
     }
 
     @DisplayName("실패한 요청 정보를 db로부터 읽어온다")
@@ -60,9 +60,9 @@ class ArchiveStatusReporterTest {
     public void read_all_failed_request_info_from_db() {
         WebArchiveReportMapper mapper = mock(WebArchiveReportMapper.class);
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
-        List<ArchivedPageUrlReport> failRequestReports = List.of(
-            new ArchivedPageUrlReport("2020", "05", Boolean.FALSE, LocalDateTime.now()),
-            new ArchivedPageUrlReport("2021", "03", Boolean.FALSE, LocalDateTime.now())
+        List<ArchiveStatus> failRequestReports = List.of(
+            new ArchiveStatus("2020", "05", Boolean.FALSE, LocalDateTime.now()),
+            new ArchiveStatus("2021", "03", Boolean.FALSE, LocalDateTime.now())
         );
 
         when(mapper.selectByPageExists(any())).thenReturn(failRequestReports);

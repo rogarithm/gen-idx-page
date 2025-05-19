@@ -1,7 +1,7 @@
 package org.gsh.genidxpage.service;
 
 import org.gsh.genidxpage.dao.WebArchiveReportMapper;
-import org.gsh.genidxpage.entity.ArchivedPageUrlReport;
+import org.gsh.genidxpage.entity.ArchiveStatus;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.springframework.stereotype.Component;
 
@@ -17,20 +17,20 @@ public class ArchiveStatusReporter {
     }
 
     void reportArchivedPageSearch(final CheckPostArchivedDto dto, final Boolean pageExists) {
-        ArchivedPageUrlReport hasReport = reportMapper.selectReportByYearMonth(dto.getYear(),
+        ArchiveStatus hasReport = reportMapper.selectReportByYearMonth(dto.getYear(),
             dto.getMonth());
 
         if (hasReport != null) {
-            reportMapper.updateReport(ArchivedPageUrlReport.from(dto, pageExists));
+            reportMapper.updateReport(ArchiveStatus.from(dto, pageExists));
             return;
         }
 
-        ArchivedPageUrlReport report = ArchivedPageUrlReport.from(dto, pageExists);
+        ArchiveStatus report = ArchiveStatus.from(dto, pageExists);
         reportMapper.insertReport(report);
     }
 
     public boolean hasArchivedPage(final CheckPostArchivedDto dto) {
-        ArchivedPageUrlReport report = reportMapper.selectReportByYearMonth(
+        ArchiveStatus report = reportMapper.selectReportByYearMonth(
             dto.getYear(),
             dto.getMonth()
         );
