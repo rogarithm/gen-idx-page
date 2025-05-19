@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.gsh.genidxpage.dao.PostMapper">
-  <insert id="insertPost" useGeneratedKeys="true" keyProperty="id"
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"
     parameterType="org.gsh.genidxpage.entity.Post">
     INSERT INTO post (parent_page_id,
                       raw_html,
@@ -23,7 +23,7 @@
       AND deleted_at IS NULL
   </select>
 
-  <update id="updatePost" useGeneratedKeys="true" keyProperty="id"
+  <update id="update" useGeneratedKeys="true" keyProperty="id"
     parameterType="org.gsh.genidxpage.entity.Post">
     UPDATE post
     SET raw_html = #{rawHtml},
