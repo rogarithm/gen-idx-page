@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ApiCallReporter {
+public class ArchiveStatusReporter {
 
     private final WebArchiveReportMapper reportMapper;
 
-    public ApiCallReporter(WebArchiveReportMapper reportMapper) {
+    public ArchiveStatusReporter(WebArchiveReportMapper reportMapper) {
         this.reportMapper = reportMapper;
     }
 

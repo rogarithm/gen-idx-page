@@ -16,12 +16,12 @@ import java.util.List;
 public class AgileStoryArchivePageService implements ArchivePageService {
 
     private final WebArchiveApiCaller webArchiveApiCaller;
-    private final ApiCallReporter reporter;
+    private final ArchiveStatusReporter reporter;
     private final PostListPageRecorder listPageRecorder;
     private final PostRecorder postRecorder;
 
     public AgileStoryArchivePageService(WebArchiveApiCaller webArchiveApiCaller,
-        ApiCallReporter reporter, PostListPageRecorder listPageRecorder, PostRecorder postRecorder) {
+        ArchiveStatusReporter reporter, PostListPageRecorder listPageRecorder, PostRecorder postRecorder) {
         this.webArchiveApiCaller = webArchiveApiCaller;
         this.reporter = reporter;
         this.listPageRecorder = listPageRecorder;

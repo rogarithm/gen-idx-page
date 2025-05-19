@@ -16,13 +16,13 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-class ApiCallReporterTest {
+class ArchiveStatusReporterTest {
 
     @DisplayName("web archive로부터 url을 받아온 연월인지 확인할 수 있다")
     @Test
     public void check_url_exists_in_web_archive_for_given_year_month() {
         WebArchiveReportMapper mapper = mock(WebArchiveReportMapper.class);
-        ApiCallReporter reporter = new ApiCallReporter(mapper);
+        ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
         ArchivedPageUrlReport report = new ArchivedPageUrlReport(
             "2021", "3", Boolean.TRUE, LocalDateTime.now()
         );
@@ -39,7 +39,7 @@ class ApiCallReporterTest {
     @Test
     public void only_update_status_when_page_status_already_inserted() {
         WebArchiveReportMapper mapper = mock(WebArchiveReportMapper.class);
-        ApiCallReporter reporter = new ApiCallReporter(mapper);
+        ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
         ArchivedPageUrlReport report = new ArchivedPageUrlReport(
             "2021", "3", Boolean.TRUE, LocalDateTime.now()
         );
@@ -59,7 +59,7 @@ class ApiCallReporterTest {
     @Test
     public void read_all_failed_request_info_from_db() {
         WebArchiveReportMapper mapper = mock(WebArchiveReportMapper.class);
-        ApiCallReporter reporter = new ApiCallReporter(mapper);
+        ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
         List<ArchivedPageUrlReport> failRequestReports = List.of(
             new ArchivedPageUrlReport("2020", "05", Boolean.FALSE, LocalDateTime.now()),
             new ArchivedPageUrlReport("2021", "03", Boolean.FALSE, LocalDateTime.now())
