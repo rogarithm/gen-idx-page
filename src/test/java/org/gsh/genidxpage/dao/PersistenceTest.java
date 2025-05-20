@@ -10,7 +10,9 @@ import org.gsh.genidxpage.entity.PostListPageBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @SpringBootTest
 class PersistenceTest {
 
@@ -63,7 +65,7 @@ class PersistenceTest {
         postListPageMapper.insert(postListPage);
 
         String rawHtml = "<html>hello</html>";
-        Long parentPageId = 1L;
+        Long parentPageId = postListPageMapper.selectByYearMonth("2021", "3").getId();
         postMapper.insert(Post.createFrom(rawHtml, parentPageId));
 
         Post loadedEntity = postMapper.selectByParentPageId(parentPageId);
