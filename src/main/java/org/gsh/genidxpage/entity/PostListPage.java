@@ -32,6 +32,16 @@ public class PostListPage {
         this.createdAt = createdAt;
     }
 
+    PostListPage(String year, String month, String url, LocalDateTime createdAt,
+        LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this.year = year;
+        this.month = month;
+        this.url = url;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+    }
+
     public static PostListPage createFrom(CheckPostArchivedDto dto, ArchivedPageInfo archivedPageInfo) {
         return new PostListPage(
             dto.getYear(),
