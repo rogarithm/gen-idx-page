@@ -9,11 +9,11 @@ import static org.mockito.Mockito.when;
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.dao.ArchiveStatusMapper;
 import org.gsh.genidxpage.entity.ArchiveStatus;
+import org.gsh.genidxpage.entity.ArchiveStatusBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 class ArchiveStatusReporterTest {
@@ -23,9 +23,10 @@ class ArchiveStatusReporterTest {
     public void check_url_exists_in_web_archive_for_given_year_month() {
         ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
-        ArchiveStatus report = new ArchiveStatus(
-            "2021", "3", Boolean.TRUE, LocalDateTime.now()
-        );
+        ArchiveStatus report = ArchiveStatusBuilder.builder()
+            .withYearMonth("2021", "3")
+            .thatExists()
+            .buildAsNew();
 
         when(mapper.selectByYearMonth(any(), any())).thenReturn(report);
 
@@ -40,9 +41,10 @@ class ArchiveStatusReporterTest {
     public void only_update_status_when_page_status_already_inserted() {
         ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
-        ArchiveStatus report = new ArchiveStatus(
-            "2021", "3", Boolean.TRUE, LocalDateTime.now()
-        );
+        ArchiveStatus report = ArchiveStatusBuilder.builder()
+            .withYearMonth("2021", "3")
+            .thatExists()
+            .buildAsNew();
 
         when(mapper.selectByYearMonth(any(), any())).thenReturn(
             report);
@@ -61,8 +63,14 @@ class ArchiveStatusReporterTest {
         ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
         List<ArchiveStatus> failRequestReports = List.of(
-            new ArchiveStatus("2020", "05", Boolean.FALSE, LocalDateTime.now()),
-            new ArchiveStatus("2021", "03", Boolean.FALSE, LocalDateTime.now())
+            ArchiveStatusBuilder.builder()
+                .withYearMonth("2020", "05")
+                .thatNotExists()
+                .buildAsNew(),
+            ArchiveStatusBuilder.builder()
+                .withYearMonth("2021", "03")
+                .thatNotExists()
+                .buildAsNew()
         );
 
         when(mapper.selectByPageExists(any())).thenReturn(failRequestReports);
