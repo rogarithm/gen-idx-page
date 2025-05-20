@@ -32,7 +32,7 @@ public class PostListPage {
         this.createdAt = createdAt;
     }
 
-    public static PostListPage of(CheckPostArchivedDto dto, ArchivedPageInfo archivedPageInfo) {
+    public static PostListPage createFrom(CheckPostArchivedDto dto, ArchivedPageInfo archivedPageInfo) {
         return new PostListPage(
             dto.getYear(),
             dto.getMonth(),

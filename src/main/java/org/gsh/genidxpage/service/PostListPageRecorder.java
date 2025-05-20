@@ -27,12 +27,12 @@ public class PostListPageRecorder {
             log.info(
                 "updating access url with id of " + hasPostListPage.getId() + " with content of "
                     + archivedPageInfo.accessibleUrl());
-            mapper.update(PostListPage.of(dto, archivedPageInfo));
+            mapper.update(PostListPage.createFrom(dto, archivedPageInfo));
             return hasPostListPage.getId();
         }
 
         log.info("inserting access url of " + archivedPageInfo.accessibleUrl());
-        PostListPage postListPage = PostListPage.of(dto, archivedPageInfo);
+        PostListPage postListPage = PostListPage.createFrom(dto, archivedPageInfo);
         mapper.insert(postListPage);
         return postListPage.getId();
     }
