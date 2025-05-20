@@ -47,7 +47,9 @@ public class PostListPage {
             dto.getYear(),
             dto.getMonth(),
             archivedPageInfo.accessibleUrl(),
-            LocalDateTime.now()
+            LocalDateTime.now(),
+            null,
+            null
         );
     }
 
