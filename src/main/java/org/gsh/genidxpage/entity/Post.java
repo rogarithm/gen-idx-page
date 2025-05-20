@@ -11,19 +11,34 @@ public class Post {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-    public Post() {}
+    private Post() {}
 
-    public Post(Long parentPageId, String rawHtml, LocalDateTime createdAt) {
+    Post(Long parentPageId, String rawHtml, LocalDateTime createdAt, LocalDateTime updatedAt,
+        LocalDateTime deletedAt) {
         this.parentPageId = parentPageId;
         this.rawHtml = rawHtml;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
-    public static Post of(String rawHtml, Long listPageId) {
+    public static Post createFrom(String rawHtml, Long listPageId) {
         return new Post(
             listPageId,
             rawHtml,
-            LocalDateTime.now()
+            LocalDateTime.now(),
+            null,
+            null
+        );
+    }
+
+    public static Post updateFrom(Post post, String rawHtml) {
+        return new Post(
+            post.getParentPageId(),
+            rawHtml,
+            null,
+            LocalDateTime.now(),
+            null
         );
     }
 

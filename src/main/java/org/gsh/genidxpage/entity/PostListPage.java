@@ -15,29 +15,37 @@ public class PostListPage {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-    public PostListPage() {}
+    private PostListPage() {}
 
-    public PostListPage(Long id, String year, String month, String url, LocalDateTime createdAt) {
-        this.id = id;
+    PostListPage(String year, String month, String url, LocalDateTime createdAt,
+        LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.year = year;
         this.month = month;
         this.url = url;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
-    public PostListPage(String year, String month, String url, LocalDateTime createdAt) {
-        this.year = year;
-        this.month = month;
-        this.url = url;
-        this.createdAt = createdAt;
-    }
-
-    public static PostListPage of(CheckPostArchivedDto dto, ArchivedPageInfo archivedPageInfo) {
+    public static PostListPage createFrom(CheckPostArchivedDto dto, ArchivedPageInfo archivedPageInfo) {
         return new PostListPage(
             dto.getYear(),
             dto.getMonth(),
             archivedPageInfo.accessibleUrl(),
-            LocalDateTime.now()
+            LocalDateTime.now(),
+            null,
+            null
+        );
+    }
+
+    public static PostListPage updateFrom(PostListPage postListPage, ArchivedPageInfo archivedPageInfo) {
+        return new PostListPage(
+            postListPage.getYear(),
+            postListPage.getMonth(),
+            archivedPageInfo.accessibleUrl(),
+            null,
+            LocalDateTime.now(),
+            null
         );
     }
 

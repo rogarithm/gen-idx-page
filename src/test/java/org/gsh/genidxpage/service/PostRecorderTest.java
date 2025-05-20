@@ -32,7 +32,7 @@ class PostRecorderTest {
         PostMapper mapper = mock(PostMapper.class);
         PostRecorder recorder = new PostRecorder(mapper);
 
-        when(mapper.selectByParentPageId(any())).thenReturn(Post.of("", 0L));
+        when(mapper.selectByParentPageId(any())).thenReturn(Post.createFrom("", 0L));
         recorder.record("", 0L);
 
         verify(mapper).update(any(Post.class));
@@ -45,8 +45,8 @@ class PostRecorderTest {
         PostRecorder recorder = new PostRecorder(mapper);
 
         List<Post> posts = List.of(
-            Post.of("blogUrl1", 0L),
-            Post.of("blogUrl2", 1L)
+            Post.createFrom("blogUrl1", 0L),
+            Post.createFrom("blogUrl2", 1L)
         );
         when(mapper.selectAll()).thenReturn(
             posts

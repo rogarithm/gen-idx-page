@@ -21,11 +21,11 @@ public class PostRecorder {
     public void record(String rawHtml, Long listPageId) {
         Post hasPost = mapper.selectByParentPageId(listPageId);
         if (hasPost != null) {
-            mapper.update(Post.of(rawHtml, listPageId));
+            mapper.update(Post.updateFrom(hasPost, rawHtml));
             return;
         }
 
-        mapper.insert(Post.of(rawHtml, listPageId));
+        mapper.insert(Post.createFrom(rawHtml, listPageId));
     }
 
     public List<String> readAllRawHtml() {

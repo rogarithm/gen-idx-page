@@ -7,13 +7,12 @@ import static org.mockito.Mockito.when;
 
 import org.gsh.genidxpage.dao.PostListPageMapper;
 import org.gsh.genidxpage.entity.PostListPage;
+import org.gsh.genidxpage.entity.PostListPageBuilder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
 
 class PostListPageRecorderTest {
 
@@ -38,12 +37,10 @@ class PostListPageRecorderTest {
         PostListPageMapper mapper = mock(PostListPageMapper.class);
         PostListPageRecorder recorder = new PostListPageRecorder(mapper);
 
-        PostListPage postListPage = new PostListPage(
-            "2021",
-            "3",
-            "http://localhost:8080/web/20230614220926/archives/2021/03",
-            LocalDateTime.now()
-        );
+        PostListPage postListPage = PostListPageBuilder.builder()
+            .withYearMonth("2021", "3")
+            .withUrl("http://localhost:8080/web/20230614220926/archives/2021/03")
+            .buildAsNew();
         when(mapper.selectByYearMonth(any(), any())).thenReturn(postListPage);
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");

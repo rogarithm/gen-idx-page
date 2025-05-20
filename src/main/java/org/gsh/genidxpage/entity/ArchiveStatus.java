@@ -14,27 +14,43 @@ public class ArchiveStatus {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-    public ArchiveStatus() {}
+    private ArchiveStatus() {}
 
-    public ArchiveStatus(String year, String month, Boolean pageExists) {
+    ArchiveStatus(String year, String month, Boolean pageExists) {
         this.year = year;
         this.month = month;
         this.pageExists = pageExists;
     }
 
-    public ArchiveStatus(String year, String month, Boolean pageExists, LocalDateTime createdAt) {
+    ArchiveStatus(String year, String month, Boolean pageExists, LocalDateTime createdAt,
+        LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.year = year;
         this.month = month;
         this.pageExists = pageExists;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
-    public static ArchiveStatus from(CheckPostArchivedDto dto, Boolean pageExists) {
+    public static ArchiveStatus createFrom(CheckPostArchivedDto dto, Boolean pageExists) {
         return new ArchiveStatus(
             dto.getYear(),
             dto.getMonth(),
             pageExists,
-            LocalDateTime.now()
+            LocalDateTime.now(),
+            null,
+            null
+        );
+    }
+
+    public static ArchiveStatus updateFrom(ArchiveStatus archiveStatus, Boolean pageExists) {
+        return new ArchiveStatus(
+            archiveStatus.getYear(),
+            archiveStatus.getMonth(),
+            pageExists,
+            null,
+            LocalDateTime.now(),
+            null
         );
     }
 
