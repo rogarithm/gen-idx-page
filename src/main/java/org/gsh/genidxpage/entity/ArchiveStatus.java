@@ -14,9 +14,9 @@ public class ArchiveStatus {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-    public ArchiveStatus() {}
+    private ArchiveStatus() {}
 
-    public ArchiveStatus(String year, String month, Boolean pageExists) {
+    ArchiveStatus(String year, String month, Boolean pageExists) {
         this.year = year;
         this.month = month;
         this.pageExists = pageExists;

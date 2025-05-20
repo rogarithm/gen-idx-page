@@ -11,7 +11,7 @@ public class Post {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-    public Post() {}
+    private Post() {}
 
     Post(Long parentPageId, String rawHtml, LocalDateTime createdAt, LocalDateTime updatedAt,
         LocalDateTime deletedAt) {
