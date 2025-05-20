@@ -21,7 +21,7 @@ public class ArchiveStatusReporter {
             dto.getMonth());
 
         if (hasReport != null) {
-            reportMapper.update(ArchiveStatus.createFrom(dto, pageExists));
+            reportMapper.update(ArchiveStatus.updateFrom(hasReport, pageExists));
             return;
         }
 

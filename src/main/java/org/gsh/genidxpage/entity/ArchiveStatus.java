@@ -43,6 +43,17 @@ public class ArchiveStatus {
         );
     }
 
+    public static ArchiveStatus updateFrom(ArchiveStatus archiveStatus, Boolean pageExists) {
+        return new ArchiveStatus(
+            archiveStatus.getYear(),
+            archiveStatus.getMonth(),
+            pageExists,
+            null,
+            LocalDateTime.now(),
+            null
+        );
+    }
+
     public String getYear() {
         return year;
     }
