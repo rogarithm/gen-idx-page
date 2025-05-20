@@ -21,7 +21,7 @@ public class PostRecorder {
     public void record(String rawHtml, Long listPageId) {
         Post hasPost = mapper.selectByParentPageId(listPageId);
         if (hasPost != null) {
-            mapper.update(Post.createFrom(rawHtml, listPageId));
+            mapper.update(Post.updateFrom(hasPost, rawHtml));
             return;
         }
 

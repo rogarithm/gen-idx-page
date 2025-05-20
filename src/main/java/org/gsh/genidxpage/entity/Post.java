@@ -32,6 +32,16 @@ public class Post {
         );
     }
 
+    public static Post updateFrom(Post post, String rawHtml) {
+        return new Post(
+            post.getParentPageId(),
+            rawHtml,
+            null,
+            LocalDateTime.now(),
+            null
+        );
+    }
+
     public Long getParentPageId() {
         return parentPageId;
     }
