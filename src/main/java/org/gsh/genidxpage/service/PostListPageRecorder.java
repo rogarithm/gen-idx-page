@@ -27,7 +27,7 @@ public class PostListPageRecorder {
             log.info(
                 "updating access url with id of " + hasPostListPage.getId() + " with content of "
                     + archivedPageInfo.accessibleUrl());
-            mapper.update(PostListPage.createFrom(dto, archivedPageInfo));
+            mapper.update(PostListPage.updateFrom(hasPostListPage, archivedPageInfo));
             return hasPostListPage.getId();
         }
 

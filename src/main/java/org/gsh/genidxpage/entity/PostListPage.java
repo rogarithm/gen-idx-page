@@ -51,6 +51,17 @@ public class PostListPage {
         );
     }
 
+    public static PostListPage updateFrom(PostListPage postListPage, ArchivedPageInfo archivedPageInfo) {
+        return new PostListPage(
+            postListPage.getYear(),
+            postListPage.getMonth(),
+            archivedPageInfo.accessibleUrl(),
+            null,
+            LocalDateTime.now(),
+            null
+        );
+    }
+
     public Long getId() {
         return id;
     }
