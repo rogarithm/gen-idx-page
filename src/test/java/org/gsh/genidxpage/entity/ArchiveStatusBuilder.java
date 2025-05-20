@@ -37,7 +37,12 @@ public class ArchiveStatusBuilder {
             this.year,
             this.month,
             this.pageExists,
-            LocalDateTime.now()
+            LocalDateTime.now(),
+            null,
+            null
+        );
+    }
+
         );
     }
 }

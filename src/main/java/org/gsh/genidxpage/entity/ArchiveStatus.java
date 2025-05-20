@@ -22,19 +22,24 @@ public class ArchiveStatus {
         this.pageExists = pageExists;
     }
 
-    public ArchiveStatus(String year, String month, Boolean pageExists, LocalDateTime createdAt) {
+    ArchiveStatus(String year, String month, Boolean pageExists, LocalDateTime createdAt,
+        LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.year = year;
         this.month = month;
         this.pageExists = pageExists;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
-    public static ArchiveStatus from(CheckPostArchivedDto dto, Boolean pageExists) {
+    public static ArchiveStatus createFrom(CheckPostArchivedDto dto, Boolean pageExists) {
         return new ArchiveStatus(
             dto.getYear(),
             dto.getMonth(),
             pageExists,
-            LocalDateTime.now()
+            LocalDateTime.now(),
+            null,
+            null
         );
     }
 
