@@ -18,9 +18,12 @@ import java.util.List;
 public class IndexPageGenerator {
 
     private final String inputPath;
+    private final IndexContentReader reader;
 
-    public IndexPageGenerator(@Value("${index-page.path}") final String inputPath) {
+    public IndexPageGenerator(@Value("${index-page.path}") final String inputPath,
+        IndexContentReader reader) {
         this.inputPath = inputPath;
+        this.reader = reader;
     }
 
     // TODO
@@ -79,6 +82,6 @@ public class IndexPageGenerator {
     }
 
     public List<String> readIndexContent() {
-        return null;
+        return reader.readAllIndexContent();
     }
 }

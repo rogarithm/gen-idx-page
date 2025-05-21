@@ -7,6 +7,7 @@ import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ArchiveStatusReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
+import org.gsh.genidxpage.service.IndexContentReader;
 import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.gsh.genidxpage.service.PostListPageRecorder;
 import org.gsh.genidxpage.service.PostRecorder;
@@ -41,6 +42,8 @@ public class AcceptanceTest {
     private PostListPageRecorder listPageRecorder;
     @Autowired
     private PostRecorder postRecorder;
+    @Autowired
+    private IndexContentReader reader;
 
     @Nested
     class ArchivePageControllerTest {
@@ -179,7 +182,8 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             final WebArchiveScheduler scheduler = new WebArchiveScheduler(
-                bulkRequestSender, service, new IndexPageGenerator("/tmp/genidxpage/test")
+                bulkRequestSender, service,
+                new IndexPageGenerator("/tmp/genidxpage/test", reader)
             );
 
             // 요청할 모든 입력쌍을 만든다
