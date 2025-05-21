@@ -58,16 +58,21 @@ public class IndexPageGenerator {
 
     private String generateHeader() {
         return """
-            <html>
-              <head>
-                <meta charset="utf-8">
-              </head>
-              <body>
+             <!DOCTYPE html>
+             <html>
+               <head>
+                 <meta charset="utf-8">
+                 <title>agile story blog index</title>
+                 <link rel="stylesheet" href="./index.css" type="text/css" media="screen" />
+               </head>
+               <body>
+                 <div class="site">
             """;
     }
 
     private String generateFooter() {
         return """
+                </div>
               </body>
             </html>
             """;
