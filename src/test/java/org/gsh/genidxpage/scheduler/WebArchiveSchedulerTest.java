@@ -53,16 +53,18 @@ class WebArchiveSchedulerTest {
     @Test
     public void read_index_content_from_db() {
         ArchivePageService service = mock(ArchivePageService.class);
+        IndexPageGenerator generator = mock(IndexPageGenerator.class);
 
         WebArchiveScheduler scheduler = new WebArchiveScheduler(
             mock(BulkRequestSender.class),
             service,
-            null
+            generator
         );
 
         scheduler.readIndexContent();
 
         verify(service).readIndexContent();
+        verify(generator).readIndexContent();
     }
 
     @DisplayName("실패한 요청에 대해 재시도한다")

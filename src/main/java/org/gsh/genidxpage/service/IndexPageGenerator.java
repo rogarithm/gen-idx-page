@@ -77,4 +77,8 @@ public class IndexPageGenerator {
             </html>
             """;
     }
+
+    public List<String> readIndexContent() {
+        return null;
+    }
 }

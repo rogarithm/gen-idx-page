@@ -40,6 +40,7 @@ public class WebArchiveScheduler {
     }
 
     List<String> readIndexContent() {
+        indexPageGenerator.readIndexContent();
         return archivePageService.readIndexContent();
     }
 
