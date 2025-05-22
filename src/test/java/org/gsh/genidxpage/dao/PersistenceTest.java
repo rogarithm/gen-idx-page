@@ -7,10 +7,13 @@ import org.gsh.genidxpage.entity.ArchiveStatusBuilder;
 import org.gsh.genidxpage.entity.Post;
 import org.gsh.genidxpage.entity.PostListPage;
 import org.gsh.genidxpage.entity.PostListPageBuilder;
+import org.gsh.genidxpage.vo.IndexContent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional
 @SpringBootTest
@@ -22,6 +25,8 @@ class PersistenceTest {
     private PostListPageMapper postListPageMapper;
     @Autowired
     private PostMapper postMapper;
+    @Autowired
+    private IndexContentMapper indexContentMapper;
 
     @Test
     public void check_archive_status_mapping() {
@@ -72,5 +77,35 @@ class PersistenceTest {
         assertThat(loadedEntity).isNotNull();
         assertThat(loadedEntity.getRawHtml()).isEqualTo(rawHtml);
         assertThat(loadedEntity.getParentPageId()).isEqualTo(parentPageId);
+    }
+
+    @Test
+    public void check_index_content_mapping() {
+        List<String> yearMonths = List.of("2021/01", "2021/02", "2021/03");
+
+        yearMonths.stream()
+            .forEach(yearMonth -> {
+                String year = yearMonth.split("/")[0];
+                String month = yearMonth.split("/")[1];
+
+                PostListPage postListPage = PostListPageBuilder.builder()
+                    .withYearMonth(year, month)
+                    .withUrl(
+                        String.format("http://localhost:8080/web/20230614220926/archives/%s/%s",
+                            year, month))
+                    .buildAsNew();
+                postListPageMapper.insert(postListPage);
+
+                String rawHtml = String.format("<html>url for %s/%s</html>", year, month);
+                Long parentPageId = postListPageMapper.selectByYearMonth(year, month).getId();
+                postMapper.insert(Post.createFrom(rawHtml, parentPageId));
+            });
+
+        List<IndexContent> loadedVOs = indexContentMapper.selectAll();
+        loadedVOs.stream().forEach(
+            loadedVO -> {
+                assertThat(loadedVO).isNotNull();
+            }
+        );
     }
 }
