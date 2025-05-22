@@ -5,7 +5,7 @@
 
 <mapper namespace="org.gsh.genidxpage.dao.IndexContentMapper">
   <select id="selectAll" resultType="org.gsh.genidxpage.vo.IndexContent">
-    SELECT plp.year, plp.month, p.raw_html
+    SELECT CONCAT(plp.year, '/', plp.month) AS post_list_id, p.raw_html
     FROM post_list_page plp
       INNER JOIN post p
       ON plp.id = p.parent_page_id;
