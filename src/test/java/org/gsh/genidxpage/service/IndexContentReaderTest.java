@@ -30,7 +30,7 @@ class IndexContentReaderTest {
 
         reader.readAllIndexContent().stream().forEach(
             indexContent -> Assertions.assertThat(
-                indexContent.matches("\\d{4}/\\d{2}:blog\\.*")
+                indexContent.matches("\\d{4}/\\d{2}:\\.*")
             )
         );
 
