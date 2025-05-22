@@ -8,6 +8,7 @@
     SELECT CONCAT(plp.year, '/', plp.month) AS post_list_id, p.raw_html
     FROM post_list_page plp
       INNER JOIN post p
-      ON plp.id = p.parent_page_id;
+      ON plp.id = p.parent_page_id
+    ORDER BY plp.year DESC, plp.month DESC;
   </select>
 </mapper>
