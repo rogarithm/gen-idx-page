@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -33,8 +35,12 @@ public class IndexPageGenerator {
         StringBuilder builder = new StringBuilder();
         builder.append(generateHeader());
         for (String pageLink : pageLinksList) {
-            String[] split = pageLink.split("\n");
-            for (String link : split) {
+            String postLinkId = pageLink.split(":")[0].trim();
+            builder.append(String.format("<div class=\"post-list-id\">%s</div>", postLinkId));
+
+            String postLinks = Arrays.stream(pageLink.split(":")).skip(1)
+                .collect(Collectors.joining(":"));
+            for (String link : postLinks.split("\n")) {
                 builder.append(link);
                 builder.append("<br>");
                 builder.append("\n");
