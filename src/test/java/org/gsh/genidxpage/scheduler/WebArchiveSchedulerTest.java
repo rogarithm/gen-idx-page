@@ -52,17 +52,17 @@ class WebArchiveSchedulerTest {
     @DisplayName("db에서 인덱스 파일 생성에 쓸 블로그 링크 html을 가져온다")
     @Test
     public void read_index_content_from_db() {
-        ArchivePageService service = mock(ArchivePageService.class);
+        IndexPageGenerator generator = mock(IndexPageGenerator.class);
 
         WebArchiveScheduler scheduler = new WebArchiveScheduler(
             mock(BulkRequestSender.class),
-            service,
-            null
+            mock(ArchivePageService.class),
+            generator
         );
 
         scheduler.readIndexContent();
 
-        verify(service).readIndexContent();
+        verify(generator).readIndexContent();
     }
 
     @DisplayName("실패한 요청에 대해 재시도한다")

@@ -11,28 +11,37 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class IndexPageGenerator {
 
     private final String inputPath;
+    private final IndexContentReader reader;
 
-    public IndexPageGenerator(@Value("${index-page.path}") final String inputPath) {
+    public IndexPageGenerator(@Value("${index-page.path}") final String inputPath,
+        IndexContentReader reader) {
         this.inputPath = inputPath;
+        this.reader = reader;
     }
 
     // TODO
     //  파일 관련 연산을 별도의 객체로 분리
     //  예외 발생 상황 테스트를 추가
-    public void generateIndexPage(List<String> pageLinksList) {
+    public void generateIndexPage(List<String> postLinksList) {
         StringBuilder builder = new StringBuilder();
         builder.append(generateHeader());
-        for (String pageLink : pageLinksList) {
-            String[] split = pageLink.split("\n");
-            for (String link : split) {
-                builder.append(link);
+        for (String postLinks : postLinksList) {
+            String postLinksGroupId = postLinks.split(":")[0].trim();
+            builder.append(String.format("<div class=\"post-list-id\">%s</div>", postLinksGroupId));
+
+            String postLinksHtml = Arrays.stream(postLinks.split(":")).skip(1)
+                .collect(Collectors.joining(":"));
+            for (String postLink : postLinksHtml.split("\n")) {
+                builder.append(postLink);
                 builder.append("<br>");
                 builder.append("\n");
             }
@@ -58,18 +67,27 @@ public class IndexPageGenerator {
 
     private String generateHeader() {
         return """
-            <html>
-              <head>
-                <meta charset="utf-8">
-              </head>
-              <body>
+             <!DOCTYPE html>
+             <html>
+               <head>
+                 <meta charset="utf-8">
+                 <title>agile story blog index</title>
+                 <link rel="stylesheet" href="./index.css" type="text/css" media="screen" />
+               </head>
+               <body>
+                 <div class="site">
             """;
     }
 
     private String generateFooter() {
         return """
+                </div>
               </body>
             </html>
             """;
+    }
+
+    public List<String> readIndexContent() {
+        return reader.readAllIndexContent();
     }
 }
