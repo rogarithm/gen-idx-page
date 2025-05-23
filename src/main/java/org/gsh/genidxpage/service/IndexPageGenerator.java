@@ -31,17 +31,17 @@ public class IndexPageGenerator {
     // TODO
     //  파일 관련 연산을 별도의 객체로 분리
     //  예외 발생 상황 테스트를 추가
-    public void generateIndexPage(List<String> pageLinksList) {
+    public void generateIndexPage(List<String> postLinksList) {
         StringBuilder builder = new StringBuilder();
         builder.append(generateHeader());
-        for (String pageLink : pageLinksList) {
-            String postLinkId = pageLink.split(":")[0].trim();
-            builder.append(String.format("<div class=\"post-list-id\">%s</div>", postLinkId));
+        for (String postLinks : postLinksList) {
+            String postLinksGroupId = postLinks.split(":")[0].trim();
+            builder.append(String.format("<div class=\"post-list-id\">%s</div>", postLinksGroupId));
 
-            String postLinks = Arrays.stream(pageLink.split(":")).skip(1)
+            String postLinksHtml = Arrays.stream(postLinks.split(":")).skip(1)
                 .collect(Collectors.joining(":"));
-            for (String link : postLinks.split("\n")) {
-                builder.append(link);
+            for (String postLink : postLinksHtml.split("\n")) {
+                builder.append(postLink);
                 builder.append("<br>");
                 builder.append("\n");
             }
