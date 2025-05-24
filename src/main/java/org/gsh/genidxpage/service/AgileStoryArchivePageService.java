@@ -29,6 +29,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     }
 
     @Transactional
+    @Override
     public String findBlogPageLink(final CheckPostArchivedDto dto) {
         ArchivedPageInfo archivedPageInfo = this.findArchivedPageInfo(dto);
         if (archivedPageInfo.isEmpty()) {
@@ -72,8 +73,6 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         WebPageParser webPageParser = new WebPageParser();
         List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
 
-        String pageLinksConcat = webPageParser.buildPageLinks(postLinks);
-
-        return pageLinksConcat;
+        return webPageParser.buildPageLinks(postLinks);
     }
 }

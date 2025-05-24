@@ -1,6 +1,7 @@
 package org.gsh.genidxpage.service;
 
 import org.gsh.genidxpage.dao.IndexContentMapper;
+import org.gsh.genidxpage.vo.IndexContent;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,9 +18,7 @@ public class IndexContentReader {
     public List<String> readAllIndexContent() {
         return mapper.selectAll()
             .stream()
-            .map(indexContent -> {
-                return indexContent.toString();
-            })
+            .map(IndexContent::toString)
             .toList();
     }
 }

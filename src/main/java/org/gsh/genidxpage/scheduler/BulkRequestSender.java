@@ -37,9 +37,8 @@ public class BulkRequestSender {
             throw new FailToReadRequestInputFileException(e, ErrorCode.SERVER_FAULT, "fail to read request input file");
         }
 
-        List<String> yearMonths = Arrays.stream(fileContent.strip().split("\n"))
+        return Arrays.stream(fileContent.strip().split("\n"))
             .collect(ArrayList::new, List::add, List::addAll);
-        return yearMonths;
     }
 
     public void sendAll(List<String> yearMonths, ArchivePageService sender) {
