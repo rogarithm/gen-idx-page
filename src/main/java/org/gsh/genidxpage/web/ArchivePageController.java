@@ -21,8 +21,8 @@ public class ArchivePageController {
 
     @GetMapping("/post-links/{year}/{month}")
     public ResponseEntity<String> getBlogPostLinks(
-        @PathVariable(value = "year") String year,
-        @PathVariable(value = "month") String month
+        @PathVariable("year") String year,
+        @PathVariable("month") String month
     ) {
         CheckPostArchivedDto dto = new CheckPostArchivedDto(year, month);
         String pageLinks = service.findBlogPageLink(dto);

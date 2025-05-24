@@ -2,7 +2,8 @@ package org.gsh.genidxpage.web.response;
 
 public class PostLinkInfo {
 
-    private final String baseUrl = "https://web.archive.org";
+    private static final String BASE_URL = "https://web.archive.org";
+
     private String pageUrl;
     private String pageTitle;
 
@@ -20,6 +21,6 @@ public class PostLinkInfo {
     }
 
     public String buildPageLink() {
-        return String.format("<a href=\"%s%s\">%s</a>", baseUrl, pageUrl, pageTitle);
+        return String.format("<a href=\"%s%s\">%s</a>", BASE_URL, pageUrl, pageTitle);
     }
 }

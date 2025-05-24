@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ArchivePageService {
 
-    String findBlogPageLink(final CheckPostArchivedDto dto);
+    String findBlogPageLink(CheckPostArchivedDto dto);
 
     List<String> findFailedRequests();
 }
