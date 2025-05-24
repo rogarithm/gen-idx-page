@@ -5,6 +5,8 @@ plugins {
 
 	id 'checkstyle'
     id 'org.ec4j.editorconfig' version '0.1.0'
+
+    id 'pmd'
 }
 
 group = 'org.gsh'
@@ -59,3 +61,8 @@ editorconfig {
 }
 
 check.dependsOn editorconfigCheck
+
+pmd {
+    toolVersion = "7.12.0"
+    ruleSetFiles = files("config/pmd/quickstart.xml")
+}
