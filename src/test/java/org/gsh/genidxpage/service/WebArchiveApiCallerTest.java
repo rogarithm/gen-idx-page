@@ -2,7 +2,6 @@ package org.gsh.genidxpage.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.FakeWebArchiveServer;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
@@ -72,7 +71,7 @@ class WebArchiveApiCallerTest {
         fakeWebArchiveServer.start();
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
-        Assertions.assertThat(caller.findArchivedPageInfo(dto))
+        assertThat(caller.findArchivedPageInfo(dto))
             .isInstanceOf(ArchivedPageInfo.class);
 
         fakeWebArchiveServer.stop();
@@ -86,7 +85,7 @@ class WebArchiveApiCallerTest {
             CustomRestTemplateBuilder.get());
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2023", "1");
-        Assertions.assertThat(caller.buildUri(dto)).matches(
+        assertThat(caller.buildUri(dto)).matches(
             "http://localhost:8080/wayback/available\\?url=https://agile.egloos.com/archives/2023/01&timestamp=\\d{8}"
         );
     }
@@ -99,14 +98,14 @@ class WebArchiveApiCallerTest {
             CustomRestTemplateBuilder.get());
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
 
-        Assertions.assertThat(callerWithTimestamp.buildUri(dto)).matches(
+        assertThat(callerWithTimestamp.buildUri(dto)).matches(
             "http://localhost:8080/wayback/available\\?url=[^&]*&timestamp=\\d{8}"
         );
 
         WebArchiveApiCaller callerWithoutTimestamp = new WebArchiveApiCaller("http://localhost:8080",
             "/wayback/available?url={url}",
             CustomRestTemplateBuilder.get());
-        Assertions.assertThat(callerWithoutTimestamp.buildUri(dto)).matches(
+        assertThat(callerWithoutTimestamp.buildUri(dto)).matches(
             "http://localhost:8080/wayback/available\\?url=[^&]*"
         );
     }

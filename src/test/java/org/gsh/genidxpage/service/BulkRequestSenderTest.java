@@ -38,7 +38,7 @@ class BulkRequestSenderTest {
 
         assertThrows(
             FailToReadRequestInputFileException.class,
-            () -> bulkRequestSender.prepareInput()
+            bulkRequestSender::prepareInput
         );
     }
 }

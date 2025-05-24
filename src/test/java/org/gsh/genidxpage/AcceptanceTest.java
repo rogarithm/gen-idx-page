@@ -250,7 +250,7 @@ public class AcceptanceTest {
 
             // 정상 응답할 입력을 설정한다
             List<String> passRequests = requestInput.stream()
-                .filter(ym -> ym.split("/")[0].equals("2021"))
+                .filter(ym -> "2021".equals(ym.split("/")[0]))
                 .toList();
             passRequests.forEach(yearMonth -> {
                 String[] pair = yearMonth.split("/");
@@ -262,7 +262,7 @@ public class AcceptanceTest {
             });
             // 비정상 응답할 입력을 설정한다
             List<String> failRequests = requestInput.stream()
-                .filter(ym -> !ym.split("/")[0].equals("2021"))
+                .filter(ym -> !"2021".equals(ym.split("/")[0]))
                 .toList();
             failRequests.forEach(yearMonth -> {
                 String[] pair = yearMonth.split("/");
