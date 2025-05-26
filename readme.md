@@ -16,7 +16,8 @@ web archive에 아카이빙된 페이지를 쉽게 탐색할 수 있도록 인�
 - [x] web archive 서버 응답을 기반으로 인덱스 파일을 만든다
 ### 인덱스 파일 배포
 - [x] 인덱스 파일을 클라우드 서버(fly.io)에 배포해서 여러 사람이 쓸 수 있게 한다
-- [ ] 스케줄링 시마다 생성되는 인덱스 파일을 자동 배포한다
+- [x] 스케줄링 시마다 생성되는 [인덱스 파일을 자동 배포](https://github.com/rogarithm/gen-idx-page/issues/81)한다
+- [ ] 스프링 앱 ec2 배포를 자동화한다
 #### 정합성 유지
 - [x] 인덱스 생성 작업을 매일 일정 시점에 백드라운드에서 수행한다
 - [x] 유효한 접근 url을 얻지 못한 요청은 따로 모아 재시도한다
@@ -29,3 +30,7 @@ web archive에 아카이빙된 페이지를 쉽게 탐색할 수 있도록 인�
 - 코드 포맷 일관성 유지: [checkstyle, .editorconfig, intelliJ 포맷터를 설정하고, pre-push 훅과 깃헙액션에서 자동 검증한다](https://github.com/rogarithm/gen-idx-page/pulls?q=is%3Apr+is%3Aclosed+label%3Aformatting)
 - 테스트 자동화: 테스트를 작성하고, [pre-push 훅과 깃헙액션에서 테스트 통과 여부를 확인한다](https://github.com/rogarithm/gen-idx-page/pull/40)
 - MyBatis SQL 문법 검증: [XML에 정의된 SQL 문이 올바른지 검증한다](https://github.com/rogarithm/gen-idx-page/blob/c0d28d02fe6e5916426ef98fc178a3aa1a93e45c/hooks/check_sql.rb). 루비 스크립트는 XML 내 SQL만 추출해 스키마 SQL 파일을 참고해 sql 문법 검사기인 sqlfluff에서 분석할 수 있는 형태로 바꾸고, pre-commit 훅으로 커밋 전마다 실행한다
+- 정적 분석: [PMD 툴로 소스 코드 정적 분석한다](https://github.com/rogarithm/gen-idx-page/pull/80)
+
+### ERD
+![img](./imgs/erd.png)
