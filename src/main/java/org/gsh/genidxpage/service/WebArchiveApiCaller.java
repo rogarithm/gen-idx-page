@@ -2,19 +2,24 @@ package org.gsh.genidxpage.service;
 
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.UnreachableArchivedPageInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class WebArchiveApiCaller {
 
@@ -34,11 +39,17 @@ public class WebArchiveApiCaller {
 
     public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
         String uri = buildUri(dto);
+        ResponseEntity<String> archivedPageInfo;
 
-        ResponseEntity<String> archivedPageInfo = restTemplate.getForEntity(
-            uri,
-            String.class
-        );
+        try {
+            archivedPageInfo = restTemplate.getForEntity(
+                uri,
+                String.class
+            );
+        } catch (ResourceAccessException e) {
+            log.warn("timeout error: {}", uri, e);
+            return new UnreachableArchivedPageInfo();
+        }
 
         String response = archivedPageInfo.getBody();
         ObjectMapper mapper = new ObjectMapper();
