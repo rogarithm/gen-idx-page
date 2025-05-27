@@ -32,6 +32,14 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     @Override
     public String findBlogPageLink(final CheckPostArchivedDto dto) {
         ArchivedPageInfo archivedPageInfo = this.findArchivedPageInfo(dto);
+        if (archivedPageInfo.isUnreachable()) {
+            log.info(
+                String.format("fail to read blog page link for %s/%s due to timeout",
+                    dto.getYear(), dto.getMonth())
+            );
+            return "";
+        }
+
         if (archivedPageInfo.isEmpty()) {
             log.info(
                 String.format("empty blog page link for %s/%s", dto.getYear(), dto.getMonth()));
@@ -53,6 +61,11 @@ public class AgileStoryArchivePageService implements ArchivePageService {
 
     ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
+
+        if (archivedPageInfo.isUnreachable()) {
+            reporter.reportArchivedPageSearch(dto, Boolean.FALSE);
+            return archivedPageInfo;
+        }
 
         if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
             reporter.reportArchivedPageSearch(dto, Boolean.FALSE);
