@@ -42,4 +42,8 @@ public class ArchivedPageInfo {
     public boolean isEmpty() {
         return false;
     }
+
+    public boolean isUnreachable() {
+        return false;
+    }
 }

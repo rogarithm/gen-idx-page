@@ -1,6 +1,6 @@
 package org.gsh.genidxpage.service.dto;
 
-public class EmptyArchivedPageInfo extends ArchivedPageInfo {
+public class UnreachableArchivedPageInfo extends ArchivedPageInfo {
 
     @Override
     public boolean isEmpty() {
@@ -9,6 +9,6 @@ public class EmptyArchivedPageInfo extends ArchivedPageInfo {
 
     @Override
     public boolean isUnreachable() {
-        return false;
+        return true;
     }
 }

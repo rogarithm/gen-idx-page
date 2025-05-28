@@ -11,6 +11,7 @@ import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
+import org.gsh.genidxpage.service.dto.UnreachableArchivedPageInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,27 @@ class ArchivePageServiceTest {
             EmptyArchivedPageInfo.class);
 
         verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), eq(Boolean.FALSE));
+    }
+
+    @DisplayName("타임아웃 초과로 페이지 아카이빙 정보를 읽어오지 못했을 때 db에 기록한다")
+    @Test
+    public void write_to_db_when_page_archive_info_read_timeout() {
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2020", "3");
+
+        WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
+        when(caller.findArchivedPageInfo(any())).thenReturn(
+            new UnreachableArchivedPageInfo()
+        );
+        ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
+
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
+            null, null);
+
+        Assertions.assertThat(service.findArchivedPageInfo(dto)).isInstanceOf(
+            ArchivedPageInfo.class);
+
+        verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class),
+            eq(Boolean.FALSE));
     }
 
     @DisplayName("페이지 아키이빙 정보를 찾았을 때 db에 기록한다")
