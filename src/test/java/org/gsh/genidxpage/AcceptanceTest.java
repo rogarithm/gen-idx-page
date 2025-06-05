@@ -5,13 +5,14 @@ import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.scheduler.BulkRequestSender;
 import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
-import org.gsh.genidxpage.service.ArchiveStatusReporter;
 import org.gsh.genidxpage.service.ArchivePageService;
+import org.gsh.genidxpage.service.ArchiveStatusReporter;
 import org.gsh.genidxpage.service.IndexContentReader;
 import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.gsh.genidxpage.service.PostListPageRecorder;
 import org.gsh.genidxpage.service.PostRecorder;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
+import org.gsh.genidxpage.service.WebPageParser;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +45,8 @@ public class AcceptanceTest {
     private PostRecorder postRecorder;
     @Autowired
     private IndexContentReader reader;
+    @Autowired
+    private WebPageParser webPageParser;
 
     @Nested
     class ArchivePageControllerTest {
@@ -55,7 +58,7 @@ public class AcceptanceTest {
                 CustomRestTemplateBuilder.get()
             );
             ArchivePageService service = new AgileStoryArchivePageService(
-                apiCaller, reporter, listPageRecorder, postRecorder
+                apiCaller, reporter, listPageRecorder, postRecorder, webPageParser
             );
 
             archivePageController = new ArchivePageController(service);
@@ -172,7 +175,7 @@ public class AcceptanceTest {
                 CustomRestTemplateBuilder.get()
             );
             service = new AgileStoryArchivePageService(
-                apiCaller, reporter, listPageRecorder, postRecorder
+                apiCaller, reporter, listPageRecorder, postRecorder, webPageParser
             );
         }
 

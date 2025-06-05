@@ -28,7 +28,7 @@ class ArchivePageServiceTest {
         );
         ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
 
-        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null, null);
+        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null, null, null);
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("1999", "7");
         service.findArchivedPageInfo(dto);
@@ -46,7 +46,7 @@ class ArchivePageServiceTest {
         ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
 
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
-            null, null);
+            null, null, null);
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2020", "3");
         service.findArchivedPageInfo(dto);
@@ -70,7 +70,7 @@ class ArchivePageServiceTest {
         ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
 
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
-            mock(PostListPageRecorder.class), null);
+            mock(PostListPageRecorder.class), null, null);
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
         service.findArchivedPageInfo(dto);
@@ -86,7 +86,8 @@ class ArchivePageServiceTest {
 
         PostListPageRecorder listPageRecorder = mock(PostListPageRecorder.class);
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller,
-            mock(ArchiveStatusReporter.class), listPageRecorder, mock(PostRecorder.class));
+            mock(ArchiveStatusReporter.class), listPageRecorder, mock(PostRecorder.class),
+            mock(WebPageParser.class));
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
         service.findBlogPageLink(dto);
@@ -105,7 +106,8 @@ class ArchivePageServiceTest {
             caller,
             mock(ArchiveStatusReporter.class),
             mock(PostListPageRecorder.class),
-            postRecorder
+            postRecorder,
+            mock(WebPageParser.class)
         );
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
@@ -123,13 +125,8 @@ class ArchivePageServiceTest {
             archivedPageInfo
         );
         when(caller.isArchived(any())).thenReturn(true);
-        when(caller.findBlogPostPage(any())).thenReturn(ResponseEntity.ok().body("""
-              <div class="POST_BODY">
-              <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2020/02/25</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5932600">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate"></span><br>
-              <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2020/02/14</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5931859">혹독한 조언이 나를 살릴까?</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[13]</span><br>
-              <div style="margin-top:10px;"><a href="/web/20230614124528/http://agile.egloos.com/archives/2020/02/page/1" title="전체보기">"2020년02월" 의 글 내용 전체 보기</a></div>
-            </div>
-            """));
+        when(caller.findBlogPostPage(any())).thenReturn(ResponseEntity.ok()
+            .body("<div><a href=\"link\">title</a></div>"));
     }
 
     @DisplayName("실패한 요청 정보를 db로부터 읽어온다")
@@ -140,7 +137,8 @@ class ArchivePageServiceTest {
             mock(WebArchiveApiCaller.class),
             reporter,
             mock(PostListPageRecorder.class),
-            mock(PostRecorder.class)
+            mock(PostRecorder.class),
+            null
         );
 
         service.findFailedRequests();
