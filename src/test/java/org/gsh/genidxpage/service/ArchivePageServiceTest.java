@@ -26,7 +26,6 @@ class ArchivePageServiceTest {
             .withEmptyArchivedSnapshots()
             .timestamp(null)
             .build();
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("1999", "7");
 
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
         when(caller.findArchivedPageInfo(any())).thenReturn(
@@ -36,6 +35,7 @@ class ArchivePageServiceTest {
 
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null, null);
 
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("1999", "7");
         Assertions.assertThat(service.findArchivedPageInfo(dto)).isInstanceOf(
             EmptyArchivedPageInfo.class);
 
@@ -45,8 +45,6 @@ class ArchivePageServiceTest {
     @DisplayName("타임아웃 초과로 페이지 아카이빙 정보를 읽어오지 못했을 때 db에 기록한다")
     @Test
     public void write_to_db_when_page_archive_info_read_timeout() {
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2020", "3");
-
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
         when(caller.findArchivedPageInfo(any())).thenReturn(
             new UnreachableArchivedPageInfo()
@@ -56,6 +54,7 @@ class ArchivePageServiceTest {
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
             null, null);
 
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2020", "3");
         Assertions.assertThat(service.findArchivedPageInfo(dto)).isInstanceOf(
             ArchivedPageInfo.class);
 
@@ -71,7 +70,6 @@ class ArchivePageServiceTest {
             .withAccessibleArchivedSnapshots()
             .timestamp("20240101")
             .build();
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
 
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
         when(caller.findArchivedPageInfo(any())).thenReturn(
@@ -83,6 +81,7 @@ class ArchivePageServiceTest {
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
             mock(PostListPageRecorder.class), null);
 
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
         service.findArchivedPageInfo(dto);
 
         verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), eq(Boolean.TRUE));
