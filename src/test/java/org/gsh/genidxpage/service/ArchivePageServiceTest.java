@@ -20,9 +20,7 @@ class ArchivePageServiceTest {
     @Test
     public void write_to_db_when_page_archive_info_not_found() {
         ArchivedPageInfo noArchivedPageInfo = ArchivedPageInfoBuilder.builder()
-            .url("")
             .withEmptyArchivedSnapshots()
-            .timestamp(null)
             .build();
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
         when(caller.findArchivedPageInfo(any())).thenReturn(
@@ -61,9 +59,7 @@ class ArchivePageServiceTest {
     @Test
     public void write_to_db_when_page_archive_info_found() {
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
-            .url("url")
             .withAccessibleArchivedSnapshots()
-            .timestamp("20240101")
             .build();
 
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
@@ -120,9 +116,7 @@ class ArchivePageServiceTest {
 
     private void respondsValidBlogPostPage(WebArchiveApiCaller caller) {
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
-            .url("url")
             .withAccessibleArchivedSnapshots()
-            .timestamp("20240101")
             .build();
 
         when(caller.findArchivedPageInfo(any())).thenReturn(
