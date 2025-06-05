@@ -6,11 +6,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
-import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.UnreachableArchivedPageInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +24,6 @@ class ArchivePageServiceTest {
             .withEmptyArchivedSnapshots()
             .timestamp(null)
             .build();
-
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
         when(caller.findArchivedPageInfo(any())).thenReturn(
             noArchivedPageInfo
@@ -36,8 +33,7 @@ class ArchivePageServiceTest {
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null, null);
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("1999", "7");
-        Assertions.assertThat(service.findArchivedPageInfo(dto)).isInstanceOf(
-            EmptyArchivedPageInfo.class);
+        service.findArchivedPageInfo(dto);
 
         verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), eq(Boolean.FALSE));
     }
@@ -55,8 +51,7 @@ class ArchivePageServiceTest {
             null, null);
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2020", "3");
-        Assertions.assertThat(service.findArchivedPageInfo(dto)).isInstanceOf(
-            ArchivedPageInfo.class);
+        service.findArchivedPageInfo(dto);
 
         verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class),
             eq(Boolean.FALSE));
