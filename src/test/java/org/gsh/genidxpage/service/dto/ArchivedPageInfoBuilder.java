@@ -35,6 +35,10 @@ public class ArchivedPageInfoBuilder {
     }
 
     public ArchivedPageInfo build() {
+        if (url == null) {
+            url = "url";
+        }
+
         return new ArchivedPageInfo(url, archivedSnapshots, timestamp);
     }
 }

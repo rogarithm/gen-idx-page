@@ -3,7 +3,6 @@ package org.gsh.genidxpage.service;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
-import org.gsh.genidxpage.web.response.PostLinkInfo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +18,16 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     private final ArchiveStatusReporter reporter;
     private final PostListPageRecorder listPageRecorder;
     private final PostRecorder postRecorder;
+    private final WebPageParser webPageParser;
 
     public AgileStoryArchivePageService(WebArchiveApiCaller webArchiveApiCaller,
-        ArchiveStatusReporter reporter, PostListPageRecorder listPageRecorder, PostRecorder postRecorder) {
+        ArchiveStatusReporter reporter, PostListPageRecorder listPageRecorder, PostRecorder postRecorder,
+        WebPageParser webPageParser) {
         this.webArchiveApiCaller = webArchiveApiCaller;
         this.reporter = reporter;
         this.listPageRecorder = listPageRecorder;
         this.postRecorder = postRecorder;
+        this.webPageParser = webPageParser;
     }
 
     @Transactional
@@ -83,9 +85,6 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     }
 
     String buildPageLinks(final String blogPost) {
-        WebPageParser webPageParser = new WebPageParser();
-        List<PostLinkInfo> postLinks = webPageParser.findPostLinks(blogPost);
-
-        return webPageParser.buildPageLinks(postLinks);
+        return webPageParser.parse(blogPost);
     }
 }
