@@ -73,11 +73,11 @@ class ArchiveStatusReporterTest {
                 .buildAsNew()
         );
 
-        when(mapper.selectByPageExists(any())).thenReturn(failRequestReports);
+        when(mapper.selectAllFailed()).thenReturn(failRequestReports);
 
         Assertions.assertThat(reporter.readAllFailedRequestInput())
             .isEqualTo(List.of("2020/05", "2021/03"));
 
-        verify(mapper).selectByPageExists(any());
+        verify(mapper).selectAllFailed();
     }
 }
