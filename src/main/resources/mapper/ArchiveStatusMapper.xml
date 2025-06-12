@@ -47,11 +47,9 @@
   <select id="selectAllFailed" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
     select plps.year, plps.month, plps.page_exists
     from post_list_page_status plps
-           join post_list_page plp
+           left join post_list_page plp
                 on concat(plps.year, '/', plps.month) = concat(plp.year, '/', plp.month)
-           left join post p
-                     on p.parent_page_id = plp.id
     where plps.page_exists = false
-      and p.id is null;
+      and plp.id is null;
   </select>
 </mapper>
