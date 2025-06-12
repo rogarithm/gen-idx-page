@@ -39,7 +39,7 @@ public class ArchiveStatusReporter {
     }
 
     List<String> readAllFailedRequestInput() {
-        return reportMapper.selectByPageExists(Boolean.FALSE)
+        return reportMapper.selectAllFailed()
             .stream()
             .map(report -> report.getYear() + "/" + report.getMonth())
             .toList();

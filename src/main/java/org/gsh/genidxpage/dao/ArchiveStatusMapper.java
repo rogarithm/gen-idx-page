@@ -16,4 +16,6 @@ public interface ArchiveStatusMapper {
     void update(ArchiveStatus report);
 
     List<ArchiveStatus> selectByPageExists(Boolean pageExists);
+
+    List<ArchiveStatus> selectAllFailed();
 }
