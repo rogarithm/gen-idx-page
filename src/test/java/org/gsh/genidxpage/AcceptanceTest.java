@@ -9,7 +9,7 @@ import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.repository.ArchiveStatusReporter;
 import org.gsh.genidxpage.service.IndexContentReader;
 import org.gsh.genidxpage.service.IndexPageGenerator;
-import org.gsh.genidxpage.service.PostListPageRecorder;
+import org.gsh.genidxpage.repository.PostListPageRecorder;
 import org.gsh.genidxpage.service.PostRecorder;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.WebPageParser;

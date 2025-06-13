@@ -1,6 +1,7 @@
 package org.gsh.genidxpage.service;
 
 import org.gsh.genidxpage.repository.ArchiveStatusReporter;
+import org.gsh.genidxpage.repository.PostListPageRecorder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
 import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
