@@ -3,11 +3,11 @@ package org.gsh.genidxpage.repository;
 import org.gsh.genidxpage.dao.ArchiveStatusMapper;
 import org.gsh.genidxpage.entity.ArchiveStatus;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Component
+@Repository
 public class ArchiveStatusReporter {
 
     private final ArchiveStatusMapper reportMapper;
