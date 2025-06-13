@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.gsh.genidxpage.repository.ArchiveStatusReporter;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;

@@ -6,7 +6,7 @@ import org.gsh.genidxpage.scheduler.BulkRequestSender;
 import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ArchivePageService;
-import org.gsh.genidxpage.service.ArchiveStatusReporter;
+import org.gsh.genidxpage.repository.ArchiveStatusReporter;
 import org.gsh.genidxpage.service.IndexContentReader;
 import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.gsh.genidxpage.service.PostListPageRecorder;
