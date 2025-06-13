@@ -1,4 +1,4 @@
-package org.gsh.genidxpage.service;
+package org.gsh.genidxpage.repository;
 
 import org.gsh.genidxpage.dao.PostListPageMapper;
 import org.gsh.genidxpage.entity.PostListPage;
@@ -17,7 +17,7 @@ public class PostListPageRecorder {
         this.mapper = mapper;
     }
 
-    Long record(final CheckPostArchivedDto dto, final ArchivedPageInfo archivedPageInfo) {
+    public Long record(final CheckPostArchivedDto dto, final ArchivedPageInfo archivedPageInfo) {
         PostListPage hasPostListPage = mapper.selectByYearMonth(
             dto.getYear(),
             dto.getMonth()

@@ -1,4 +1,4 @@
-package org.gsh.genidxpage.service;
+package org.gsh.genidxpage.repository;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;

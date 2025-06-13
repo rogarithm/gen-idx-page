@@ -1,4 +1,4 @@
-package org.gsh.genidxpage.service;
+package org.gsh.genidxpage.repository;
 
 import org.gsh.genidxpage.dao.PostMapper;
 import org.gsh.genidxpage.entity.Post;
