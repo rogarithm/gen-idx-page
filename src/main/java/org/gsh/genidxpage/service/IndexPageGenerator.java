@@ -3,6 +3,7 @@ package org.gsh.genidxpage.service;
 import org.gsh.genidxpage.common.exception.ErrorCode;
 import org.gsh.genidxpage.exception.FailToCreateDirectoryException;
 import org.gsh.genidxpage.exception.FailToWriteFileException;
+import org.gsh.genidxpage.repository.IndexContentReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;

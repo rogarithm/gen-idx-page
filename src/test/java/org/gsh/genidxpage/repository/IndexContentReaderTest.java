@@ -1,4 +1,4 @@
-package org.gsh.genidxpage.service;
+package org.gsh.genidxpage.repository;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
