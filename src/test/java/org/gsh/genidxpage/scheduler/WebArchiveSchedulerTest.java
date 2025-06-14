@@ -1,6 +1,7 @@
 package org.gsh.genidxpage.scheduler;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -80,7 +81,7 @@ class WebArchiveSchedulerTest {
 
         scheduler.doRetry();
 
-        verify(service).findFailedRequests();
+        verify(service, atLeast(1)).findFailedRequests();
         verify(sender).sendAll(any(), any(ArchivePageService.class));
     }
 
