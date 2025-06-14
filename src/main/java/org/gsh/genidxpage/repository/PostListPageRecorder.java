@@ -24,14 +24,14 @@ public class PostListPageRecorder {
         );
 
         if (hasPostListPage != null) {
-            log.info(
+            log.debug(
                 "updating access url with id of " + hasPostListPage.getId() + " with content of "
                     + archivedPageInfo.accessibleUrl());
             mapper.update(PostListPage.updateFrom(hasPostListPage, archivedPageInfo));
             return hasPostListPage.getId();
         }
 
-        log.info("inserting access url of " + archivedPageInfo.accessibleUrl());
+        log.debug("inserting access url of " + archivedPageInfo.accessibleUrl());
         PostListPage postListPage = PostListPage.createFrom(dto, archivedPageInfo);
         mapper.insert(postListPage);
         return postListPage.getId();

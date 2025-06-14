@@ -1,11 +1,13 @@
 package org.gsh.genidxpage.scheduler;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.IndexPageGenerator;
 import org.junit.jupiter.api.DisplayName;
@@ -79,7 +81,19 @@ class WebArchiveSchedulerTest {
 
         scheduler.doRetry();
 
-        verify(service).findFailedRequests();
+        verify(service, atLeast(1)).findFailedRequests();
         verify(sender).sendAll(any(), any(ArchivePageService.class));
+    }
+
+    @DisplayName("재시도 이후 실패/성공한 요청 정보를 알아낼 수 있다")
+    @Test
+    public void get_success_fail_info_after_retry() {
+        List<String> sendInfo = List.of("2020/01", "2020/02", "2020/03", "2020/04");
+        List<String> failedAfterRetry = List.of("2020/01", "2020/02");
+        WebArchiveScheduler scheduler = new WebArchiveScheduler(
+            null, null, null
+        );
+        Assertions.assertThat(scheduler.successAfterRetry(sendInfo, failedAfterRetry))
+            .isEqualTo(List.of("2020/03", "2020/04"));
     }
 }
