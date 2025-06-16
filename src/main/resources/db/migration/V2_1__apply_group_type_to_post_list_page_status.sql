@@ -11,9 +11,4 @@ SET post_group_type_id = (SELECT id
     group_key    = CONCAT(year, '/', month);
 
 ALTER TABLE post_list_page_status
-    MODIFY post_group_type_id BIGINT NOT NULL;
-ALTER TABLE post_list_page_status
-    MODIFY group_key VARCHAR (255) NOT NULL;
-
-ALTER TABLE post_list_page_status
     ADD FOREIGN KEY (post_group_type_id) REFERENCES post_group_type (id);
