@@ -1,4 +1,4 @@
-package org.gsh.genidxpage.service;
+package org.gsh.genidxpage.scheduler;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -8,8 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.gsh.genidxpage.exception.FailToReadRequestInputFileException;
-import org.gsh.genidxpage.scheduler.BulkRequestSender;
-import org.gsh.genidxpage.scheduler.YearMonthBulkRequestSender;
+import org.gsh.genidxpage.service.ArchivePageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
