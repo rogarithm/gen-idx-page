@@ -3,6 +3,7 @@ package org.gsh.genidxpage;
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.scheduler.BulkRequestSender;
+import org.gsh.genidxpage.scheduler.WebArchiveJob;
 import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ArchivePageService;
@@ -185,8 +186,8 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             final WebArchiveScheduler scheduler = new WebArchiveScheduler(
-                bulkRequestSender, service,
-                new IndexPageGenerator("/tmp/genidxpage/test", reader)
+                List.of(new WebArchiveJob(bulkRequestSender, service,
+                    new IndexPageGenerator("/tmp/genidxpage/test", reader)))
             );
 
             // 요청할 모든 입력쌍을 만든다
@@ -216,7 +217,8 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             final WebArchiveScheduler scheduler = new WebArchiveScheduler(
-                bulkRequestSender, service, null
+                List.of(new WebArchiveJob(bulkRequestSender, service,
+                    new IndexPageGenerator("/tmp/genidxpage/test", reader)))
             );
 
             // 요청할 모든 입력쌍을 만든다
@@ -233,7 +235,7 @@ public class AcceptanceTest {
             });
             fakeWebArchiveServer.start();
 
-            scheduler.doSend();
+            scheduler.scheduleSend();
 
             fakeWebArchiveServer.hasReceivedMultipleRequests(requestInput.size());
             fakeWebArchiveServer.stop();
@@ -245,7 +247,8 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             final WebArchiveScheduler scheduler = new WebArchiveScheduler(
-                bulkRequestSender, service, null
+                List.of(new WebArchiveJob(bulkRequestSender, service,
+                    new IndexPageGenerator("/tmp/genidxpage/test", reader)))
             );
 
             // 요청할 모든 입력쌍을 만든다
@@ -276,8 +279,7 @@ public class AcceptanceTest {
             });
             fakeWebArchiveServer.start();
 
-            scheduler.doSend();
-            scheduler.doRetry();
+            scheduler.scheduleSend();
 
             fakeWebArchiveServer.hasReceivedMultipleRequests(
                 // 접근 url을 가져오는 요청 중 비정상 응답받은 경우는 재시도한다
