@@ -24,7 +24,7 @@ class IndexPageGeneratorTest {
             "2020/05:<a href=\"https://x.net\">l2</a>",
             "2020/02:<a href=\"https://x.net\">l3</a>\n<a href=\"https://x.net\">l4</a>"
         );
-        IndexPageGenerator generator = new IndexPageGenerator("/tmp/genidxpage", null);
+        IndexPageGenerator generator = new AgileStoryIndexPageGenerator("/tmp/genidxpage", null);
         generator.generateIndexPage(pageLinksList);
         String fileContent = Files.readString(Path.of("/tmp/genidxpage/index.html"), StandardCharsets.UTF_8);
         Assertions.assertThat(fileContent).contains("l1")
@@ -37,7 +37,7 @@ class IndexPageGeneratorTest {
     @Test
     public void read_all_index_page_content_from_db() {
         IndexContentReader reader = mock(IndexContentReader.class);
-        IndexPageGenerator generator = new IndexPageGenerator(
+        IndexPageGenerator generator = new AgileStoryIndexPageGenerator(
             "/tmp/genidxpage",
             reader
         );

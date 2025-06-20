@@ -12,7 +12,7 @@ import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.scheduler.YearMonthBulkRequestSender;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ArchivePageService;
-import org.gsh.genidxpage.service.IndexPageGenerator;
+import org.gsh.genidxpage.service.AgileStoryIndexPageGenerator;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.WebPageParser;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
@@ -188,7 +188,7 @@ public class AcceptanceTest {
 
             final WebArchiveScheduler scheduler = new WebArchiveScheduler(
                 List.of(new WebArchiveJob(bulkRequestSender, service,
-                    new IndexPageGenerator("/tmp/genidxpage/test", reader)))
+                    new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader)))
             );
 
             // 요청할 모든 입력쌍을 만든다
@@ -219,7 +219,7 @@ public class AcceptanceTest {
 
             final WebArchiveScheduler scheduler = new WebArchiveScheduler(
                 List.of(new WebArchiveJob(bulkRequestSender, service,
-                    new IndexPageGenerator("/tmp/genidxpage/test", reader)))
+                    new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader)))
             );
 
             // 요청할 모든 입력쌍을 만든다
@@ -249,7 +249,7 @@ public class AcceptanceTest {
 
             final WebArchiveScheduler scheduler = new WebArchiveScheduler(
                 List.of(new WebArchiveJob(bulkRequestSender, service,
-                    new IndexPageGenerator("/tmp/genidxpage/test", reader)))
+                    new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader)))
             );
 
             // 요청할 모든 입력쌍을 만든다
