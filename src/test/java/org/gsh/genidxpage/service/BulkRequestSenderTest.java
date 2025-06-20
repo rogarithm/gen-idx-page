@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import org.gsh.genidxpage.exception.FailToReadRequestInputFileException;
 import org.gsh.genidxpage.scheduler.BulkRequestSender;
+import org.gsh.genidxpage.scheduler.YearMonthBulkRequestSender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +22,7 @@ class BulkRequestSenderTest {
     @DisplayName("한 번에 여러 요청을 보낼 수 있다")
     @Test
     public void send_multiple_requests() {
-        BulkRequestSender bulkRequestSender = new BulkRequestSender(IGNORE_INPUT_PATH);
+        BulkRequestSender bulkRequestSender = new YearMonthBulkRequestSender(IGNORE_INPUT_PATH);
         ArchivePageService sender = mock(ArchivePageService.class);
 
         when(sender.findBlogPageLink(any())).thenReturn("link");
@@ -34,7 +35,7 @@ class BulkRequestSenderTest {
     @DisplayName("요청 입력 파일을 읽는 데 실패했을 경우를 처리할 수 있다")
     @Test
     public void handle_fail_to_read_request_input_file() {
-        BulkRequestSender bulkRequestSender = new BulkRequestSender(IGNORE_INPUT_PATH);
+        BulkRequestSender bulkRequestSender = new YearMonthBulkRequestSender(IGNORE_INPUT_PATH);
 
         assertThrows(
             FailToReadRequestInputFileException.class,

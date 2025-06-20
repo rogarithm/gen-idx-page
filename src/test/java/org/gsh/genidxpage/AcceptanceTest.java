@@ -2,16 +2,17 @@ package org.gsh.genidxpage;
 
 import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
+import org.gsh.genidxpage.repository.ArchiveStatusReporter;
+import org.gsh.genidxpage.repository.IndexContentReader;
+import org.gsh.genidxpage.repository.PostListPageRecorder;
+import org.gsh.genidxpage.repository.PostRecorder;
 import org.gsh.genidxpage.scheduler.BulkRequestSender;
 import org.gsh.genidxpage.scheduler.WebArchiveJob;
 import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
+import org.gsh.genidxpage.scheduler.YearMonthBulkRequestSender;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ArchivePageService;
-import org.gsh.genidxpage.repository.ArchiveStatusReporter;
-import org.gsh.genidxpage.repository.IndexContentReader;
 import org.gsh.genidxpage.service.IndexPageGenerator;
-import org.gsh.genidxpage.repository.PostListPageRecorder;
-import org.gsh.genidxpage.repository.PostRecorder;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.WebPageParser;
 import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
@@ -169,7 +170,7 @@ public class AcceptanceTest {
     class ArchivePageSchedulingTest {
         @BeforeEach
         public void setUp() {
-            bulkRequestSender = new BulkRequestSender(IGNORE_INPUT_PATH);
+            bulkRequestSender = new YearMonthBulkRequestSender(IGNORE_INPUT_PATH);
             WebArchiveApiCaller apiCaller = new WebArchiveApiCaller(
                 "http://localhost:8080",
                 "/wayback/available?url={url}&timestamp={timestamp}",
