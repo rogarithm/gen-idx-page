@@ -7,6 +7,7 @@ public class ArchiveStatusBuilder {
     private Long id;
     private String year;
     private String month;
+    private String groupKey;
     private Boolean pageExists;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -19,6 +20,11 @@ public class ArchiveStatusBuilder {
     public ArchiveStatusBuilder withYearMonth(String year, String month) {
         this.year = year;
         this.month = month;
+        return this;
+    }
+
+    public ArchiveStatusBuilder withGroupKey(String groupKey) {
+        this.groupKey = groupKey;
         return this;
     }
 
@@ -36,6 +42,7 @@ public class ArchiveStatusBuilder {
         return new ArchiveStatus(
             this.year,
             this.month,
+            this.groupKey,
             this.pageExists,
             LocalDateTime.now(),
             null,

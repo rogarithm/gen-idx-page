@@ -7,22 +7,22 @@
     parameterType="org.gsh.genidxpage.entity.ArchiveStatus">
 
     INSERT INTO post_list_page_status (year,
-                          month,
-                          page_exists,
-                          created_at)
+                                       month,
+                                       group_key,
+                                       page_exists,
+                                       created_at)
     VALUES (#{year},
             #{month},
+            #{groupKey},
             #{pageExists},
             #{createdAt})
   </insert>
 
-  <select id="selectByYearMonth" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
-    SELECT `year`,
-           `month`,
+  <select id="selectByGroupKey" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
+    SELECT group_key,
            page_exists
     FROM post_list_page_status
-    WHERE `year` = #{year}
-      AND `month` = #{month}
+    WHERE group_key = #{groupKey}
       AND deleted_at IS NULL
   </select>
 

@@ -9,6 +9,7 @@ public class ArchiveStatus {
     private Long id;
     private String year;
     private String month;
+    private String groupKey;
     private Boolean pageExists;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -32,10 +33,22 @@ public class ArchiveStatus {
         this.deletedAt = deletedAt;
     }
 
+    ArchiveStatus(String year, String month, String groupKey, Boolean pageExists, LocalDateTime createdAt,
+        LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this.year = year;
+        this.month = month;
+        this.groupKey = groupKey;
+        this.pageExists = pageExists;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+    }
+
     public static ArchiveStatus createFrom(CheckPostArchivedDto dto, Boolean pageExists) {
         return new ArchiveStatus(
             dto.getYear(),
             dto.getMonth(),
+            dto.getGroupKey(),
             pageExists,
             LocalDateTime.now(),
             null,
@@ -47,6 +60,7 @@ public class ArchiveStatus {
         return new ArchiveStatus(
             archiveStatus.getYear(),
             archiveStatus.getMonth(),
+            archiveStatus.getGroupKey(),
             pageExists,
             null,
             LocalDateTime.now(),
@@ -60,6 +74,10 @@ public class ArchiveStatus {
 
     public String getMonth() {
         return month;
+    }
+
+    public String getGroupKey() {
+        return groupKey;
     }
 
     public Boolean getPageExists() {

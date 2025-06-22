@@ -23,6 +23,10 @@ public class CheckPostArchivedDto implements CheckPostArchived {
         return month;
     }
 
+    public String getGroupKey() {
+        return year + "/" + month;
+    };
+
     public String getUrl() {
         return url;
     }

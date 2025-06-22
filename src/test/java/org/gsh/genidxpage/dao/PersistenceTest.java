@@ -32,14 +32,15 @@ class PersistenceTest {
     public void check_archive_status_mapping() {
         ArchiveStatus report = ArchiveStatusBuilder.builder()
             .withYearMonth("2021", "03")
+            .withGroupKey("2021/03")
             .thatExists()
             .buildAsNew();
         statusMapper.insert(report);
 
-        ArchiveStatus loadedEntity = statusMapper.selectByYearMonth("2021", "03");
+        ArchiveStatus loadedEntity = statusMapper.selectByGroupKey("2021/03");
 
         assertThat(loadedEntity).isNotNull();
-        assertThat(loadedEntity.getYear()).isEqualTo("2021");
+        assertThat(loadedEntity.getGroupKey()).isEqualTo("2021/03");
         assertThat(loadedEntity.getPageExists()).isEqualTo(Boolean.TRUE);
     }
 
