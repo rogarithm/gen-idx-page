@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
-class WebArchiveSchedulerTest {
+class WebArchiveJobTest {
 
     static final List<String> IGNORE_REQUEST_INPUT = Collections.emptyList();
 
@@ -29,9 +29,9 @@ class WebArchiveSchedulerTest {
         when(sender.prepareInput()).thenReturn(IGNORE_REQUEST_INPUT);
         doNothing().when(sender).sendAll(any(), any(ArchivePageService.class));
 
-        WebArchiveScheduler scheduler = new WebArchiveScheduler(sender, service, null);
+        WebArchiveJob archiveJob = new WebArchiveJob(sender, service, null);
 
-        scheduler.doSend();
+        archiveJob.doSend();
 
         verify(sender).sendAll(any(), any(ArchivePageService.class));
     }
@@ -44,7 +44,7 @@ class WebArchiveSchedulerTest {
 
         doNothing().when(generator).generateIndexPage(any());
 
-        WebArchiveScheduler scheduler = new WebArchiveScheduler(null, null, generator);
+        WebArchiveJob scheduler = new WebArchiveJob(null, null, generator);
 
         scheduler.doGenerate(pageLinksList);
 
@@ -56,7 +56,7 @@ class WebArchiveSchedulerTest {
     public void read_index_content_from_db() {
         IndexPageGenerator generator = mock(IndexPageGenerator.class);
 
-        WebArchiveScheduler scheduler = new WebArchiveScheduler(
+        WebArchiveJob scheduler = new WebArchiveJob(
             mock(BulkRequestSender.class),
             mock(ArchivePageService.class),
             generator
@@ -75,7 +75,7 @@ class WebArchiveSchedulerTest {
 
         doNothing().when(sender).sendAll(any(), any(ArchivePageService.class));
 
-        WebArchiveScheduler scheduler = new WebArchiveScheduler(
+        WebArchiveJob scheduler = new WebArchiveJob(
             sender, service, null
         );
 
@@ -90,7 +90,7 @@ class WebArchiveSchedulerTest {
     public void get_success_fail_info_after_retry() {
         List<String> sendInfo = List.of("2020/01", "2020/02", "2020/03", "2020/04");
         List<String> failedAfterRetry = List.of("2020/01", "2020/02");
-        WebArchiveScheduler scheduler = new WebArchiveScheduler(
+        WebArchiveJob scheduler = new WebArchiveJob(
             null, null, null
         );
         Assertions.assertThat(scheduler.successAfterRetry(sendInfo, failedAfterRetry))
