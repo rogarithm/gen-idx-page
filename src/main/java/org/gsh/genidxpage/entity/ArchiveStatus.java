@@ -9,6 +9,7 @@ public class ArchiveStatus {
     private Long id;
     private String year;
     private String month;
+    private Long postGroupTypeId;
     private String groupKey;
     private Boolean pageExists;
     private LocalDateTime createdAt;

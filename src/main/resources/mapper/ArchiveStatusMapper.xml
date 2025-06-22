@@ -8,18 +8,21 @@
 
     INSERT INTO post_list_page_status (year,
                                        month,
+                                       post_group_type_id,
                                        group_key,
                                        page_exists,
                                        created_at)
     VALUES (#{year},
             #{month},
+            1,
             #{groupKey},
             #{pageExists},
             #{createdAt})
   </insert>
 
   <select id="selectByGroupKey" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
-    SELECT group_key,
+    SELECT post_group_type_id,
+           group_key,
            page_exists
     FROM post_list_page_status
     WHERE group_key = #{groupKey}
@@ -45,10 +48,10 @@
   </select>
 
   <select id="selectAllFailed" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
-    select plps.year, plps.month, plps.page_exists
+    select plps.post_group_type_id, plps.group_key, plps.page_exists
     from post_list_page_status plps
            left join post_list_page plp
-                on concat(plps.year, '/', plps.month) = concat(plp.year, '/', plp.month)
+                on plps.group_key = concat(plp.year, '/', plp.month)
     where plps.page_exists = false
       and plp.id is null;
   </select>
