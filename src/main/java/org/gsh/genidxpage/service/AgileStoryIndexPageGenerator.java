@@ -32,6 +32,7 @@ public class AgileStoryIndexPageGenerator implements IndexPageGenerator {
     // TODO
     //  파일 관련 연산을 별도의 객체로 분리
     //  예외 발생 상황 테스트를 추가
+    @Override
     public void generateIndexPage(List<String> postLinksList) {
         StringBuilder builder = new StringBuilder();
         builder.append(generateHeader());
@@ -88,6 +89,7 @@ public class AgileStoryIndexPageGenerator implements IndexPageGenerator {
             """;
     }
 
+    @Override
     public List<String> readIndexContent() {
         return reader.readAllIndexContent();
     }

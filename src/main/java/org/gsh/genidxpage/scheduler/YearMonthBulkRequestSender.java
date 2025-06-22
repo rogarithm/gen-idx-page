@@ -26,6 +26,7 @@ public class YearMonthBulkRequestSender implements BulkRequestSender {
         this.inputPath = inputPath;
     }
 
+    @Override
     public List<String> prepareInput() {
         ClassPathResource classPathResource = new ClassPathResource(inputPath);
         String fileContent = "";
@@ -41,6 +42,7 @@ public class YearMonthBulkRequestSender implements BulkRequestSender {
             .collect(ArrayList::new, List::add, List::addAll);
     }
 
+    @Override
     public void sendAll(List<String> yearMonths, ArchivePageService sender) {
         yearMonths.forEach(yearMonth -> {
             // 외부 서버에 요청할 입력 형식으로 파일 내용을 정제한다
