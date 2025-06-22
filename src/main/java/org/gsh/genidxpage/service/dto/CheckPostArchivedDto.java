@@ -1,6 +1,6 @@
 package org.gsh.genidxpage.service.dto;
 
-public class CheckPostArchivedDto {
+public class CheckPostArchivedDto implements CheckPostArchived {
 
     private final String year;
     private final String month;
