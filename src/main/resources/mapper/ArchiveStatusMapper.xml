@@ -46,7 +46,7 @@
     select plps.post_group_type_id, plps.group_key, plps.page_exists
     from post_list_page_status plps
            left join post_list_page plp
-                on plps.group_key = concat(plp.year, '/', plp.month)
+                on plps.group_key = plp.group_key
     where plps.page_exists = false
       and plp.id is null;
   </select>
