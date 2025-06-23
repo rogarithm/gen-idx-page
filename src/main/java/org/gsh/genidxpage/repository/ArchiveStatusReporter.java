@@ -35,10 +35,9 @@ public class ArchiveStatusReporter {
     }
 
     public List<String> readAllFailedRequestInput() {
-        List<String> list = reportMapper.selectAllFailed()
+        return reportMapper.selectAllFailed()
             .stream()
-            .map(report -> report.getGroupKey())
+            .map(ArchiveStatus::getGroupKey)
             .toList();
-        return list;
     }
 }

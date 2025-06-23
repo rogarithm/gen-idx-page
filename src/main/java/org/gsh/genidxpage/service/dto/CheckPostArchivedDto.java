@@ -23,14 +23,17 @@ public class CheckPostArchivedDto implements CheckPostArchived {
         return month;
     }
 
+    @Override
     public String getGroupKey() {
         return year + "/" + month;
-    };
+    }
 
+    @Override
     public String getUrl() {
         return url;
     }
 
+    @Override
     public String getTimestamp() {
         return timestamp;
     }
