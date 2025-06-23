@@ -6,15 +6,11 @@
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"
     parameterType="org.gsh.genidxpage.entity.ArchiveStatus">
 
-    INSERT INTO post_list_page_status (year,
-                                       month,
-                                       post_group_type_id,
+    INSERT INTO post_list_page_status (post_group_type_id,
                                        group_key,
                                        page_exists,
                                        created_at)
-    VALUES (#{year},
-            #{month},
-            1,
+    VALUES (1,
             #{groupKey},
             #{pageExists},
             #{createdAt})
@@ -34,13 +30,12 @@
     UPDATE post_list_page_status
     SET page_exists = #{pageExists},
         updated_at  = #{updatedAt}
-    WHERE `year` = #{year}
-      AND `month` = #{month}
+    WHERE group_key = #{groupKey}
   </update>
 
   <select id="selectByPageExists" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
-    SELECT year,
-           month,
+    SELECT post_group_type_id,
+           group_key,
            page_exists
     FROM post_list_page_status
     WHERE page_exists = #{pageExists}

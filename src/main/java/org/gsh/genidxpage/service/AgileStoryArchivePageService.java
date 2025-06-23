@@ -39,15 +39,15 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         ArchivedPageInfo archivedPageInfo = this.findArchivedPageInfo(dto);
         if (archivedPageInfo.isUnreachable()) {
             log.debug(
-                String.format("fail to read blog page link for %s/%s due to timeout",
-                    dto.getYear(), dto.getMonth())
+                String.format("fail to read blog page link for %s due to timeout",
+                    dto.getGroupKey())
             );
             return "";
         }
 
         if (archivedPageInfo.isEmpty()) {
             log.debug(
-                String.format("empty blog page link for %s/%s", dto.getYear(), dto.getMonth()));
+                String.format("empty blog page link for %s", dto.getGroupKey()));
             return "";
         }
         Long listPageId = listPageRecorder.record(dto, archivedPageInfo);

@@ -31,7 +31,6 @@ class PersistenceTest {
     @Test
     public void check_archive_status_mapping() {
         ArchiveStatus report = ArchiveStatusBuilder.builder()
-            .withYearMonth("2021", "03")
             .withGroupKey("2021/03")
             .thatExists()
             .buildAsNew();

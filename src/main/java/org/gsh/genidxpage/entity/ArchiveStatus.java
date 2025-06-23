@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 public class ArchiveStatus {
 
     private Long id;
-    private String year;
-    private String month;
     private Long postGroupTypeId;
     private String groupKey;
     private Boolean pageExists;
@@ -18,26 +16,8 @@ public class ArchiveStatus {
 
     private ArchiveStatus() {}
 
-    ArchiveStatus(String year, String month, Boolean pageExists) {
-        this.year = year;
-        this.month = month;
-        this.pageExists = pageExists;
-    }
-
-    ArchiveStatus(String year, String month, Boolean pageExists, LocalDateTime createdAt,
+    ArchiveStatus(String groupKey, Boolean pageExists, LocalDateTime createdAt,
         LocalDateTime updatedAt, LocalDateTime deletedAt) {
-        this.year = year;
-        this.month = month;
-        this.pageExists = pageExists;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
-    }
-
-    ArchiveStatus(String year, String month, String groupKey, Boolean pageExists, LocalDateTime createdAt,
-        LocalDateTime updatedAt, LocalDateTime deletedAt) {
-        this.year = year;
-        this.month = month;
         this.groupKey = groupKey;
         this.pageExists = pageExists;
         this.createdAt = createdAt;
@@ -47,8 +27,6 @@ public class ArchiveStatus {
 
     public static ArchiveStatus createFrom(CheckPostArchivedDto dto, Boolean pageExists) {
         return new ArchiveStatus(
-            dto.getYear(),
-            dto.getMonth(),
             dto.getGroupKey(),
             pageExists,
             LocalDateTime.now(),
@@ -59,22 +37,12 @@ public class ArchiveStatus {
 
     public static ArchiveStatus updateFrom(ArchiveStatus archiveStatus, Boolean pageExists) {
         return new ArchiveStatus(
-            archiveStatus.getYear(),
-            archiveStatus.getMonth(),
             archiveStatus.getGroupKey(),
             pageExists,
             null,
             LocalDateTime.now(),
             null
         );
-    }
-
-    public String getYear() {
-        return year;
-    }
-
-    public String getMonth() {
-        return month;
     }
 
     public String getGroupKey() {
