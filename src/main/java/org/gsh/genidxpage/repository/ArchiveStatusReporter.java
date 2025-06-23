@@ -17,8 +17,7 @@ public class ArchiveStatusReporter {
     }
 
     public void reportArchivedPageSearch(final CheckPostArchivedDto dto, final Boolean pageExists) {
-        ArchiveStatus hasReport = reportMapper.selectByYearMonth(dto.getYear(),
-            dto.getMonth());
+        ArchiveStatus hasReport = reportMapper.selectByGroupKey(dto.getGroupKey());
 
         if (hasReport != null) {
             reportMapper.update(ArchiveStatus.updateFrom(hasReport, pageExists));
@@ -30,10 +29,7 @@ public class ArchiveStatusReporter {
     }
 
     public boolean hasArchivedPage(final CheckPostArchivedDto dto) {
-        ArchiveStatus report = reportMapper.selectByYearMonth(
-            dto.getYear(),
-            dto.getMonth()
-        );
+        ArchiveStatus report = reportMapper.selectByGroupKey(dto.getGroupKey());
 
         return report.getPageExists() == Boolean.TRUE;
     }
@@ -41,7 +37,7 @@ public class ArchiveStatusReporter {
     public List<String> readAllFailedRequestInput() {
         return reportMapper.selectAllFailed()
             .stream()
-            .map(report -> report.getYear() + "/" + report.getMonth())
+            .map(ArchiveStatus::getGroupKey)
             .toList();
     }
 }

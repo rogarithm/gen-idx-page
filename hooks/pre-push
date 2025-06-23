@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'open3'
 require_relative './lib/branch_name_checker'
 
 now_branch_nm = `git rev-parse --abbrev-ref HEAD`
@@ -18,6 +19,13 @@ is_editorconfig_failed = editorconfig_result.split("\n")
   .select {|l|
     l.match(/^> Task :editorconfigCheck FAILED.*/)
   } != []
+
+puts 'checking pmd rule...'
+pmd_result, ignore= Open3.capture2e("./gradlew pmdMain pmdTest")
+is_pmd_failed = pmd_result.split("\n")
+                          .select {|l|
+                            l.match(/^> Task :pmdMain FAILED.*|^> Task :pmdTest FAILED.*/)
+                          } != []
 
 puts 'run test...'
 test_result = `./gradlew test 2>/dev/null`
@@ -47,10 +55,17 @@ if is_test_failed
 else
   puts 'test ok'
 end
+if is_pmd_failed
+  puts 'invalid pmd rule'
+  puts pmd_result
+else
+  puts 'pmd ok'
+end
 
 if branch_nm_report.status == 'FAIL' or
   is_checkstyle_failed or
   is_editorconfig_failed or
-  is_test_failed
+  is_test_failed or
+  is_pmd_failed
   exit 1
 end

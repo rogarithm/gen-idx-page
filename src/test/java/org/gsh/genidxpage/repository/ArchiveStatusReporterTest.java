@@ -24,11 +24,11 @@ class ArchiveStatusReporterTest {
         ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
         ArchiveStatus report = ArchiveStatusBuilder.builder()
-            .withYearMonth("2021", "3")
+            .withGroupKey("2021/03")
             .thatExists()
             .buildAsNew();
 
-        when(mapper.selectByYearMonth(any(), any())).thenReturn(report);
+        when(mapper.selectByGroupKey(any())).thenReturn(report);
 
         boolean hasArchivedPage = reporter.hasArchivedPage(
             new CheckPostArchivedDto("2021", "3")
@@ -42,18 +42,18 @@ class ArchiveStatusReporterTest {
         ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
         ArchiveStatus report = ArchiveStatusBuilder.builder()
-            .withYearMonth("2021", "3")
+            .withGroupKey("2021/03")
             .thatExists()
             .buildAsNew();
 
-        when(mapper.selectByYearMonth(any(), any())).thenReturn(
+        when(mapper.selectByGroupKey(any())).thenReturn(
             report);
         doNothing().when(mapper).update(report);
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
         reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
 
-        verify(mapper).selectByYearMonth(any(), any());
+        verify(mapper).selectByGroupKey(any());
         verify(mapper).update(any(ArchiveStatus.class));
     }
 
@@ -64,11 +64,11 @@ class ArchiveStatusReporterTest {
         ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
         List<ArchiveStatus> failRequestReports = List.of(
             ArchiveStatusBuilder.builder()
-                .withYearMonth("2020", "05")
+                .withGroupKey("2020/05")
                 .thatNotExists()
                 .buildAsNew(),
             ArchiveStatusBuilder.builder()
-                .withYearMonth("2021", "03")
+                .withGroupKey("2021/03")
                 .thatNotExists()
                 .buildAsNew()
         );

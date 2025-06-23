@@ -11,7 +11,7 @@ public interface ArchiveStatusMapper {
 
     Long insert(ArchiveStatus report);
 
-    ArchiveStatus selectByYearMonth(@Param("year") String year, @Param("month") String month);
+    ArchiveStatus selectByGroupKey(@Param("groupKey") String groupKey);
 
     void update(ArchiveStatus report);
 

@@ -6,23 +6,22 @@
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"
     parameterType="org.gsh.genidxpage.entity.ArchiveStatus">
 
-    INSERT INTO post_list_page_status (year,
-                          month,
-                          page_exists,
-                          created_at)
-    VALUES (#{year},
-            #{month},
+    INSERT INTO post_list_page_status (post_group_type_id,
+                                       group_key,
+                                       page_exists,
+                                       created_at)
+    VALUES (1,
+            #{groupKey},
             #{pageExists},
             #{createdAt})
   </insert>
 
-  <select id="selectByYearMonth" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
-    SELECT `year`,
-           `month`,
+  <select id="selectByGroupKey" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
+    SELECT post_group_type_id,
+           group_key,
            page_exists
     FROM post_list_page_status
-    WHERE `year` = #{year}
-      AND `month` = #{month}
+    WHERE group_key = #{groupKey}
       AND deleted_at IS NULL
   </select>
 
@@ -31,13 +30,12 @@
     UPDATE post_list_page_status
     SET page_exists = #{pageExists},
         updated_at  = #{updatedAt}
-    WHERE `year` = #{year}
-      AND `month` = #{month}
+    WHERE group_key = #{groupKey}
   </update>
 
   <select id="selectByPageExists" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
-    SELECT year,
-           month,
+    SELECT post_group_type_id,
+           group_key,
            page_exists
     FROM post_list_page_status
     WHERE page_exists = #{pageExists}
@@ -45,10 +43,10 @@
   </select>
 
   <select id="selectAllFailed" resultType="org.gsh.genidxpage.entity.ArchiveStatus">
-    select plps.year, plps.month, plps.page_exists
+    select plps.post_group_type_id, plps.group_key, plps.page_exists
     from post_list_page_status plps
            left join post_list_page plp
-                on concat(plps.year, '/', plps.month) = concat(plp.year, '/', plp.month)
+                on plps.group_key = concat(plp.year, '/', plp.month)
     where plps.page_exists = false
       and plp.id is null;
   </select>
