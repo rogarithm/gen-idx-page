@@ -5,8 +5,7 @@ import java.time.LocalDateTime;
 public class PostListPageBuilder {
 
     private Long id;
-    private String year;
-    private String month;
+    private String groupKey;
     private String url;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -16,9 +15,8 @@ public class PostListPageBuilder {
         return new PostListPageBuilder();
     }
 
-    public PostListPageBuilder withYearMonth(String year, String month) {
-        this.year = year;
-        this.month = month;
+    public PostListPageBuilder withGroupKey(String groupKey) {
+        this.groupKey = groupKey;
         return this;
     }
 
@@ -29,8 +27,7 @@ public class PostListPageBuilder {
 
     public PostListPage buildAsNew() {
         return new PostListPage(
-            this.year,
-            this.month,
+            this.groupKey,
             this.url,
             LocalDateTime.now(),
             null,

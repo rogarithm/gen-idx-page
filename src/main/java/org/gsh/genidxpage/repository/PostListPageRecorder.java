@@ -18,10 +18,7 @@ public class PostListPageRecorder {
     }
 
     public Long record(final CheckPostArchivedDto dto, final ArchivedPageInfo archivedPageInfo) {
-        PostListPage hasPostListPage = mapper.selectByYearMonth(
-            dto.getYear(),
-            dto.getMonth()
-        );
+        PostListPage hasPostListPage = mapper.selectByGroupKey(dto.getGroupKey());
 
         if (hasPostListPage != null) {
             log.debug(
