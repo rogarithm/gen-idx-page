@@ -22,7 +22,7 @@ class PostListPageRecorderTest {
         PostListPageMapper mapper = mock(PostListPageMapper.class);
         PostListPageRecorder recorder = new PostListPageRecorder(mapper);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
             .withAccessibleArchivedSnapshots()
             .build();
@@ -43,7 +43,7 @@ class PostListPageRecorderTest {
             .buildAsNew();
         when(mapper.selectByGroupKey(any())).thenReturn(postListPage);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
             .withAccessibleArchivedSnapshots()
             .build();

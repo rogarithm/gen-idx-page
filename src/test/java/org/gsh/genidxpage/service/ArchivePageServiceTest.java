@@ -33,7 +33,7 @@ class ArchivePageServiceTest {
 
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null, null, null);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("1999", "7");
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("1999/07");
         service.findArchivedPageInfo(dto);
 
         verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), eq(Boolean.FALSE));
@@ -51,7 +51,7 @@ class ArchivePageServiceTest {
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
             null, null, null);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2020", "3");
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2020/03");
         service.findArchivedPageInfo(dto);
 
         verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class),
@@ -75,7 +75,7 @@ class ArchivePageServiceTest {
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
             mock(PostListPageRecorder.class), null, null);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
         service.findArchivedPageInfo(dto);
 
         verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), eq(Boolean.TRUE));
@@ -92,7 +92,7 @@ class ArchivePageServiceTest {
             mock(ArchiveStatusReporter.class), listPageRecorder, mock(PostRecorder.class),
             mock(WebPageParser.class));
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
         service.findBlogPageLink(dto);
 
         verify(listPageRecorder).record(any(CheckPostArchivedDto.class), any(ArchivedPageInfo.class));
@@ -113,7 +113,7 @@ class ArchivePageServiceTest {
             mock(WebPageParser.class)
         );
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
         service.findBlogPageLink(dto);
 
         verify(postRecorder).record(any(), any());

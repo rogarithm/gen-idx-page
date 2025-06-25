@@ -31,7 +31,7 @@ class ArchiveStatusReporterTest {
         when(mapper.selectByGroupKey(any())).thenReturn(report);
 
         boolean hasArchivedPage = reporter.hasArchivedPage(
-            new CheckPostArchivedDto("2021", "3")
+            new CheckPostArchivedDto("2021/03")
         );
         Assertions.assertThat(hasArchivedPage).isTrue();
     }
@@ -50,7 +50,7 @@ class ArchiveStatusReporterTest {
             report);
         doNothing().when(mapper).update(report);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
+        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
         reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
 
         verify(mapper).selectByGroupKey(any());

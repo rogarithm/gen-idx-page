@@ -155,7 +155,7 @@ public class AcceptanceTest {
 
             // 서버는 db에 요청 성공을 기록한다
             Assertions.assertThat(
-                reporter.hasArchivedPage(new CheckPostArchivedDto("2021", "3"))
+                reporter.hasArchivedPage(new CheckPostArchivedDto("2021/03"))
             ).isTrue();
 
             fakeWebArchiveServer.stop();
