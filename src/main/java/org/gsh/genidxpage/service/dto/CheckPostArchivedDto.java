@@ -15,14 +15,6 @@ public class CheckPostArchivedDto implements CheckPostArchived {
         this.timestamp = "20230401";
     }
 
-    public String getYear() {
-        return year;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
     @Override
     public String getGroupKey() {
         return year + "/" + month;
