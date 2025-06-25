@@ -5,7 +5,6 @@ import org.gsh.genidxpage.repository.PostListPageRecorder;
 import org.gsh.genidxpage.repository.PostRecorder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchived;
-import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
 import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
