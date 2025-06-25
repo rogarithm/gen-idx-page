@@ -9,7 +9,7 @@ public interface PostListPageMapper {
 
     Long insert(PostListPage postListPage);
 
-    PostListPage selectByYearMonth(@Param("year") String year, @Param("month") String month);
+    PostListPage selectByGroupKey(@Param("groupKey") String groupKey);
 
     Long update(PostListPage postListPage);
 }

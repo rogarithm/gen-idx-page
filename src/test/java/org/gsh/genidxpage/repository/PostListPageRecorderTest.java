@@ -38,10 +38,10 @@ class PostListPageRecorderTest {
         PostListPageRecorder recorder = new PostListPageRecorder(mapper);
 
         PostListPage postListPage = PostListPageBuilder.builder()
-            .withYearMonth("2021", "3")
+            .withGroupKey("2021/03")
             .withUrl("http://localhost:8080/web/20230614220926/archives/2021/03")
             .buildAsNew();
-        when(mapper.selectByYearMonth(any(), any())).thenReturn(postListPage);
+        when(mapper.selectByGroupKey(any())).thenReturn(postListPage);
 
         CheckPostArchivedDto dto = new CheckPostArchivedDto("2021", "3");
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()

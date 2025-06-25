@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 public class PostListPage {
 
     private Long id;
-    private String year;
-    private String month;
+    private Long postGroupTypeId;
+    private String groupKey;
     private String url;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -17,10 +17,9 @@ public class PostListPage {
 
     private PostListPage() {}
 
-    PostListPage(String year, String month, String url, LocalDateTime createdAt,
+    PostListPage(String groupKey, String url, LocalDateTime createdAt,
         LocalDateTime updatedAt, LocalDateTime deletedAt) {
-        this.year = year;
-        this.month = month;
+        this.groupKey = groupKey;
         this.url = url;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -29,8 +28,7 @@ public class PostListPage {
 
     public static PostListPage createFrom(CheckPostArchivedDto dto, ArchivedPageInfo archivedPageInfo) {
         return new PostListPage(
-            dto.getYear(),
-            dto.getMonth(),
+            dto.getGroupKey(),
             archivedPageInfo.accessibleUrl(),
             LocalDateTime.now(),
             null,
@@ -40,8 +38,7 @@ public class PostListPage {
 
     public static PostListPage updateFrom(PostListPage postListPage, ArchivedPageInfo archivedPageInfo) {
         return new PostListPage(
-            postListPage.getYear(),
-            postListPage.getMonth(),
+            postListPage.getGroupKey(),
             archivedPageInfo.accessibleUrl(),
             null,
             LocalDateTime.now(),
@@ -53,12 +50,8 @@ public class PostListPage {
         return id;
     }
 
-    public String getYear() {
-        return year;
-    }
-
-    public String getMonth() {
-        return month;
+    public String getGroupKey() {
+        return groupKey;
     }
 
     public String getUrl() {

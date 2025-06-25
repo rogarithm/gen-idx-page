@@ -46,16 +46,16 @@ class PersistenceTest {
     @Test
     public void check_post_list_page_mapping() {
         PostListPage postListPage = PostListPageBuilder.builder()
-            .withYearMonth("2021", "3")
+            .withGroupKey("2021/03")
             .withUrl("http://localhost:8080/web/20230614220926/archives/2021/03")
             .buildAsNew();
         postListPageMapper.insert(postListPage);
 
-        PostListPage loadedEntity = postListPageMapper.selectByYearMonth("2021", "3");
+        PostListPage loadedEntity = postListPageMapper.selectByGroupKey("2021/03");
 
         assertThat(loadedEntity).isNotNull();
         assertThat(loadedEntity.getId()).isNotNull();
-        assertThat(loadedEntity.getYear()).isEqualTo("2021");
+        assertThat(loadedEntity.getGroupKey()).isEqualTo("2021/03");
         assertThat(loadedEntity.getUrl()).isEqualTo(
             "http://localhost:8080/web/20230614220926/archives/2021/03");
     }
@@ -64,13 +64,13 @@ class PersistenceTest {
     public void check_post_mapping() {
         // fk 정합성을 위해 postListPage를 insert한다
         PostListPage postListPage = PostListPageBuilder.builder()
-            .withYearMonth("2021", "3")
+            .withGroupKey("2021/03")
             .withUrl("http://localhost:8080/web/20230614220926/archives/2021/03")
             .buildAsNew();
         postListPageMapper.insert(postListPage);
 
         String rawHtml = "<html>hello</html>";
-        Long parentPageId = postListPageMapper.selectByYearMonth("2021", "3").getId();
+        Long parentPageId = postListPageMapper.selectByGroupKey("2021/03").getId();
         postMapper.insert(Post.createFrom(rawHtml, parentPageId));
 
         Post loadedEntity = postMapper.selectByParentPageId(parentPageId);
@@ -89,7 +89,7 @@ class PersistenceTest {
                 String month = yearMonth.split("/")[1];
 
                 PostListPage postListPage = PostListPageBuilder.builder()
-                    .withYearMonth(year, month)
+                    .withGroupKey(yearMonth)
                     .withUrl(
                         String.format("http://localhost:8080/web/20230614220926/archives/%s/%s",
                             year, month))
@@ -97,7 +97,7 @@ class PersistenceTest {
                 postListPageMapper.insert(postListPage);
 
                 String rawHtml = String.format("<html>url for %s/%s</html>", year, month);
-                Long parentPageId = postListPageMapper.selectByYearMonth(year, month).getId();
+                Long parentPageId = postListPageMapper.selectByGroupKey(yearMonth).getId();
                 postMapper.insert(Post.createFrom(rawHtml, parentPageId));
             });
 

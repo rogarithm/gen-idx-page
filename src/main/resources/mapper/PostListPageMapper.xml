@@ -7,24 +7,23 @@
   <insert id="insert" useGeneratedKeys="true" keyProperty="id"
     parameterType="org.gsh.genidxpage.entity.PostListPage">
 
-    INSERT INTO post_list_page (year,
-                                month,
+    INSERT INTO post_list_page (post_group_type_id,
+                                group_key,
                                 url,
                                 created_at)
-    VALUES (#{year},
-            #{month},
+    VALUES (1,
+            #{groupKey},
             #{url},
             #{createdAt})
   </insert>
 
-  <select id="selectByYearMonth" resultType="org.gsh.genidxpage.entity.PostListPage">
+  <select id="selectByGroupKey" resultType="org.gsh.genidxpage.entity.PostListPage">
     SELECT id,
-           year,
-           month,
+           post_group_type_id,
+           group_key,
            url
     FROM post_list_page
-    WHERE year = #{year}
-      AND month = #{month}
+    WHERE group_key = #{groupKey}
       AND deleted_at IS NULL
   </select>
 
@@ -33,7 +32,6 @@
     UPDATE post_list_page
     SET url        = #{url},
         updated_at = #{updatedAt}
-    WHERE year = #{year}
-      AND month = #{month}
+    WHERE group_key = #{groupKey}
   </update>
 </mapper>
