@@ -1,7 +1,7 @@
 package org.gsh.genidxpage.service;
 
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.gsh.genidxpage.service.dto.UnreachableArchivedPageInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -36,7 +36,7 @@ public class WebArchiveApiCaller {
         this.rootUri = rootUri;
     }
 
-    public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
+    public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchived dto) {
         String uri = buildUri(dto);
         ResponseEntity<String> archivedPageInfo;
 
@@ -59,7 +59,7 @@ public class WebArchiveApiCaller {
         }
     }
 
-    String buildUri(final CheckPostArchivedDto dto) {
+    String buildUri(final CheckPostArchived dto) {
         UriComponents uriComponents = UriComponentsBuilder.fromUriString(checkArchivedUri).build();
 
         List<String> queryParams = new ArrayList<>();

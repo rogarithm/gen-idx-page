@@ -10,7 +10,8 @@ import org.gsh.genidxpage.entity.PostListPage;
 import org.gsh.genidxpage.entity.PostListPageBuilder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
+import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ class PostListPageRecorderTest {
         PostListPageMapper mapper = mock(PostListPageMapper.class);
         PostListPageRecorder recorder = new PostListPageRecorder(mapper);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
             .withAccessibleArchivedSnapshots()
             .build();
@@ -43,7 +44,7 @@ class PostListPageRecorderTest {
             .buildAsNew();
         when(mapper.selectByGroupKey(any())).thenReturn(postListPage);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
             .withAccessibleArchivedSnapshots()
             .build();

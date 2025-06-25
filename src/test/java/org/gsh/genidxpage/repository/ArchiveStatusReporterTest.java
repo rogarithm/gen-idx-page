@@ -10,7 +10,8 @@ import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.dao.ArchiveStatusMapper;
 import org.gsh.genidxpage.entity.ArchiveStatus;
 import org.gsh.genidxpage.entity.ArchiveStatusBuilder;
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
+import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +32,7 @@ class ArchiveStatusReporterTest {
         when(mapper.selectByGroupKey(any())).thenReturn(report);
 
         boolean hasArchivedPage = reporter.hasArchivedPage(
-            new CheckPostArchivedDto("2021/03")
+            new CheckYearMonthPostArchivedDto("2021/03")
         );
         Assertions.assertThat(hasArchivedPage).isTrue();
     }
@@ -50,7 +51,7 @@ class ArchiveStatusReporterTest {
             report);
         doNothing().when(mapper).update(report);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
 
         verify(mapper).selectByGroupKey(any());

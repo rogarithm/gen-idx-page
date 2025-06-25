@@ -6,7 +6,8 @@ import org.gsh.genidxpage.FakeWebArchiveServer;
 import org.gsh.genidxpage.config.CustomRestTemplateBuilder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
+import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,14 +25,14 @@ class WebArchiveApiCallerTest {
         fakeWebArchiveServer.respondItHasArchivedPage();
         fakeWebArchiveServer.start();
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         ArchivedPageInfo archivedPageInfo = caller.findArchivedPageInfo(dto);
 
         // 페이지가 아카이빙되어 있는 경우
         assertThat(caller.isArchived(archivedPageInfo)).isTrue();
 
         fakeWebArchiveServer.respondItHasNoArchivedPage();
-        CheckPostArchivedDto dto2 = new CheckPostArchivedDto("1999/07");
+        CheckPostArchived dto2 = new CheckYearMonthPostArchivedDto("1999/07");
         ArchivedPageInfo noArchivedPageInfo = caller.findArchivedPageInfo(dto2);
 
         // 페이지가 아카이빙되어 있지 않은 경우
@@ -70,7 +71,7 @@ class WebArchiveApiCallerTest {
         fakeWebArchiveServer.respondItHasArchivedPage();
         fakeWebArchiveServer.start();
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         assertThat(caller.findArchivedPageInfo(dto))
             .isInstanceOf(ArchivedPageInfo.class);
 
@@ -84,7 +85,7 @@ class WebArchiveApiCallerTest {
             "/wayback/available?url={url}&timestamp={timestamp}",
             CustomRestTemplateBuilder.get());
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2023/01");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2023/01");
         assertThat(caller.buildUri(dto)).matches(
             "http://localhost:8080/wayback/available\\?url=https://agile.egloos.com/archives/2023/01&timestamp=\\d{8}"
         );
@@ -96,7 +97,7 @@ class WebArchiveApiCallerTest {
         WebArchiveApiCaller callerWithTimestamp = new WebArchiveApiCaller("http://localhost:8080",
             "/wayback/available?url={url}&timestamp={timestamp}",
             CustomRestTemplateBuilder.get());
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
 
         assertThat(callerWithTimestamp.buildUri(dto)).matches(
             "http://localhost:8080/wayback/available\\?url=[^&]*&timestamp=\\d{8}"

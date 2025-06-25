@@ -3,7 +3,8 @@ package org.gsh.genidxpage.scheduler;
 import org.gsh.genidxpage.common.exception.ErrorCode;
 import org.gsh.genidxpage.exception.FailToReadRequestInputFileException;
 import org.gsh.genidxpage.service.ArchivePageService;
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
+import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -45,7 +46,7 @@ public class YearMonthBulkRequestSender implements BulkRequestSender {
     @Override
     public void sendAll(List<String> yearMonths, ArchivePageService sender) {
         yearMonths.forEach(yearMonth -> {
-            CheckPostArchivedDto dto = new CheckPostArchivedDto(yearMonth);
+            CheckPostArchived dto = new CheckYearMonthPostArchivedDto(yearMonth);
 
             sender.findBlogPageLink(dto);
         });

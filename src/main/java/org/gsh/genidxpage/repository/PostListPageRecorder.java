@@ -3,7 +3,7 @@ package org.gsh.genidxpage.repository;
 import org.gsh.genidxpage.dao.PostListPageMapper;
 import org.gsh.genidxpage.entity.PostListPage;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.springframework.stereotype.Repository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +17,7 @@ public class PostListPageRecorder {
         this.mapper = mapper;
     }
 
-    public Long record(final CheckPostArchivedDto dto, final ArchivedPageInfo archivedPageInfo) {
+    public Long record(final CheckPostArchived dto, final ArchivedPageInfo archivedPageInfo) {
         PostListPage hasPostListPage = mapper.selectByGroupKey(dto.getGroupKey());
 
         if (hasPostListPage != null) {

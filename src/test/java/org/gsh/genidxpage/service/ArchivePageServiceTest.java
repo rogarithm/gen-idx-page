@@ -11,7 +11,8 @@ import org.gsh.genidxpage.repository.PostListPageRecorder;
 import org.gsh.genidxpage.repository.PostRecorder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
+import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
 import org.gsh.genidxpage.service.dto.UnreachableArchivedPageInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,10 +34,10 @@ class ArchivePageServiceTest {
 
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null, null, null);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("1999/07");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("1999/07");
         service.findArchivedPageInfo(dto);
 
-        verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), eq(Boolean.FALSE));
+        verify(reporter).reportArchivedPageSearch(any(CheckPostArchived.class), eq(Boolean.FALSE));
     }
 
     @DisplayName("타임아웃 초과로 페이지 아카이빙 정보를 읽어오지 못했을 때 db에 기록한다")
@@ -51,10 +52,10 @@ class ArchivePageServiceTest {
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
             null, null, null);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2020/03");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2020/03");
         service.findArchivedPageInfo(dto);
 
-        verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class),
+        verify(reporter).reportArchivedPageSearch(any(CheckPostArchived.class),
             eq(Boolean.FALSE));
     }
 
@@ -75,10 +76,10 @@ class ArchivePageServiceTest {
         AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
             mock(PostListPageRecorder.class), null, null);
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         service.findArchivedPageInfo(dto);
 
-        verify(reporter).reportArchivedPageSearch(any(CheckPostArchivedDto.class), eq(Boolean.TRUE));
+        verify(reporter).reportArchivedPageSearch(any(CheckPostArchived.class), eq(Boolean.TRUE));
     }
 
     @DisplayName("페이지 아키이빙 정보를 찾았을 때, 접근 url을 db에 기록한다")
@@ -92,10 +93,10 @@ class ArchivePageServiceTest {
             mock(ArchiveStatusReporter.class), listPageRecorder, mock(PostRecorder.class),
             mock(WebPageParser.class));
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         service.findBlogPageLink(dto);
 
-        verify(listPageRecorder).record(any(CheckPostArchivedDto.class), any(ArchivedPageInfo.class));
+        verify(listPageRecorder).record(any(CheckPostArchived.class), any(ArchivedPageInfo.class));
     }
 
     @DisplayName("블로그 글 목록 페이지로부터 파싱한 블로그 링크 목록을 db에 기록한다")
@@ -113,7 +114,7 @@ class ArchivePageServiceTest {
             mock(WebPageParser.class)
         );
 
-        CheckPostArchivedDto dto = new CheckPostArchivedDto("2021/03");
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         service.findBlogPageLink(dto);
 
         verify(postRecorder).record(any(), any());
