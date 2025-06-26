@@ -20,4 +20,8 @@ public enum PostGroupTypeCode {
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Invalid group key: " + groupKey));
     }
+
+    public String getGroupType() {
+        return groupType;
+    }
 }
