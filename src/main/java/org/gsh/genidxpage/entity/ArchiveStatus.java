@@ -1,6 +1,6 @@
 package org.gsh.genidxpage.entity;
 
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
 
 import java.time.LocalDateTime;
 
@@ -25,7 +25,7 @@ public class ArchiveStatus {
         this.deletedAt = deletedAt;
     }
 
-    public static ArchiveStatus createFrom(CheckPostArchivedDto dto, Boolean pageExists) {
+    public static ArchiveStatus createFrom(CheckPostArchived dto, Boolean pageExists) {
         return new ArchiveStatus(
             dto.getGroupKey(),
             pageExists,

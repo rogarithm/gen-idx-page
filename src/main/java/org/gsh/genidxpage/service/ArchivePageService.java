@@ -1,12 +1,12 @@
 package org.gsh.genidxpage.service;
 
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
 
 import java.util.List;
 
 public interface ArchivePageService {
 
-    String findBlogPageLink(CheckPostArchivedDto dto);
+    String findBlogPageLink(CheckPostArchived dto);
 
     List<String> findFailedRequests();
 }

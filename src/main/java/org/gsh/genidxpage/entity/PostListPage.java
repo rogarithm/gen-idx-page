@@ -1,7 +1,7 @@
 package org.gsh.genidxpage.entity;
 
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
 
 import java.time.LocalDateTime;
 
@@ -26,7 +26,7 @@ public class PostListPage {
         this.deletedAt = deletedAt;
     }
 
-    public static PostListPage createFrom(CheckPostArchivedDto dto, ArchivedPageInfo archivedPageInfo) {
+    public static PostListPage createFrom(CheckPostArchived dto, ArchivedPageInfo archivedPageInfo) {
         return new PostListPage(
             dto.getGroupKey(),
             archivedPageInfo.accessibleUrl(),

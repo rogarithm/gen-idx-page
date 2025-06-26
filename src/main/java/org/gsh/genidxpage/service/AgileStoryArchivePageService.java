@@ -4,7 +4,7 @@ import org.gsh.genidxpage.repository.ArchiveStatusReporter;
 import org.gsh.genidxpage.repository.PostListPageRecorder;
 import org.gsh.genidxpage.repository.PostRecorder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
 
     @Transactional
     @Override
-    public String findBlogPageLink(final CheckPostArchivedDto dto) {
+    public String findBlogPageLink(final CheckPostArchived dto) {
         ArchivedPageInfo archivedPageInfo = this.findArchivedPageInfo(dto);
         if (archivedPageInfo.isUnreachable()) {
             log.debug(
@@ -64,7 +64,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         return reporter.readAllFailedRequestInput();
     }
 
-    ArchivedPageInfo findArchivedPageInfo(final CheckPostArchivedDto dto) {
+    ArchivedPageInfo findArchivedPageInfo(final CheckPostArchived dto) {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
 
         if (archivedPageInfo.isUnreachable()) {

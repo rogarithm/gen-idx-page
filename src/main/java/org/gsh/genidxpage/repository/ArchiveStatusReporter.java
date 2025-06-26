@@ -2,7 +2,7 @@ package org.gsh.genidxpage.repository;
 
 import org.gsh.genidxpage.dao.ArchiveStatusMapper;
 import org.gsh.genidxpage.entity.ArchiveStatus;
-import org.gsh.genidxpage.service.dto.CheckPostArchivedDto;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class ArchiveStatusReporter {
         this.reportMapper = reportMapper;
     }
 
-    public void reportArchivedPageSearch(final CheckPostArchivedDto dto, final Boolean pageExists) {
+    public void reportArchivedPageSearch(final CheckPostArchived dto, final Boolean pageExists) {
         ArchiveStatus hasReport = reportMapper.selectByGroupKey(dto.getGroupKey());
 
         if (hasReport != null) {
@@ -28,7 +28,7 @@ public class ArchiveStatusReporter {
         reportMapper.insert(report);
     }
 
-    public boolean hasArchivedPage(final CheckPostArchivedDto dto) {
+    public boolean hasArchivedPage(final CheckPostArchived dto) {
         ArchiveStatus report = reportMapper.selectByGroupKey(dto.getGroupKey());
 
         return report.getPageExists() == Boolean.TRUE;
