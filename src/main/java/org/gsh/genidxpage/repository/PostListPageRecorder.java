@@ -35,7 +35,7 @@ public class PostListPageRecorder {
         }
 
         log.debug("inserting access url of " + archivedPageInfo.accessibleUrl());
-        PostListPage postListPage = PostListPage.createFrom(postGroupType.getId(), dto, archivedPageInfo);
+        PostListPage postListPage = PostListPage.createFrom(postGroupType.getId(), groupKey, archivedPageInfo);
         mapper.insert(postListPage);
         return postListPage.getId();
     }

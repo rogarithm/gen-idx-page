@@ -32,7 +32,7 @@ public class ArchiveStatusReporter {
             return;
         }
 
-        ArchiveStatus report = ArchiveStatus.createFrom(dto, pageExists, postGroupTypeId);
+        ArchiveStatus report = ArchiveStatus.createFrom(groupKey, pageExists, postGroupTypeId);
         reportMapper.insert(report);
     }
 
