@@ -15,7 +15,8 @@ public enum PostGroupTypeCode {
     }
 
     public static PostGroupTypeCode findByGroupKey(String groupKey) {
-        return Arrays.stream(PostGroupTypeCode.values())
+        PostGroupTypeCode[] postGroupTypeCodes = PostGroupTypeCode.values();
+        return Arrays.stream(postGroupTypeCodes)
             .filter(groupType -> groupKey.matches(groupType.pattern))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Invalid group key: " + groupKey));

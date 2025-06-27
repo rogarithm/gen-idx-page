@@ -18,6 +18,7 @@ public class ArchiveStatus {
 
     ArchiveStatus(Long postGroupTypeId, String groupKey, Boolean pageExists, LocalDateTime createdAt,
         LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this.postGroupTypeId = postGroupTypeId;
         this.groupKey = groupKey;
         this.pageExists = pageExists;
         this.createdAt = createdAt;
