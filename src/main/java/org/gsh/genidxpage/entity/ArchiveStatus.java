@@ -16,7 +16,7 @@ public class ArchiveStatus {
 
     private ArchiveStatus() {}
 
-    ArchiveStatus(String groupKey, Boolean pageExists, LocalDateTime createdAt,
+    ArchiveStatus(Long postGroupTypeId, String groupKey, Boolean pageExists, LocalDateTime createdAt,
         LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.groupKey = groupKey;
         this.pageExists = pageExists;
@@ -25,8 +25,10 @@ public class ArchiveStatus {
         this.deletedAt = deletedAt;
     }
 
-    public static ArchiveStatus createFrom(CheckPostArchived dto, Boolean pageExists) {
+    public static ArchiveStatus createFrom(CheckPostArchived dto, Boolean pageExists,
+        Long postGroupTypeId) {
         return new ArchiveStatus(
+            postGroupTypeId,
             dto.getGroupKey(),
             pageExists,
             LocalDateTime.now(),
@@ -35,8 +37,10 @@ public class ArchiveStatus {
         );
     }
 
-    public static ArchiveStatus updateFrom(ArchiveStatus archiveStatus, Boolean pageExists) {
+    public static ArchiveStatus updateFrom(Long postGroupTypeId, ArchiveStatus archiveStatus,
+        Boolean pageExists) {
         return new ArchiveStatus(
+            postGroupTypeId,
             archiveStatus.getGroupKey(),
             pageExists,
             null,
