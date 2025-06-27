@@ -1,6 +1,7 @@
 package org.gsh.genidxpage.vo;
 
-import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,15 +13,13 @@ class PostGroupTypeCodeTest {
     @Test
     public void find_group_type_matching_given_value() {
         String yearMonthGroupKey = "2021/12";
-        Assertions.assertThat(PostGroupTypeCode.findByGroupKey(yearMonthGroupKey))
+        assertThat(PostGroupTypeCode.findByGroupKey(yearMonthGroupKey))
             .isEqualTo(PostGroupTypeCode.YEAR_MONTH);
 
         List.of(
             "Concept %26amp%3B Principle", "Domain-Driven Design", "Software Design"
-        ).forEach(categoryGroupKey -> {
-                Assertions.assertThat(PostGroupTypeCode.findByGroupKey(categoryGroupKey))
-                    .isEqualTo(PostGroupTypeCode.CATEGORY);
-            }
+        ).forEach(categoryGroupKey -> assertThat(PostGroupTypeCode.findByGroupKey(categoryGroupKey))
+            .isEqualTo(PostGroupTypeCode.CATEGORY)
         );
     }
 }

@@ -46,7 +46,7 @@ class ArchiveStatusReporterTest {
     public void only_update_status_when_page_status_already_inserted() {
         ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
         PostGroupTypeResolver resolver = mock(PostGroupTypeResolver.class);
-        ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper, resolver);
+        final ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper, resolver);
         ArchiveStatus report = ArchiveStatusBuilder.builder()
             .withGroupKey("2021/03")
             .thatExists()

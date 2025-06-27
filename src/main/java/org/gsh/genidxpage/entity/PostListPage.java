@@ -27,7 +27,8 @@ public class PostListPage {
         this.deletedAt = deletedAt;
     }
 
-    public static PostListPage createFrom(Long postGroupTypeId, CheckPostArchived dto, ArchivedPageInfo archivedPageInfo) {
+    public static PostListPage createFrom(Long postGroupTypeId, CheckPostArchived dto,
+        ArchivedPageInfo archivedPageInfo) {
         return new PostListPage(
             postGroupTypeId,
             dto.getGroupKey(),
