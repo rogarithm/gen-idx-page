@@ -24,8 +24,8 @@ public class ArchiveStatus {
         this.deletedAt = deletedAt;
     }
 
-    public static ArchiveStatus createFrom(String groupKey, Boolean pageExists,
-        Long postGroupTypeId) {
+    public static ArchiveStatus createFrom(Long postGroupTypeId, String groupKey,
+        Boolean pageExists) {
         return new ArchiveStatus(
             postGroupTypeId,
             groupKey,
