@@ -1,5 +1,7 @@
 package org.gsh.genidxpage.vo;
 
+import org.gsh.genidxpage.common.exception.ErrorCode;
+import org.gsh.genidxpage.exception.InvalidPostGroupTypeException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -24,7 +26,8 @@ public enum PostGroupTypeCode {
             .findFirst()
             .orElseThrow(() -> {
                 log.warn("Could not find PostGroupTypeCode for groupKey: {}", groupKey);
-                return new IllegalArgumentException(
+                return new InvalidPostGroupTypeException(
+                    ErrorCode.SERVER_FAULT,
                     "Could not find PostGroupTypeCode for groupKey: " + groupKey
                 );
             });

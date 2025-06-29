@@ -3,6 +3,7 @@ package org.gsh.genidxpage.vo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.gsh.genidxpage.exception.InvalidPostGroupTypeException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +27,7 @@ class PostGroupTypeCodeTest {
         List.of(
             "***", "///", ":::"
         ).forEach(unsupportedGroupKey -> assertThrows(
-                IllegalArgumentException.class,
+            InvalidPostGroupTypeException.class,
                 () -> PostGroupTypeCode.findByGroupKey(unsupportedGroupKey)
             )
         );
