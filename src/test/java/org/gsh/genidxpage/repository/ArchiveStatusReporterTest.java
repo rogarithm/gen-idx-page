@@ -10,6 +10,9 @@ import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.dao.ArchiveStatusMapper;
 import org.gsh.genidxpage.entity.ArchiveStatus;
 import org.gsh.genidxpage.entity.ArchiveStatusBuilder;
+import org.gsh.genidxpage.entity.PostGroupType;
+import org.gsh.genidxpage.entity.PostGroupTypeBuilder;
+import org.gsh.genidxpage.service.PostGroupTypeResolver;
 import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +26,8 @@ class ArchiveStatusReporterTest {
     @Test
     public void check_url_exists_in_web_archive_for_given_year_month() {
         ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
-        ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
+        PostGroupTypeResolver resolver = mock(PostGroupTypeResolver.class);
+        ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper, resolver);
         ArchiveStatus report = ArchiveStatusBuilder.builder()
             .withGroupKey("2021/03")
             .thatExists()
@@ -41,15 +45,20 @@ class ArchiveStatusReporterTest {
     @Test
     public void only_update_status_when_page_status_already_inserted() {
         ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
-        ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
+        PostGroupTypeResolver resolver = mock(PostGroupTypeResolver.class);
+        final ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper, resolver);
         ArchiveStatus report = ArchiveStatusBuilder.builder()
             .withGroupKey("2021/03")
             .thatExists()
+            .buildAsNew();
+        PostGroupType postGroupType = PostGroupTypeBuilder.builder()
+            .withYearMonthGroupType()
             .buildAsNew();
 
         when(mapper.selectByGroupKey(any())).thenReturn(
             report);
         doNothing().when(mapper).update(report);
+        when(resolver.resolve(any())).thenReturn(postGroupType);
 
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
@@ -62,7 +71,8 @@ class ArchiveStatusReporterTest {
     @Test
     public void read_all_failed_request_info_from_db() {
         ArchiveStatusMapper mapper = mock(ArchiveStatusMapper.class);
-        ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper);
+        PostGroupTypeResolver resolver = mock(PostGroupTypeResolver.class);
+        ArchiveStatusReporter reporter = new ArchiveStatusReporter(mapper, resolver);
         List<ArchiveStatus> failRequestReports = List.of(
             ArchiveStatusBuilder.builder()
                 .withGroupKey("2020/05")

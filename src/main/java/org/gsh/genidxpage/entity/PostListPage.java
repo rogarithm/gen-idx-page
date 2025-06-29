@@ -1,7 +1,6 @@
 package org.gsh.genidxpage.entity;
 
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
-import org.gsh.genidxpage.service.dto.CheckPostArchived;
 
 import java.time.LocalDateTime;
 
@@ -17,8 +16,9 @@ public class PostListPage {
 
     private PostListPage() {}
 
-    PostListPage(String groupKey, String url, LocalDateTime createdAt,
+    PostListPage(Long postGroupTypeId, String groupKey, String url, LocalDateTime createdAt,
         LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this.postGroupTypeId = postGroupTypeId;
         this.groupKey = groupKey;
         this.url = url;
         this.createdAt = createdAt;
@@ -26,9 +26,11 @@ public class PostListPage {
         this.deletedAt = deletedAt;
     }
 
-    public static PostListPage createFrom(CheckPostArchived dto, ArchivedPageInfo archivedPageInfo) {
+    public static PostListPage createFrom(Long postGroupTypeId, String groupKey,
+        ArchivedPageInfo archivedPageInfo) {
         return new PostListPage(
-            dto.getGroupKey(),
+            postGroupTypeId,
+            groupKey,
             archivedPageInfo.accessibleUrl(),
             LocalDateTime.now(),
             null,
@@ -36,8 +38,10 @@ public class PostListPage {
         );
     }
 
-    public static PostListPage updateFrom(PostListPage postListPage, ArchivedPageInfo archivedPageInfo) {
+    public static PostListPage updateFrom(Long postGroupTypeId, PostListPage postListPage,
+        ArchivedPageInfo archivedPageInfo) {
         return new PostListPage(
+            postGroupTypeId,
             postListPage.getGroupKey(),
             archivedPageInfo.accessibleUrl(),
             null,

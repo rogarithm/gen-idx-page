@@ -11,7 +11,7 @@
                                 group_key,
                                 url,
                                 created_at)
-    VALUES (1,
+    VALUES (#{postGroupTypeId},
             #{groupKey},
             #{url},
             #{createdAt})

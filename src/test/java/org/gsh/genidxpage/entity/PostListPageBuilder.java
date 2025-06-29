@@ -27,6 +27,7 @@ public class PostListPageBuilder {
 
     public PostListPage buildAsNew() {
         return new PostListPage(
+            1L,
             this.groupKey,
             this.url,
             LocalDateTime.now(),

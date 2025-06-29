@@ -32,6 +32,7 @@ public class ArchiveStatusBuilder {
 
     public ArchiveStatus buildAsNew() {
         return new ArchiveStatus(
+            1L,
             this.groupKey,
             this.pageExists,
             LocalDateTime.now(),

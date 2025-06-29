@@ -10,7 +10,7 @@
                                        group_key,
                                        page_exists,
                                        created_at)
-    VALUES (1,
+    VALUES (#{postGroupTypeId},
             #{groupKey},
             #{pageExists},
             #{createdAt})
