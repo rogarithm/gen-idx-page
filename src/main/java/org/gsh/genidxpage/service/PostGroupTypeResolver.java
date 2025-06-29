@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PostGroupTypeResolver {
 
+    private static final String UNSUPPORTED_GROUP_TYPE = "unsupported";
     private final PostGroupTypeMapper mapper;
 
     public PostGroupTypeResolver(PostGroupTypeMapper mapper) {
@@ -15,7 +16,11 @@ public class PostGroupTypeResolver {
     }
 
     public PostGroupType resolve(String groupKey) {
-        PostGroupTypeCode code = PostGroupTypeCode.findByGroupKey(groupKey);
-        return mapper.selectByGroupType(code.getGroupType());
+        try {
+            PostGroupTypeCode code = PostGroupTypeCode.findByGroupKey(groupKey);
+            return mapper.selectByGroupType(code.getGroupType());
+        } catch (IllegalArgumentException e) {
+            return mapper.selectByGroupType(UNSUPPORTED_GROUP_TYPE);
+        }
     }
 }

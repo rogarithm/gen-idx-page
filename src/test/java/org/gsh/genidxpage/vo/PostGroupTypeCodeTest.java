@@ -1,6 +1,7 @@
 package org.gsh.genidxpage.vo;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,14 @@ class PostGroupTypeCodeTest {
             "Concept %26amp%3B Principle", "Domain-Driven Design", "Software Design"
         ).forEach(categoryGroupKey -> assertThat(PostGroupTypeCode.findByGroupKey(categoryGroupKey))
             .isEqualTo(PostGroupTypeCode.CATEGORY)
+        );
+
+        List.of(
+            "***", "///", ":::"
+        ).forEach(unsupportedGroupKey -> assertThrows(
+                IllegalArgumentException.class,
+                () -> PostGroupTypeCode.findByGroupKey(unsupportedGroupKey)
+            )
         );
     }
 }

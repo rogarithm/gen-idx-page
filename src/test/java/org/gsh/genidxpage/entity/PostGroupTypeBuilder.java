@@ -19,6 +19,11 @@ public class PostGroupTypeBuilder {
         return this;
     }
 
+    public PostGroupTypeBuilder withUnsupportedGroupType() {
+        this.groupType = "unsupported";
+        return this;
+    }
+
     public PostGroupType buildAsNew() {
         return new PostGroupType(
             1L,
