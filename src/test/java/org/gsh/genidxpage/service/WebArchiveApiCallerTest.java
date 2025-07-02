@@ -86,7 +86,7 @@ class WebArchiveApiCallerTest {
             CustomRestTemplateBuilder.get());
 
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2023/01");
-        assertThat(caller.buildUri(dto)).matches(
+        assertThat(caller.buildUri(dto.getUrl(), dto.getTimestamp())).matches(
             "http://localhost:8080/wayback/available\\?url=https://agile.egloos.com/archives/2023/01&timestamp=\\d{8}"
         );
     }
@@ -99,14 +99,14 @@ class WebArchiveApiCallerTest {
             CustomRestTemplateBuilder.get());
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
 
-        assertThat(callerWithTimestamp.buildUri(dto)).matches(
+        assertThat(callerWithTimestamp.buildUri(dto.getUrl(), dto.getTimestamp())).matches(
             "http://localhost:8080/wayback/available\\?url=[^&]*&timestamp=\\d{8}"
         );
 
         WebArchiveApiCaller callerWithoutTimestamp = new WebArchiveApiCaller("http://localhost:8080",
             "/wayback/available?url={url}",
             CustomRestTemplateBuilder.get());
-        assertThat(callerWithoutTimestamp.buildUri(dto)).matches(
+        assertThat(callerWithoutTimestamp.buildUri(dto.getUrl(), dto.getTimestamp())).matches(
             "http://localhost:8080/wayback/available\\?url=[^&]*"
         );
     }
