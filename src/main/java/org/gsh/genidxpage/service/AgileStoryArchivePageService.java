@@ -37,20 +37,21 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     @Override
     public String findBlogPageLink(final CheckPostArchived dto) {
         ArchivedPageInfo archivedPageInfo = this.findArchivedPageInfo(dto);
+        String groupKey = dto.getGroupKey();
         if (archivedPageInfo.isUnreachable()) {
             log.debug(
                 String.format("fail to read blog page link for %s due to timeout",
-                    dto.getGroupKey())
+                    groupKey)
             );
             return "";
         }
 
         if (archivedPageInfo.isEmpty()) {
             log.debug(
-                String.format("empty blog page link for %s", dto.getGroupKey()));
+                String.format("empty blog page link for %s", groupKey));
             return "";
         }
-        Long listPageId = listPageRecorder.record(dto.getGroupKey(), archivedPageInfo);
+        Long listPageId = listPageRecorder.record(groupKey, archivedPageInfo);
         log.debug("id of post list page inserted/updated now is {" + listPageId + "}");
 
         String blogPost = this.findBlogPostPage(archivedPageInfo);
@@ -68,17 +69,18 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto.getUrl(),
             dto.getTimestamp());
 
+        String groupKey = dto.getGroupKey();
         if (archivedPageInfo.isUnreachable()) {
-            reporter.reportArchivedPageSearch(dto.getGroupKey(), Boolean.FALSE);
+            reporter.reportArchivedPageSearch(groupKey, Boolean.FALSE);
             return archivedPageInfo;
         }
 
         if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
-            reporter.reportArchivedPageSearch(dto.getGroupKey(), Boolean.FALSE);
+            reporter.reportArchivedPageSearch(groupKey, Boolean.FALSE);
             return new EmptyArchivedPageInfo();
         }
 
-        reporter.reportArchivedPageSearch(dto.getGroupKey(), Boolean.TRUE);
+        reporter.reportArchivedPageSearch(groupKey, Boolean.TRUE);
         return archivedPageInfo;
     }
 
