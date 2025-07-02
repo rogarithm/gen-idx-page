@@ -18,23 +18,19 @@ class PostGroupTypeCodeTest {
         assertThat(PostGroupTypeCode.findByGroupKey(yearMonthGroupKey))
             .isEqualTo(PostGroupTypeCode.YEAR_MONTH);
 
-        List.of(
-                "Concept %26amp%3B Principle", "Domain-Driven Design", "Software Design"
-            ).stream()
+        List.of("Concept %26amp%3B Principle", "Domain-Driven Design", "Software Design")
+            .stream()
             .map(GroupKey::from)
             .forEach(
                 categoryGroupKey -> assertThat(PostGroupTypeCode.findByGroupKey(categoryGroupKey))
-                    .isEqualTo(PostGroupTypeCode.CATEGORY)
-            );
+                    .isEqualTo(PostGroupTypeCode.CATEGORY));
 
-        List.of(
-                "***", "///", ":::"
-            ).stream()
+        List.of("***", "///", ":::")
+            .stream()
             .map(GroupKey::from)
             .forEach(unsupportedGroupKey -> assertThrows(
-                    InvalidPostGroupTypeException.class,
-                    () -> PostGroupTypeCode.findByGroupKey(unsupportedGroupKey)
-                )
-            );
+                InvalidPostGroupTypeException.class,
+                () -> PostGroupTypeCode.findByGroupKey(unsupportedGroupKey)
+            ));
     }
 }
