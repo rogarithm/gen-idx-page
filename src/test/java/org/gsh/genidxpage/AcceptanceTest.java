@@ -15,6 +15,7 @@ import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.AgileStoryIndexPageGenerator;
 import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.WebPageParser;
+import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
 import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.BeforeEach;
@@ -154,8 +155,9 @@ public class AcceptanceTest {
             archivePageController.getBlogPostLinks("2021", "3");
 
             // 서버는 db에 요청 성공을 기록한다
+            CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
             Assertions.assertThat(
-                reporter.hasArchivedPage(new CheckYearMonthPostArchivedDto("2021/03"))
+                reporter.hasArchivedPage(dto.getGroupKey())
             ).isTrue();
 
             fakeWebArchiveServer.stop();

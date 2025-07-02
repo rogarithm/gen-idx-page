@@ -4,7 +4,6 @@ import org.gsh.genidxpage.dao.ArchiveStatusMapper;
 import org.gsh.genidxpage.entity.ArchiveStatus;
 import org.gsh.genidxpage.entity.PostGroupType;
 import org.gsh.genidxpage.service.PostGroupTypeResolver;
-import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,8 +34,8 @@ public class ArchiveStatusReporter {
         reportMapper.insert(report);
     }
 
-    public boolean hasArchivedPage(final CheckPostArchived dto) {
-        ArchiveStatus report = reportMapper.selectByGroupKey(dto.getGroupKey());
+    public boolean hasArchivedPage(final String groupKey) {
+        ArchiveStatus report = reportMapper.selectByGroupKey(groupKey);
 
         return report.getPageExists() == Boolean.TRUE;
     }
