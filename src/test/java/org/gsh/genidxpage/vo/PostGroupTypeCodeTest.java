@@ -21,7 +21,7 @@ class PostGroupTypeCodeTest {
         List.of(
                 "Concept %26amp%3B Principle", "Domain-Driven Design", "Software Design"
             ).stream()
-            .map(value -> GroupKey.from(value))
+            .map(GroupKey::from)
             .forEach(
                 categoryGroupKey -> assertThat(PostGroupTypeCode.findByGroupKey(categoryGroupKey))
                     .isEqualTo(PostGroupTypeCode.CATEGORY)
@@ -30,7 +30,7 @@ class PostGroupTypeCodeTest {
         List.of(
                 "***", "///", ":::"
             ).stream()
-            .map(value -> GroupKey.from(value))
+            .map(GroupKey::from)
             .forEach(unsupportedGroupKey -> assertThrows(
                     InvalidPostGroupTypeException.class,
                     () -> PostGroupTypeCode.findByGroupKey(unsupportedGroupKey)
