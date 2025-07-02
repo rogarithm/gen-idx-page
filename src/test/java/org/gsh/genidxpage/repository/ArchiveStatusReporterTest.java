@@ -61,7 +61,7 @@ class ArchiveStatusReporterTest {
         when(resolver.resolve(any())).thenReturn(postGroupType);
 
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
-        reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
+        reporter.reportArchivedPageSearch(dto.getGroupKey(), Boolean.TRUE);
 
         verify(mapper).selectByGroupKey(any());
         verify(mapper).update(any(ArchiveStatus.class));

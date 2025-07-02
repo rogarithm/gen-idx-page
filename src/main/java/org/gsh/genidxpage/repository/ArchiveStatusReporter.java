@@ -20,8 +20,7 @@ public class ArchiveStatusReporter {
         this.resolver = resolver;
     }
 
-    public void reportArchivedPageSearch(final CheckPostArchived dto, final Boolean pageExists) {
-        String groupKey = dto.getGroupKey();
+    public void reportArchivedPageSearch(final String groupKey, final Boolean pageExists) {
         PostGroupType postGroupType = resolver.resolve(groupKey);
         Long postGroupTypeId = postGroupType.getId();
 

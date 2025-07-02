@@ -69,16 +69,16 @@ public class AgileStoryArchivePageService implements ArchivePageService {
             dto.getTimestamp());
 
         if (archivedPageInfo.isUnreachable()) {
-            reporter.reportArchivedPageSearch(dto, Boolean.FALSE);
+            reporter.reportArchivedPageSearch(dto.getGroupKey(), Boolean.FALSE);
             return archivedPageInfo;
         }
 
         if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
-            reporter.reportArchivedPageSearch(dto, Boolean.FALSE);
+            reporter.reportArchivedPageSearch(dto.getGroupKey(), Boolean.FALSE);
             return new EmptyArchivedPageInfo();
         }
 
-        reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
+        reporter.reportArchivedPageSearch(dto.getGroupKey(), Boolean.TRUE);
         return archivedPageInfo;
     }
 
