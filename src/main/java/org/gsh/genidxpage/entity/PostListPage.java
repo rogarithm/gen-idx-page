@@ -1,6 +1,7 @@
 package org.gsh.genidxpage.entity;
 
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
+import org.gsh.genidxpage.vo.GroupKey;
 
 import java.time.LocalDateTime;
 
@@ -26,11 +27,11 @@ public class PostListPage {
         this.deletedAt = deletedAt;
     }
 
-    public static PostListPage createFrom(Long postGroupTypeId, String groupKey,
+    public static PostListPage createFrom(Long postGroupTypeId, GroupKey groupKey,
         ArchivedPageInfo archivedPageInfo) {
         return new PostListPage(
             postGroupTypeId,
-            groupKey,
+            groupKey.value(),
             archivedPageInfo.accessibleUrl(),
             LocalDateTime.now(),
             null,

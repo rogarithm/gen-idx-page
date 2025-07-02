@@ -24,8 +24,7 @@ public class PostListPageRecorder {
     public Long record(final GroupKey groupKey, final ArchivedPageInfo archivedPageInfo) {
         PostGroupType postGroupType = resolver.resolve(groupKey);
 
-        String value = groupKey.value();
-        PostListPage hasPostListPage = mapper.selectByGroupKey(value);
+        PostListPage hasPostListPage = mapper.selectByGroupKey(groupKey.value());
 
         if (hasPostListPage != null) {
             log.debug(
@@ -36,7 +35,7 @@ public class PostListPageRecorder {
         }
 
         log.debug("inserting access url of " + archivedPageInfo.accessibleUrl());
-        PostListPage postListPage = PostListPage.createFrom(postGroupType.getId(), value, archivedPageInfo);
+        PostListPage postListPage = PostListPage.createFrom(postGroupType.getId(), groupKey, archivedPageInfo);
         mapper.insert(postListPage);
         return postListPage.getId();
     }
