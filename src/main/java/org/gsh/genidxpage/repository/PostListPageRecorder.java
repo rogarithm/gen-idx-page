@@ -5,7 +5,6 @@ import org.gsh.genidxpage.entity.PostGroupType;
 import org.gsh.genidxpage.entity.PostListPage;
 import org.gsh.genidxpage.service.PostGroupTypeResolver;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
-import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.springframework.stereotype.Repository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,8 +20,7 @@ public class PostListPageRecorder {
         this.resolver = resolver;
     }
 
-    public Long record(final CheckPostArchived dto, final ArchivedPageInfo archivedPageInfo) {
-        String groupKey = dto.getGroupKey();
+    public Long record(final String groupKey, final ArchivedPageInfo archivedPageInfo) {
         PostGroupType postGroupType = resolver.resolve(groupKey);
         PostListPage hasPostListPage = mapper.selectByGroupKey(groupKey);
 

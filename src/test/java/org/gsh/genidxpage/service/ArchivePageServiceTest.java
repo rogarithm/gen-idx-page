@@ -95,7 +95,7 @@ class ArchivePageServiceTest {
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         service.findBlogPageLink(dto);
 
-        verify(listPageRecorder).record(any(CheckPostArchived.class), any(ArchivedPageInfo.class));
+        verify(listPageRecorder).record(any(), any(ArchivedPageInfo.class));
     }
 
     @DisplayName("블로그 글 목록 페이지로부터 파싱한 블로그 링크 목록을 db에 기록한다")

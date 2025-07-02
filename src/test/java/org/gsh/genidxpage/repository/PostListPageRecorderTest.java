@@ -37,7 +37,7 @@ class PostListPageRecorderTest {
 
         when(resolver.resolve(any())).thenReturn(postGroupType);
 
-        recorder.record(dto, archivedPageInfo);
+        recorder.record(dto.getGroupKey(), archivedPageInfo);
 
         verify(mapper).insert(any(PostListPage.class));
     }
@@ -64,7 +64,7 @@ class PostListPageRecorderTest {
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
             .withAccessibleArchivedSnapshots()
             .build();
-        recorder.record(dto, archivedPageInfo);
+        recorder.record(dto.getGroupKey(), archivedPageInfo);
 
         verify(mapper).update(any(PostListPage.class));
     }
