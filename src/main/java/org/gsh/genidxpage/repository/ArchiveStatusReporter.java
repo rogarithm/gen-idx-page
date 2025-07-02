@@ -24,15 +24,14 @@ public class ArchiveStatusReporter {
         PostGroupType postGroupType = resolver.resolve(groupKey);
         Long postGroupTypeId = postGroupType.getId();
 
-        String value = groupKey.value();
-        ArchiveStatus hasReport = reportMapper.selectByGroupKey(value);
+        ArchiveStatus hasReport = reportMapper.selectByGroupKey(groupKey.value());
 
         if (hasReport != null) {
             reportMapper.update(ArchiveStatus.updateFrom(postGroupTypeId, hasReport, pageExists));
             return;
         }
 
-        ArchiveStatus report = ArchiveStatus.createFrom(postGroupTypeId, value, pageExists);
+        ArchiveStatus report = ArchiveStatus.createFrom(postGroupTypeId, groupKey, pageExists);
         reportMapper.insert(report);
     }
 

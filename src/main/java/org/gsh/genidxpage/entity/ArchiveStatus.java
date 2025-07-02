@@ -1,5 +1,7 @@
 package org.gsh.genidxpage.entity;
 
+import org.gsh.genidxpage.vo.GroupKey;
+
 import java.time.LocalDateTime;
 
 public class ArchiveStatus {
@@ -24,11 +26,11 @@ public class ArchiveStatus {
         this.deletedAt = deletedAt;
     }
 
-    public static ArchiveStatus createFrom(Long postGroupTypeId, String groupKey,
+    public static ArchiveStatus createFrom(Long postGroupTypeId, GroupKey groupKey,
         Boolean pageExists) {
         return new ArchiveStatus(
             postGroupTypeId,
-            groupKey,
+            groupKey.value(),
             pageExists,
             LocalDateTime.now(),
             null,
