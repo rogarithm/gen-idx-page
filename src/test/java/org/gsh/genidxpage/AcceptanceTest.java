@@ -17,6 +17,7 @@ import org.gsh.genidxpage.service.WebArchiveApiCaller;
 import org.gsh.genidxpage.service.WebPageParser;
 import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
+import org.gsh.genidxpage.vo.GroupKey;
 import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -156,8 +157,9 @@ public class AcceptanceTest {
 
             // 서버는 db에 요청 성공을 기록한다
             CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
+            GroupKey groupKey = GroupKey.from(dto.getGroupKey());
             Assertions.assertThat(
-                reporter.hasArchivedPage(dto.getGroupKey())
+                reporter.hasArchivedPage(groupKey)
             ).isTrue();
 
             fakeWebArchiveServer.stop();

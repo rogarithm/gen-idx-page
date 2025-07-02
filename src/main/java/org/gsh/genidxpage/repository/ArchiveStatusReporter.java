@@ -35,8 +35,8 @@ public class ArchiveStatusReporter {
         reportMapper.insert(report);
     }
 
-    public boolean hasArchivedPage(final String groupKey) {
-        ArchiveStatus report = reportMapper.selectByGroupKey(groupKey);
+    public boolean hasArchivedPage(final GroupKey groupKey) {
+        ArchiveStatus report = reportMapper.selectByGroupKey(groupKey.value());
 
         return report.getPageExists() == Boolean.TRUE;
     }

@@ -37,8 +37,9 @@ class ArchiveStatusReporterTest {
         when(mapper.selectByGroupKey(any())).thenReturn(report);
 
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
+        GroupKey groupKey = GroupKey.from(dto.getGroupKey());
         boolean hasArchivedPage = reporter.hasArchivedPage(
-            dto.getGroupKey()
+            groupKey
         );
         Assertions.assertThat(hasArchivedPage).isTrue();
     }
