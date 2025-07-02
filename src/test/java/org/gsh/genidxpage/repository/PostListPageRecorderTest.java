@@ -15,6 +15,7 @@ import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfoBuilder;
 import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
+import org.gsh.genidxpage.vo.GroupKey;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +38,8 @@ class PostListPageRecorderTest {
 
         when(resolver.resolve(any())).thenReturn(postGroupType);
 
-        recorder.record(dto.getGroupKey(), archivedPageInfo);
+        GroupKey groupKey = GroupKey.from(dto.getGroupKey());
+        recorder.record(groupKey, archivedPageInfo);
 
         verify(mapper).insert(any(PostListPage.class));
     }
@@ -64,7 +66,8 @@ class PostListPageRecorderTest {
         ArchivedPageInfo archivedPageInfo = ArchivedPageInfoBuilder.builder()
             .withAccessibleArchivedSnapshots()
             .build();
-        recorder.record(dto.getGroupKey(), archivedPageInfo);
+        GroupKey groupKey = GroupKey.from(dto.getGroupKey());
+        recorder.record(groupKey, archivedPageInfo);
 
         verify(mapper).update(any(PostListPage.class));
     }

@@ -38,7 +38,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     @Override
     public String findBlogPageLink(final CheckPostArchived dto) {
         ArchivedPageInfo archivedPageInfo = this.findArchivedPageInfo(dto);
-        String groupKey = dto.getGroupKey();
+        GroupKey groupKey = GroupKey.from(dto.getGroupKey());
         if (archivedPageInfo.isUnreachable()) {
             log.debug(
                 String.format("fail to read blog page link for %s due to timeout",

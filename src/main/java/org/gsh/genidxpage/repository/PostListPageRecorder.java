@@ -5,6 +5,7 @@ import org.gsh.genidxpage.entity.PostGroupType;
 import org.gsh.genidxpage.entity.PostListPage;
 import org.gsh.genidxpage.service.PostGroupTypeResolver;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
+import org.gsh.genidxpage.vo.GroupKey;
 import org.springframework.stereotype.Repository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,9 +21,10 @@ public class PostListPageRecorder {
         this.resolver = resolver;
     }
 
-    public Long record(final String groupKey, final ArchivedPageInfo archivedPageInfo) {
-        PostGroupType postGroupType = resolver.resolve(groupKey);
-        PostListPage hasPostListPage = mapper.selectByGroupKey(groupKey);
+    public Long record(final GroupKey groupKey, final ArchivedPageInfo archivedPageInfo) {
+        String value = groupKey.value();
+        PostGroupType postGroupType = resolver.resolve(value);
+        PostListPage hasPostListPage = mapper.selectByGroupKey(value);
 
         if (hasPostListPage != null) {
             log.debug(
@@ -33,7 +35,7 @@ public class PostListPageRecorder {
         }
 
         log.debug("inserting access url of " + archivedPageInfo.accessibleUrl());
-        PostListPage postListPage = PostListPage.createFrom(postGroupType.getId(), groupKey, archivedPageInfo);
+        PostListPage postListPage = PostListPage.createFrom(postGroupType.getId(), value, archivedPageInfo);
         mapper.insert(postListPage);
         return postListPage.getId();
     }
