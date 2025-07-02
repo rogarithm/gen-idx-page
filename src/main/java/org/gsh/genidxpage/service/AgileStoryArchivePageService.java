@@ -6,6 +6,7 @@ import org.gsh.genidxpage.repository.PostRecorder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
+import org.gsh.genidxpage.vo.GroupKey;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,7 +70,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto.getUrl(),
             dto.getTimestamp());
 
-        String groupKey = dto.getGroupKey();
+        GroupKey groupKey = GroupKey.from(dto.getGroupKey());
         if (archivedPageInfo.isUnreachable()) {
             reporter.reportArchivedPageSearch(groupKey, Boolean.FALSE);
             return archivedPageInfo;

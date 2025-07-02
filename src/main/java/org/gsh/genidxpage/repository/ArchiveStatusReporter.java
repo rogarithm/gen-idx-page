@@ -4,6 +4,7 @@ import org.gsh.genidxpage.dao.ArchiveStatusMapper;
 import org.gsh.genidxpage.entity.ArchiveStatus;
 import org.gsh.genidxpage.entity.PostGroupType;
 import org.gsh.genidxpage.service.PostGroupTypeResolver;
+import org.gsh.genidxpage.vo.GroupKey;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,18 +20,19 @@ public class ArchiveStatusReporter {
         this.resolver = resolver;
     }
 
-    public void reportArchivedPageSearch(final String groupKey, final Boolean pageExists) {
-        PostGroupType postGroupType = resolver.resolve(groupKey);
+    public void reportArchivedPageSearch(final GroupKey groupKey, final Boolean pageExists) {
+        String value = groupKey.value();
+        PostGroupType postGroupType = resolver.resolve(value);
         Long postGroupTypeId = postGroupType.getId();
 
-        ArchiveStatus hasReport = reportMapper.selectByGroupKey(groupKey);
+        ArchiveStatus hasReport = reportMapper.selectByGroupKey(value);
 
         if (hasReport != null) {
             reportMapper.update(ArchiveStatus.updateFrom(postGroupTypeId, hasReport, pageExists));
             return;
         }
 
-        ArchiveStatus report = ArchiveStatus.createFrom(postGroupTypeId, groupKey, pageExists);
+        ArchiveStatus report = ArchiveStatus.createFrom(postGroupTypeId, value, pageExists);
         reportMapper.insert(report);
     }
 
