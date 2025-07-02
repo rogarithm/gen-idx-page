@@ -21,10 +21,10 @@ public class ArchiveStatusReporter {
     }
 
     public void reportArchivedPageSearch(final GroupKey groupKey, final Boolean pageExists) {
-        String value = groupKey.value();
-        PostGroupType postGroupType = resolver.resolve(value);
+        PostGroupType postGroupType = resolver.resolve(groupKey);
         Long postGroupTypeId = postGroupType.getId();
 
+        String value = groupKey.value();
         ArchiveStatus hasReport = reportMapper.selectByGroupKey(value);
 
         if (hasReport != null) {

@@ -9,6 +9,7 @@ import org.assertj.core.api.Assertions;
 import org.gsh.genidxpage.dao.PostGroupTypeMapper;
 import org.gsh.genidxpage.entity.PostGroupType;
 import org.gsh.genidxpage.entity.PostGroupTypeBuilder;
+import org.gsh.genidxpage.vo.GroupKey;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,7 @@ class PostGroupTypeResolverTest {
             .buildAsNew();
         when(mapper.selectByGroupType(any())).thenReturn(postGroupType);
 
-        PostGroupType expectedPostGroupType = resolver.resolve("2022/03");
+        PostGroupType expectedPostGroupType = resolver.resolve(GroupKey.from("2022/03"));
 
         Assertions.assertThat(expectedPostGroupType.getGroupType()).isEqualTo("year_month");
     }
@@ -41,7 +42,7 @@ class PostGroupTypeResolverTest {
             .buildAsNew();
         when(mapper.selectByGroupType(any())).thenReturn(postGroupType);
 
-        resolver.resolve("***");
+        resolver.resolve(GroupKey.from("***"));
 
         verify(mapper).selectByGroupType(any());
     }

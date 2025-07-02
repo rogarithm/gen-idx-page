@@ -22,8 +22,9 @@ public class PostListPageRecorder {
     }
 
     public Long record(final GroupKey groupKey, final ArchivedPageInfo archivedPageInfo) {
+        PostGroupType postGroupType = resolver.resolve(groupKey);
+
         String value = groupKey.value();
-        PostGroupType postGroupType = resolver.resolve(value);
         PostListPage hasPostListPage = mapper.selectByGroupKey(value);
 
         if (hasPostListPage != null) {
