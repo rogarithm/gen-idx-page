@@ -27,7 +27,7 @@ class ArchivePageServiceTest {
             .withEmptyArchivedSnapshots()
             .build();
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
-        when(caller.findArchivedPageInfo(any())).thenReturn(
+        when(caller.findArchivedPageInfo(any(), any())).thenReturn(
             noArchivedPageInfo
         );
         ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
@@ -44,7 +44,7 @@ class ArchivePageServiceTest {
     @Test
     public void write_to_db_when_page_archive_info_read_timeout() {
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
-        when(caller.findArchivedPageInfo(any())).thenReturn(
+        when(caller.findArchivedPageInfo(any(), any())).thenReturn(
             new UnreachableArchivedPageInfo()
         );
         ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
@@ -67,7 +67,7 @@ class ArchivePageServiceTest {
             .build();
 
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
-        when(caller.findArchivedPageInfo(any())).thenReturn(
+        when(caller.findArchivedPageInfo(any(), any())).thenReturn(
             archivedPageInfo
         );
         when(caller.isArchived(any())).thenReturn(true);
@@ -125,7 +125,7 @@ class ArchivePageServiceTest {
             .withAccessibleArchivedSnapshots()
             .build();
 
-        when(caller.findArchivedPageInfo(any())).thenReturn(
+        when(caller.findArchivedPageInfo(any(), any())).thenReturn(
             archivedPageInfo
         );
         when(caller.isArchived(any())).thenReturn(true);

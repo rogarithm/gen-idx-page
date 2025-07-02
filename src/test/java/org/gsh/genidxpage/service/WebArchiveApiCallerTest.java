@@ -26,14 +26,16 @@ class WebArchiveApiCallerTest {
         fakeWebArchiveServer.start();
 
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
-        ArchivedPageInfo archivedPageInfo = caller.findArchivedPageInfo(dto);
+        ArchivedPageInfo archivedPageInfo = caller.findArchivedPageInfo(dto.getUrl(),
+            dto.getTimestamp());
 
         // 페이지가 아카이빙되어 있는 경우
         assertThat(caller.isArchived(archivedPageInfo)).isTrue();
 
         fakeWebArchiveServer.respondItHasNoArchivedPage();
         CheckPostArchived dto2 = new CheckYearMonthPostArchivedDto("1999/07");
-        ArchivedPageInfo noArchivedPageInfo = caller.findArchivedPageInfo(dto2);
+        ArchivedPageInfo noArchivedPageInfo = caller.findArchivedPageInfo(dto2.getUrl(),
+            dto2.getTimestamp());
 
         // 페이지가 아카이빙되어 있지 않은 경우
         assertThat(caller.isArchived(noArchivedPageInfo)).isFalse();
@@ -72,7 +74,7 @@ class WebArchiveApiCallerTest {
         fakeWebArchiveServer.start();
 
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
-        assertThat(caller.findArchivedPageInfo(dto))
+        assertThat(caller.findArchivedPageInfo(dto.getUrl(), dto.getTimestamp()))
             .isInstanceOf(ArchivedPageInfo.class);
 
         fakeWebArchiveServer.stop();

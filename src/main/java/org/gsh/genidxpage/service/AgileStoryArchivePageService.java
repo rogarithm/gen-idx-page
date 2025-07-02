@@ -65,7 +65,8 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     }
 
     ArchivedPageInfo findArchivedPageInfo(final CheckPostArchived dto) {
-        ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
+        ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto.getUrl(),
+            dto.getTimestamp());
 
         if (archivedPageInfo.isUnreachable()) {
             reporter.reportArchivedPageSearch(dto, Boolean.FALSE);
