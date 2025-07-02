@@ -6,6 +6,7 @@ import org.gsh.genidxpage.repository.PostRecorder;
 import org.gsh.genidxpage.service.dto.ArchivedPageInfo;
 import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.gsh.genidxpage.service.dto.EmptyArchivedPageInfo;
+import org.gsh.genidxpage.vo.GroupKey;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,20 +38,21 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     @Override
     public String findBlogPageLink(final CheckPostArchived dto) {
         ArchivedPageInfo archivedPageInfo = this.findArchivedPageInfo(dto);
+        GroupKey groupKey = GroupKey.from(dto.getGroupKey());
         if (archivedPageInfo.isUnreachable()) {
             log.debug(
                 String.format("fail to read blog page link for %s due to timeout",
-                    dto.getGroupKey())
+                    groupKey)
             );
             return "";
         }
 
         if (archivedPageInfo.isEmpty()) {
             log.debug(
-                String.format("empty blog page link for %s", dto.getGroupKey()));
+                String.format("empty blog page link for %s", groupKey));
             return "";
         }
-        Long listPageId = listPageRecorder.record(dto, archivedPageInfo);
+        Long listPageId = listPageRecorder.record(groupKey, archivedPageInfo);
         log.debug("id of post list page inserted/updated now is {" + listPageId + "}");
 
         String blogPost = this.findBlogPostPage(archivedPageInfo);
@@ -65,19 +67,21 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     }
 
     ArchivedPageInfo findArchivedPageInfo(final CheckPostArchived dto) {
-        ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto);
+        ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto.getUrl(),
+            dto.getTimestamp());
 
+        GroupKey groupKey = GroupKey.from(dto.getGroupKey());
         if (archivedPageInfo.isUnreachable()) {
-            reporter.reportArchivedPageSearch(dto, Boolean.FALSE);
+            reporter.reportArchivedPageSearch(groupKey, Boolean.FALSE);
             return archivedPageInfo;
         }
 
         if (!webArchiveApiCaller.isArchived(archivedPageInfo)) {
-            reporter.reportArchivedPageSearch(dto, Boolean.FALSE);
+            reporter.reportArchivedPageSearch(groupKey, Boolean.FALSE);
             return new EmptyArchivedPageInfo();
         }
 
-        reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
+        reporter.reportArchivedPageSearch(groupKey, Boolean.TRUE);
         return archivedPageInfo;
     }
 

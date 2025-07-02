@@ -19,10 +19,10 @@ public enum PostGroupTypeCode {
         this.pattern = pattern;
     }
 
-    public static PostGroupTypeCode findByGroupKey(String groupKey) {
+    public static PostGroupTypeCode findByGroupKey(GroupKey groupKey) {
         PostGroupTypeCode[] postGroupTypeCodes = PostGroupTypeCode.values();
         return Arrays.stream(postGroupTypeCodes)
-            .filter(groupType -> groupKey.matches(groupType.pattern))
+            .filter(groupType -> groupKey.value().matches(groupType.pattern))
             .findFirst()
             .orElseThrow(() -> {
                 log.warn("Could not find PostGroupTypeCode for groupKey: {}", groupKey);

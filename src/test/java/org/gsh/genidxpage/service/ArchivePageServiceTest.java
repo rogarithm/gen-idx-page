@@ -27,7 +27,7 @@ class ArchivePageServiceTest {
             .withEmptyArchivedSnapshots()
             .build();
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
-        when(caller.findArchivedPageInfo(any())).thenReturn(
+        when(caller.findArchivedPageInfo(any(), any())).thenReturn(
             noArchivedPageInfo
         );
         ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
@@ -37,14 +37,14 @@ class ArchivePageServiceTest {
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("1999/07");
         service.findArchivedPageInfo(dto);
 
-        verify(reporter).reportArchivedPageSearch(any(CheckPostArchived.class), eq(Boolean.FALSE));
+        verify(reporter).reportArchivedPageSearch(any(), eq(Boolean.FALSE));
     }
 
     @DisplayName("타임아웃 초과로 페이지 아카이빙 정보를 읽어오지 못했을 때 db에 기록한다")
     @Test
     public void write_to_db_when_page_archive_info_read_timeout() {
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
-        when(caller.findArchivedPageInfo(any())).thenReturn(
+        when(caller.findArchivedPageInfo(any(), any())).thenReturn(
             new UnreachableArchivedPageInfo()
         );
         ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
@@ -55,8 +55,7 @@ class ArchivePageServiceTest {
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2020/03");
         service.findArchivedPageInfo(dto);
 
-        verify(reporter).reportArchivedPageSearch(any(CheckPostArchived.class),
-            eq(Boolean.FALSE));
+        verify(reporter).reportArchivedPageSearch(any(), eq(Boolean.FALSE));
     }
 
     @DisplayName("페이지 아키이빙 정보를 찾았을 때 db에 기록한다")
@@ -67,7 +66,7 @@ class ArchivePageServiceTest {
             .build();
 
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
-        when(caller.findArchivedPageInfo(any())).thenReturn(
+        when(caller.findArchivedPageInfo(any(), any())).thenReturn(
             archivedPageInfo
         );
         when(caller.isArchived(any())).thenReturn(true);
@@ -79,7 +78,7 @@ class ArchivePageServiceTest {
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         service.findArchivedPageInfo(dto);
 
-        verify(reporter).reportArchivedPageSearch(any(CheckPostArchived.class), eq(Boolean.TRUE));
+        verify(reporter).reportArchivedPageSearch(any(), eq(Boolean.TRUE));
     }
 
     @DisplayName("페이지 아키이빙 정보를 찾았을 때, 접근 url을 db에 기록한다")
@@ -96,7 +95,7 @@ class ArchivePageServiceTest {
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
         service.findBlogPageLink(dto);
 
-        verify(listPageRecorder).record(any(CheckPostArchived.class), any(ArchivedPageInfo.class));
+        verify(listPageRecorder).record(any(), any(ArchivedPageInfo.class));
     }
 
     @DisplayName("블로그 글 목록 페이지로부터 파싱한 블로그 링크 목록을 db에 기록한다")
@@ -125,7 +124,7 @@ class ArchivePageServiceTest {
             .withAccessibleArchivedSnapshots()
             .build();
 
-        when(caller.findArchivedPageInfo(any())).thenReturn(
+        when(caller.findArchivedPageInfo(any(), any())).thenReturn(
             archivedPageInfo
         );
         when(caller.isArchived(any())).thenReturn(true);

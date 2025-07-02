@@ -3,6 +3,7 @@ package org.gsh.genidxpage.service;
 import org.gsh.genidxpage.dao.PostGroupTypeMapper;
 import org.gsh.genidxpage.entity.PostGroupType;
 import org.gsh.genidxpage.exception.InvalidPostGroupTypeException;
+import org.gsh.genidxpage.vo.GroupKey;
 import org.gsh.genidxpage.vo.PostGroupTypeCode;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class PostGroupTypeResolver {
         this.mapper = mapper;
     }
 
-    public PostGroupType resolve(String groupKey) {
+    public PostGroupType resolve(GroupKey groupKey) {
         try {
             PostGroupTypeCode code = PostGroupTypeCode.findByGroupKey(groupKey);
             return mapper.selectByGroupType(code.getGroupType());

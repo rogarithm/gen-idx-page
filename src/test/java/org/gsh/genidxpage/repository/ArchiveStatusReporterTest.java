@@ -15,6 +15,7 @@ import org.gsh.genidxpage.entity.PostGroupTypeBuilder;
 import org.gsh.genidxpage.service.PostGroupTypeResolver;
 import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
+import org.gsh.genidxpage.vo.GroupKey;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,8 +36,10 @@ class ArchiveStatusReporterTest {
 
         when(mapper.selectByGroupKey(any())).thenReturn(report);
 
+        CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
+        GroupKey groupKey = GroupKey.from(dto.getGroupKey());
         boolean hasArchivedPage = reporter.hasArchivedPage(
-            new CheckYearMonthPostArchivedDto("2021/03")
+            groupKey
         );
         Assertions.assertThat(hasArchivedPage).isTrue();
     }
@@ -61,7 +64,8 @@ class ArchiveStatusReporterTest {
         when(resolver.resolve(any())).thenReturn(postGroupType);
 
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
-        reporter.reportArchivedPageSearch(dto, Boolean.TRUE);
+        GroupKey groupKey = GroupKey.from(dto.getGroupKey());
+        reporter.reportArchivedPageSearch(groupKey, Boolean.TRUE);
 
         verify(mapper).selectByGroupKey(any());
         verify(mapper).update(any(ArchiveStatus.class));
