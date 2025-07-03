@@ -276,11 +276,8 @@ public class AcceptanceTest {
                 .filter(ym -> !"2021".equals(ym.split("/")[0]))
                 .toList();
             failRequests.forEach(yearMonth -> {
-                String[] pair = yearMonth.split("/");
-                String year = pair[0];
-                String month = pair[1];
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 비정상 응답한다
-                fakeWebArchiveServer.respondItHasNoArchivedPageFor(year, month);
+                fakeWebArchiveServer.respondItHasNoArchivedPageFor(yearMonth);
             });
             fakeWebArchiveServer.start();
 
