@@ -93,7 +93,7 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             fakeWebArchiveServer.respondItHasArchivedPage();
-            fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(
+            fakeWebArchiveServer.respondBlogPostListInGivenGroupKey(
                 "2021/03", false
             );
 
@@ -119,7 +119,7 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             fakeWebArchiveServer.respondItHasArchivedPage();
-            fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(
+            fakeWebArchiveServer.respondBlogPostListInGivenGroupKey(
                 "2021/03", true
             );
 
@@ -147,7 +147,7 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             fakeWebArchiveServer.respondItHasArchivedPage();
-            fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(
+            fakeWebArchiveServer.respondBlogPostListInGivenGroupKey(
                 "2021/03", false
             );
             fakeWebArchiveServer.start();
@@ -202,7 +202,7 @@ public class AcceptanceTest {
                 String month = pair[1];
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
                 fakeWebArchiveServer.respondItHasArchivedPageFor(yearMonth);
-                fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(yearMonth, false);
+                fakeWebArchiveServer.respondBlogPostListInGivenGroupKey(yearMonth, false);
             });
             fakeWebArchiveServer.start();
 
@@ -236,7 +236,7 @@ public class AcceptanceTest {
                 String month = pair[1];
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
                 fakeWebArchiveServer.respondItHasArchivedPageFor(yearMonth);
-                fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(yearMonth, false);
+                fakeWebArchiveServer.respondBlogPostListInGivenGroupKey(yearMonth, false);
             });
             fakeWebArchiveServer.start();
 
@@ -269,7 +269,7 @@ public class AcceptanceTest {
                 String month = pair[1];
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 정상 응답한다
                 fakeWebArchiveServer.respondItHasArchivedPageFor(yearMonth);
-                fakeWebArchiveServer.respondBlogPostListInGivenYearMonth(yearMonth, false);
+                fakeWebArchiveServer.respondBlogPostListInGivenGroupKey(yearMonth, false);
             });
             // 비정상 응답할 입력을 설정한다
             List<String> failRequests = requestInput.stream()

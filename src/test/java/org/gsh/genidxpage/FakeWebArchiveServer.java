@@ -25,7 +25,7 @@ public class FakeWebArchiveServer {
         this.instance.stop();
     }
 
-    public void respondBlogPostListInGivenYearMonth(String groupKey,
+    public void respondBlogPostListInGivenGroupKey(String groupKey,
         boolean hasManyPost) {
         instance.stubFor(get(urlPathTemplate("/web/20230614220926/archives"))
             .withQueryParam("groupKey", matching(groupKey))
