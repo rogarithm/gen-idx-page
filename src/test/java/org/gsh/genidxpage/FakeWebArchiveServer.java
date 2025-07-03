@@ -87,32 +87,32 @@ public class FakeWebArchiveServer {
     }
 
 
-    public void respondItHasArchivedPageFor(String year, String month) {
+    public void respondItHasArchivedPageFor(String groupKey) {
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
-            .withQueryParam("url", matching(String.format("http[s]?://agile.egloos.com/archives/%s/%s", year, month)))
+            .withQueryParam("url", matching(String.format("http[s]?://agile.egloos.com/archives/%s", groupKey)))
             .withQueryParam("timestamp", matching("[0-9]{8}"))
             .willReturn(aResponse().withStatus(200).withBody(
                     String.format("""
                         {
-                          "url": "agile.egloos.com/archives/%s/%s",
+                          "url": "agile.egloos.com/archives/%s",
                           "archived_snapshots": {
                             "closest": {
                               "status": "200",
                               "available": true,
-                              "url": "http://localhost:8080/web/20230614220926/archives/%s/%s",
+                              "url": "http://localhost:8080/web/20230614220926/archives/%s",
                               "timestamp": "20230614220926"
                             }
                           },
                           "timestamp": "20240101"
                         }
-                        """, year, month, year, month)
+                        """, groupKey, groupKey)
                 )
             )
         );
     }
 
     public void respondItHasArchivedPage() {
-        respondItHasArchivedPageFor("2021", "03");
+        respondItHasArchivedPageFor("2021/03");
     }
 
     public void respondItHasNoArchivedPageFor(String groupKey) {
