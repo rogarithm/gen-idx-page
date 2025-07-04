@@ -25,20 +25,19 @@ public class FakeWebArchiveServer {
         this.instance.stop();
     }
 
-    public void respondBlogPostListInGivenYearMonth(String year, String month,
+    public void respondBlogPostListInGivenGroupKey(String groupKey,
         boolean hasManyPost) {
-        instance.stubFor(get(urlPathTemplate("/web/20230614220926/archives/{year}/{month}"))
-            .withPathParam("year", matching(year))
-            .withPathParam("month", matching(month))
+        instance.stubFor(get(urlPathTemplate("/web/20230614220926/archives"))
+            .withQueryParam("groupKey", matching(groupKey))
             .willReturn(aResponse().withStatus(200)
                 .withBody(
-                    buildPostListPage(year, month, hasManyPost)
+                    buildPostListPage(groupKey, hasManyPost)
                 ).withHeader("Content-Type", "text/html; charset=utf-8")
             )
         );
     }
 
-    private String buildPostListPage(String year, String month, boolean hasManyPost) {
+    private String buildPostListPage(String groupKey, boolean hasManyPost) {
         String postListPageHead = """
             <html>
             <table border="0" cellpadding="0" cellspacing="0" align="CENTER" width="100%">
@@ -72,10 +71,10 @@ public class FakeWebArchiveServer {
             """;
 
         String firstPostTemplate = """
-            <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">YEAR/MONTH/22</span> &nbsp; <a href="/web/20230614220926/http://agile.egloos.com/5946833">YEAR년 MONTH월 첫 AC2 과정 40기가 곧 열립니다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[3]</span><br/>
+            <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">GROUPKEY/22</span> &nbsp; <a href="/web/20230614220926/http://agile.egloos.com/5946833">GROUPKEY 첫 AC2 과정 40기가 곧 열립니다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[3]</span><br/>
             """;
-        String firstPost = firstPostTemplate.replaceAll("YEAR", year)
-            .replaceAll("MONTH", month);
+        String firstPost = firstPostTemplate.replaceAll("GROUPKEY", groupKey);
+
         String otherPosts = """
             <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/25</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5932600">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate"></span><br>
             <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/27</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5931859">혹독한 조언이 나를 살릴까?</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[13]</span><br>
@@ -87,57 +86,56 @@ public class FakeWebArchiveServer {
     }
 
 
-    public void respondItHasArchivedPageFor(String year, String month) {
+    public void respondItHasArchivedPageFor(String groupKey) {
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
-            .withQueryParam("url", matching(String.format("http[s]?://agile.egloos.com/archives/%s/%s", year, month)))
+            .withQueryParam("url", matching(String.format("http[s]?://agile.egloos.com/archives/%s", groupKey)))
             .withQueryParam("timestamp", matching("[0-9]{8}"))
             .willReturn(aResponse().withStatus(200).withBody(
                     String.format("""
                         {
-                          "url": "agile.egloos.com/archives/%s/%s",
+                          "url": "agile.egloos.com/archives/%s",
                           "archived_snapshots": {
                             "closest": {
                               "status": "200",
                               "available": true,
-                              "url": "http://localhost:8080/web/20230614220926/archives/%s/%s",
+                              "url": "http://localhost:8080/web/20230614220926/archives?groupKey=%s",
                               "timestamp": "20230614220926"
                             }
                           },
                           "timestamp": "20240101"
                         }
-                        """, year, month, year, month)
+                        """, groupKey, groupKey)
                 )
             )
         );
     }
 
     public void respondItHasArchivedPage() {
-        respondItHasArchivedPageFor("2021", "03");
+        respondItHasArchivedPageFor("2021/03");
     }
 
-    public void respondItHasNoArchivedPageFor(String year, String month) {
+    public void respondItHasNoArchivedPageFor(String groupKey) {
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
             .withQueryParam("url", matching(
-                String.format("http[s]?://agile.egloos.com/archives/%s/%s",
-                    year,
-                    month
+                String.format("http[s]?://agile.egloos.com/archives/%s",
+                    groupKey
                 )
             ))
             .withQueryParam("timestamp", matching("[0-9]{8}"))
             .willReturn(aResponse().withStatus(200).withBody(
                 String.format("""
                     {
-                      "url": "agile.egloos.com/archives/%s/%s",
+                      "url": "agile.egloos.com/archives/%s",
                       "archived_snapshots": {}
                     }
-                    """, year, month)
+                    """, groupKey)
                 )
             )
         );
     }
 
     public void respondItHasNoArchivedPage() {
-        respondItHasNoArchivedPageFor("1999", "07");
+        respondItHasNoArchivedPageFor("1999/07");
     }
 
     public void hasReceivedMultipleRequests(int requestCount) {
@@ -160,10 +158,9 @@ public class FakeWebArchiveServer {
 
     public void hasReceivedMultiplePostListPageRequests(int requestCount) {
         instance.verify(requestCount,
-            getRequestedFor(urlPathTemplate("/web/{timestamp}/archives/{year}/{month}"))
+            getRequestedFor(urlPathTemplate("/web/{timestamp}/archives"))
+                .withQueryParam("groupKey", matching("[12][0-9]{3}/[01][0-9]"))
                 .withPathParam("timestamp", matching("[0-9]{14}"))
-                .withPathParam("year", matching("[12][0-9]{3}"))
-                .withPathParam("month", matching("[01][0-9]"))
         );
     }
 }
