@@ -197,9 +197,6 @@ public class AcceptanceTest {
 
             // 요청할 모든 입력쌍을 만든다
             List.of("2021/03", "2020/05").forEach(yearMonth -> {
-                String[] pair = yearMonth.split("/");
-                String year = pair[0];
-                String month = pair[1];
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
                 fakeWebArchiveServer.respondItHasArchivedPageFor(yearMonth);
                 fakeWebArchiveServer.respondBlogPostListInGivenGroupKey(yearMonth, false);
@@ -231,9 +228,6 @@ public class AcceptanceTest {
 
             // 입력쌍의 갯수만큼 요청을 보낸다
             requestInput.forEach(yearMonth -> {
-                String[] pair = yearMonth.split("/");
-                String year = pair[0];
-                String month = pair[1];
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
                 fakeWebArchiveServer.respondItHasArchivedPageFor(yearMonth);
                 fakeWebArchiveServer.respondBlogPostListInGivenGroupKey(yearMonth, false);
@@ -264,9 +258,6 @@ public class AcceptanceTest {
                 .filter(ym -> "2021".equals(ym.split("/")[0]))
                 .toList();
             passRequests.forEach(yearMonth -> {
-                String[] pair = yearMonth.split("/");
-                String year = pair[0];
-                String month = pair[1];
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 정상 응답한다
                 fakeWebArchiveServer.respondItHasArchivedPageFor(yearMonth);
                 fakeWebArchiveServer.respondBlogPostListInGivenGroupKey(yearMonth, false);
