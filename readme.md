@@ -33,4 +33,4 @@ web archive에 아카이빙된 페이지를 쉽게 탐색할 수 있도록 인�
 - 정적 분석: [PMD 툴로 소스 코드 정적 분석한다](https://github.com/rogarithm/gen-idx-page/pull/80)
 
 ### ERD
-![img](./imgs/erd.png)
+![img](./imgs/erd_revised.png)
