@@ -7,11 +7,9 @@ import org.gsh.genidxpage.repository.IndexContentReader;
 import org.gsh.genidxpage.repository.PostListPageRecorder;
 import org.gsh.genidxpage.repository.PostRecorder;
 import org.gsh.genidxpage.scheduler.BulkRequestSender;
-import org.gsh.genidxpage.scheduler.CategoryBulkRequestSender;
 import org.gsh.genidxpage.scheduler.WebArchiveJob;
 import org.gsh.genidxpage.scheduler.WebArchiveScheduler;
 import org.gsh.genidxpage.scheduler.YearMonthBulkRequestSender;
-import org.gsh.genidxpage.service.AeternumArchivePageService;
 import org.gsh.genidxpage.service.AgileStoryArchivePageService;
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.AgileStoryIndexPageGenerator;
@@ -22,7 +20,6 @@ import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
 import org.gsh.genidxpage.vo.GroupKey;
 import org.gsh.genidxpage.web.ArchivePageController;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -38,7 +35,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-@Disabled
 @TestPropertySource(properties = "app.scheduling.enable=false")
 @Transactional
 @SpringBootTest
@@ -170,28 +166,21 @@ public class AcceptanceTest {
         }
     }
 
-    private BulkRequestSender yearMonthBulkRequestSender;
-    private BulkRequestSender categoryBulkRequestSender;
-    private ArchivePageService agileStoryService;
-    private ArchivePageService aeternumService;
-    private static final String IGNORE_YEAR_MONTH_INPUT_PATH = "static/year-month-list";
-    private static final String IGNORE_CATEGORY_INPUT_PATH = "static/category";
+    private BulkRequestSender bulkRequestSender;
+    private ArchivePageService service;
+    private static final String IGNORE_INPUT_PATH = "static/year-month-list";
 
     @Nested
     class ArchivePageSchedulingTest {
         @BeforeEach
         public void setUp() {
-            yearMonthBulkRequestSender = new YearMonthBulkRequestSender(IGNORE_YEAR_MONTH_INPUT_PATH);
-            categoryBulkRequestSender = new CategoryBulkRequestSender(IGNORE_CATEGORY_INPUT_PATH);
+            bulkRequestSender = new YearMonthBulkRequestSender(IGNORE_INPUT_PATH);
             WebArchiveApiCaller apiCaller = new WebArchiveApiCaller(
                 "http://localhost:8080",
                 "/wayback/available?url={url}&timestamp={timestamp}",
                 CustomRestTemplateBuilder.get()
             );
-            agileStoryService = new AgileStoryArchivePageService(
-                apiCaller, reporter, listPageRecorder, postRecorder, webPageParser
-            );
-            aeternumService = new AeternumArchivePageService(
+            service = new AgileStoryArchivePageService(
                 apiCaller, reporter, listPageRecorder, postRecorder, webPageParser
             );
         }
@@ -202,17 +191,12 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             final WebArchiveScheduler scheduler = new WebArchiveScheduler(
-                List.of(
-                    new WebArchiveJob(yearMonthBulkRequestSender, agileStoryService,
-                        new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader)),
-                    new WebArchiveJob(categoryBulkRequestSender, aeternumService,
-                        new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader))
-                )
+                List.of(new WebArchiveJob(bulkRequestSender, service,
+                    new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader)))
             );
 
             // 요청할 모든 입력쌍을 만든다
-            List.of("2021/03", "2020/05", "Domain-Driven Design", "Software Design").forEach(
-                yearMonth -> {
+            List.of("2021/03", "2020/05").forEach(yearMonth -> {
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 응답할 수 있도록 설정한다
                 fakeWebArchiveServer.respondItHasArchivedPageFor(yearMonth);
                 fakeWebArchiveServer.respondBlogPostListInGivenGroupKey(yearMonth, false);
@@ -225,9 +209,6 @@ public class AcceptanceTest {
             Assertions.assertThat(
                 Files.readString(Path.of("/tmp/genidxpage/test/index.html"), StandardCharsets.UTF_8)
             ).isNotNull();
-            Assertions.assertThat(
-                Files.readString(Path.of("/tmp/genidxpage/test/aeternum-index.html"), StandardCharsets.UTF_8)
-            ).isNotNull();
 
             fakeWebArchiveServer.stop();
         }
@@ -238,16 +219,12 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             final WebArchiveScheduler scheduler = new WebArchiveScheduler(
-                List.of(new WebArchiveJob(yearMonthBulkRequestSender, agileStoryService,
-                        new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader)),
-                    new WebArchiveJob(categoryBulkRequestSender, aeternumService,
-                        new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader))
-                )
+                List.of(new WebArchiveJob(bulkRequestSender, service,
+                    new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader)))
             );
 
             // 요청할 모든 입력쌍을 만든다
-            List<String> requestInput = List.of("2021/03", "2020/05", "Domain-Driven Design",
-                "Software Design");
+            List<String> requestInput = List.of("2021/03", "2020/05");
 
             // 입력쌍의 갯수만큼 요청을 보낸다
             requestInput.forEach(yearMonth -> {
@@ -269,20 +246,16 @@ public class AcceptanceTest {
             FakeWebArchiveServer fakeWebArchiveServer = new FakeWebArchiveServer();
 
             final WebArchiveScheduler scheduler = new WebArchiveScheduler(
-                List.of(new WebArchiveJob(yearMonthBulkRequestSender, agileStoryService,
-                        new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader)),
-                    new WebArchiveJob(categoryBulkRequestSender, aeternumService,
-                        new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader))
-                )
+                List.of(new WebArchiveJob(bulkRequestSender, service,
+                    new AgileStoryIndexPageGenerator("/tmp/genidxpage/test", reader)))
             );
 
             // 요청할 모든 입력쌍을 만든다
-            List<String> requestInput = List.of("2021/03", "2020/05", "Domain-Driven Design",
-                "Software Design");
+            List<String> requestInput = List.of("2021/03", "2020/05");
 
             // 정상 응답할 입력을 설정한다
             List<String> passRequests = requestInput.stream()
-                .filter(ym -> "2021".equals(ym.split("/")[0]) || "Software Design".equals(ym))
+                .filter(ym -> "2021".equals(ym.split("/")[0]))
                 .toList();
             passRequests.forEach(yearMonth -> {
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 정상 응답한다
@@ -291,7 +264,7 @@ public class AcceptanceTest {
             });
             // 비정상 응답할 입력을 설정한다
             List<String> failRequests = requestInput.stream()
-                .filter(ym -> !"2021".equals(ym.split("/")[0]) && !"Software Design".equals(ym))
+                .filter(ym -> !"2021".equals(ym.split("/")[0]))
                 .toList();
             failRequests.forEach(yearMonth -> {
                 // 주어진 연월 쌍을 요청받았을 때 FakeWebArchive 서버가 비정상 응답한다
