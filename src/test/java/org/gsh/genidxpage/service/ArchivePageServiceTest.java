@@ -16,6 +16,7 @@ import org.gsh.genidxpage.service.dto.CheckCategoryPostArchivedDto;
 import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
 import org.gsh.genidxpage.service.dto.UnreachableArchivedPageInfo;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +26,30 @@ import java.util.stream.IntStream;
 
 class ArchivePageServiceTest {
 
+    WebArchiveApiCaller caller;
+    ArchiveStatusReporter reporter;
+    PostListPageRecorder listPageRecorder;
+    PostRecorder postRecorder;
+    WebPageParser parser;
+
+    @BeforeEach
+    public void setUp() {
+        caller = mock(WebArchiveApiCaller.class);
+        reporter = mock(ArchiveStatusReporter.class);
+        listPageRecorder = mock(PostListPageRecorder.class);
+        postRecorder = mock(PostRecorder.class);
+        parser = mock(WebPageParser.class);
+    }
+
     @DisplayName("페이지 아키이빙 정보를 찾지 못했을 때 db에 기록한다")
     @Test
     public void write_to_db_when_page_archive_info_not_found() {
         ArchivedPageInfo noArchivedPageInfo = ArchivedPageInfoBuilder.builder()
             .withEmptyArchivedSnapshots()
             .build();
-        WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
         when(caller.findArchivedPageInfo(any(), any())).thenReturn(
             noArchivedPageInfo
         );
-        ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
 
         List<ArchivePageService> services = List.of(
             new AgileStoryArchivePageService(caller, reporter, null, null, null),
@@ -58,11 +72,9 @@ class ArchivePageServiceTest {
     @DisplayName("타임아웃 초과로 페이지 아카이빙 정보를 읽어오지 못했을 때 db에 기록한다")
     @Test
     public void write_to_db_when_page_archive_info_read_timeout() {
-        WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
         when(caller.findArchivedPageInfo(any(), any())).thenReturn(
             new UnreachableArchivedPageInfo()
         );
-        ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
 
         List<ArchivePageService> services = List.of(
             new AgileStoryArchivePageService(caller, reporter, null, null, null),
@@ -89,14 +101,11 @@ class ArchivePageServiceTest {
             .withAccessibleArchivedSnapshots()
             .build();
 
-        WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
         when(caller.findArchivedPageInfo(any(), any())).thenReturn(
             archivedPageInfo
         );
         when(caller.isArchived(any())).thenReturn(true);
-        ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
 
-        PostListPageRecorder listPageRecorder = mock(PostListPageRecorder.class);
         List<ArchivePageService> services = List.of(
             new AgileStoryArchivePageService(caller, reporter, listPageRecorder, null, null),
             new AeternumArchivePageService(caller, reporter, listPageRecorder, null, null)
@@ -118,13 +127,7 @@ class ArchivePageServiceTest {
     @DisplayName("페이지 아키이빙 정보를 찾았을 때, 접근 url을 db에 기록한다")
     @Test
     public void write_access_url_to_db_when_page_archive_info_found() {
-        WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
         respondsValidBlogPostPage(caller);
-
-        PostListPageRecorder listPageRecorder = mock(PostListPageRecorder.class);
-        ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
-        PostRecorder postRecorder = mock(PostRecorder.class);
-        WebPageParser parser = mock(WebPageParser.class);
 
         List<ArchivePageService> services = List.of(
             new AgileStoryArchivePageService(caller, reporter, listPageRecorder, postRecorder,
@@ -148,13 +151,7 @@ class ArchivePageServiceTest {
     @DisplayName("블로그 글 목록 페이지로부터 파싱한 블로그 링크 목록을 db에 기록한다")
     @Test
     public void write_post_link_parsed_from_list_page_to_db() {
-        PostRecorder postRecorder = mock(PostRecorder.class);
-        WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
         respondsValidBlogPostPage(caller);
-
-        ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
-        PostListPageRecorder listPageRecorder = mock(PostListPageRecorder.class);
-        WebPageParser parser = mock(WebPageParser.class);
 
         List<ArchivePageService> services = List.of(
             new AgileStoryArchivePageService(caller, reporter, listPageRecorder, postRecorder,
@@ -191,11 +188,6 @@ class ArchivePageServiceTest {
     @DisplayName("실패한 요청 정보를 db로부터 읽어온다")
     @Test
     public void read_all_failed_request_info_from_db() {
-        ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
-        WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
-        PostListPageRecorder listPageRecorder = mock(PostListPageRecorder.class);
-        PostRecorder postRecorder = mock(PostRecorder.class);
-
         List<ArchivePageService> services = List.of(
             new AgileStoryArchivePageService(caller, reporter, listPageRecorder, postRecorder,
                 null),
