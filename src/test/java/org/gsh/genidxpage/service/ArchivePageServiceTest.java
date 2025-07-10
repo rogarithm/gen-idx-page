@@ -32,7 +32,7 @@ class ArchivePageServiceTest {
         );
         ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
 
-        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null, null, null);
+        ArchivePageService service = new AgileStoryArchivePageService(caller, reporter, null, null, null);
 
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("1999/07");
         service.findArchivedPageInfo(dto);
@@ -49,7 +49,7 @@ class ArchivePageServiceTest {
         );
         ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
 
-        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
+        ArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
             null, null, null);
 
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2020/03");
@@ -72,7 +72,7 @@ class ArchivePageServiceTest {
         when(caller.isArchived(any())).thenReturn(true);
         ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
 
-        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
+        ArchivePageService service = new AgileStoryArchivePageService(caller, reporter,
             mock(PostListPageRecorder.class), null, null);
 
         CheckPostArchived dto = new CheckYearMonthPostArchivedDto("2021/03");
@@ -88,7 +88,7 @@ class ArchivePageServiceTest {
         respondsValidBlogPostPage(caller);
 
         PostListPageRecorder listPageRecorder = mock(PostListPageRecorder.class);
-        AgileStoryArchivePageService service = new AgileStoryArchivePageService(caller,
+        ArchivePageService service = new AgileStoryArchivePageService(caller,
             mock(ArchiveStatusReporter.class), listPageRecorder, mock(PostRecorder.class),
             mock(WebPageParser.class));
 
@@ -105,7 +105,7 @@ class ArchivePageServiceTest {
         WebArchiveApiCaller caller = mock(WebArchiveApiCaller.class);
         respondsValidBlogPostPage(caller);
 
-        AgileStoryArchivePageService service = new AgileStoryArchivePageService(
+        ArchivePageService service = new AgileStoryArchivePageService(
             caller,
             mock(ArchiveStatusReporter.class),
             mock(PostListPageRecorder.class),
@@ -136,7 +136,7 @@ class ArchivePageServiceTest {
     @Test
     public void read_all_failed_request_info_from_db() {
         ArchiveStatusReporter reporter = mock(ArchiveStatusReporter.class);
-        AgileStoryArchivePageService service = new AgileStoryArchivePageService(
+        ArchivePageService service = new AgileStoryArchivePageService(
             mock(WebArchiveApiCaller.class),
             reporter,
             mock(PostListPageRecorder.class),

@@ -65,7 +65,8 @@ public class AeternumArchivePageService implements ArchivePageService {
         return reporter.readAllFailedRequestInput();
     }
 
-    ArchivedPageInfo findArchivedPageInfo(final CheckPostArchived dto) {
+    @Override
+    public ArchivedPageInfo findArchivedPageInfo(final CheckPostArchived dto) {
         ArchivedPageInfo archivedPageInfo = webArchiveApiCaller.findArchivedPageInfo(dto.getUrl(),
             dto.getTimestamp());
 
