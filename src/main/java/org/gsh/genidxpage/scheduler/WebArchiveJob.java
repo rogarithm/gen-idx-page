@@ -2,6 +2,7 @@ package org.gsh.genidxpage.scheduler;
 
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.IndexPageGenerator;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,8 +17,11 @@ public class WebArchiveJob {
     private final ArchivePageService archivePageService;
     private final IndexPageGenerator indexPageGenerator;
 
-    public WebArchiveJob(BulkRequestSender bulkRequestSender, ArchivePageService archivePageService,
-        IndexPageGenerator indexPageGenerator) {
+    public WebArchiveJob(
+        @Qualifier("yearMonthBulkRequestSender") BulkRequestSender bulkRequestSender,
+        @Qualifier("agileStoryArchivePageService") ArchivePageService archivePageService,
+        @Qualifier("agileStoryIndexPageGenerator") IndexPageGenerator indexPageGenerator
+    ) {
         this.bulkRequestSender = bulkRequestSender;
         this.archivePageService = archivePageService;
         this.indexPageGenerator = indexPageGenerator;
