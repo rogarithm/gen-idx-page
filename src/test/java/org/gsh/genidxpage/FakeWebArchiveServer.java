@@ -9,6 +9,12 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class FakeWebArchiveServer {
 
     WireMockServer instance;
@@ -38,53 +44,22 @@ public class FakeWebArchiveServer {
     }
 
     private String buildPostListPage(String groupKey, boolean hasManyPost) {
-        String postListPageHead = """
-            <html>
-            <table border="0" cellpadding="0" cellspacing="0" align="CENTER" width="100%">
-              <tr><td valign="TOP" width="90%">
-                <div id="LEFT">
-                  <!-- egloos content start -->
-                  <div class="POST">
-                    <div class="POST_HEAD">
-                      <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tr><td width="80%"><div class="POST_TTL">2021년 03월 전체 글 목록</div></td>
-                          <td width="20%" align="RIGHT"></td></tr>
-                      </table>
-                    </div>
-                    <div class="POST_BODY">
-            """;
-        String postListPageTail = """
-                      <div style="margin-top:10px;"><a href="/web/20230614220926/http://agile.egloos.com/archives/2021/03/page/1" title="전체보기">"2021년03월" 의 글 내용 전체 보기</a></div>
-                    </div>
-                    <div class="POST_TAIL"></div>
-
-                  </div><!-- egloos content end -->
-                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr><td align="RIGHT" width="48%">&lt; 이전페이지</td><td width="4%"></td>
-                      <td align="LEFT" width="48%">다음페이지 &gt;</td></tr>
-                  </table>
-                  <br><br>
-                </div>
-              </td>
-            </table>
-            </html>
-            """;
-
-        String firstPostTemplate = """
-            <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">GROUPKEY/22</span> &nbsp; <a href="/web/20230614220926/http://agile.egloos.com/5946833">GROUPKEY 첫 AC2 과정 40기가 곧 열립니다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[3]</span><br/>
-            """;
-        String firstPost = firstPostTemplate.replaceAll("GROUPKEY", groupKey);
-
-        String otherPosts = """
-            <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/25</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5932600">AC2 온라인 과정 : 마인크래프트로 함께 자라기를 배운다</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate"></span><br>
-            <span style="font-size: 90%; color: #9b9b9b;" class="archivedate">2021/03/27</span> &nbsp; <a href="/web/20230614124528/http://agile.egloos.com/5931859">혹독한 조언이 나를 살릴까?</a> <span style="font-size: 8pt; color: #9b9b9b;" class="archivedate">[13]</span><br>
-            """;
+        String stringPath;
         if (hasManyPost) {
-            return postListPageHead + firstPost + otherPosts + postListPageTail;
+            stringPath = "src/test/resources/year-month-multiple-post-list-page.html";
+        } else {
+            stringPath = "src/test/resources/year-month-one-post-list-page.html";
         }
-        return postListPageHead + firstPost + postListPageTail;
-    }
 
+        try {
+            Path path = Paths.get(stringPath);
+            String fileContent = Files.readString(path, StandardCharsets.UTF_8);
+            return fileContent;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public void respondItHasArchivedPageFor(String groupKey) {
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
