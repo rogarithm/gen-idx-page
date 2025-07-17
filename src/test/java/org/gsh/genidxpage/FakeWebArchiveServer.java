@@ -62,13 +62,15 @@ public class FakeWebArchiveServer {
     }
 
     public void respondItHasArchivedPageFor(String groupKey) {
+        MatcherInfo mi = MatcherInfo.parse(groupKey);
+
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
-            .withQueryParam("url", matching(String.format("http[s]?://agile.egloos.com/archives/%s", groupKey)))
+            .withQueryParam("url", matching(String.format(mi.url() + "%s", groupKey)))
             .withQueryParam("timestamp", matching("[0-9]{8}"))
             .willReturn(aResponse().withStatus(200).withBody(
                     String.format("""
                         {
-                          "url": "agile.egloos.com/archives/%s",
+                          "url": "%s%s",
                           "archived_snapshots": {
                             "closest": {
                               "status": "200",
@@ -79,7 +81,7 @@ public class FakeWebArchiveServer {
                           },
                           "timestamp": "20240101"
                         }
-                        """, groupKey, groupKey)
+                        """, mi.urlNoScheme(), groupKey, groupKey)
                 )
             )
         );
@@ -90,20 +92,22 @@ public class FakeWebArchiveServer {
     }
 
     public void respondItHasNoArchivedPageFor(String groupKey) {
+        MatcherInfo mi = MatcherInfo.parse(groupKey);
+
         instance.stubFor(get(urlPathTemplate("/wayback/available"))
             .withQueryParam("url", matching(
-                String.format("http[s]?://agile.egloos.com/archives/%s",
+                String.format(mi.url() + "%s",
                     groupKey
                 )
             ))
             .withQueryParam("timestamp", matching("[0-9]{8}"))
             .willReturn(aResponse().withStatus(200).withBody(
-                String.format("""
-                    {
-                      "url": "agile.egloos.com/archives/%s",
-                      "archived_snapshots": {}
-                    }
-                    """, groupKey)
+                    String.format("""
+                        {
+                          "url": "%s%s",
+                          "archived_snapshots": {}
+                        }
+                        """, mi.urlNoScheme(), groupKey)
                 )
             )
         );
@@ -137,5 +141,32 @@ public class FakeWebArchiveServer {
                 .withQueryParam("groupKey", matching("[12][0-9]{3}/[01][0-9]"))
                 .withPathParam("timestamp", matching("[0-9]{14}"))
         );
+    }
+}
+
+class MatcherInfo {
+    private final String scheme;
+    private final String host;
+    private final String groupKey;
+
+    public MatcherInfo(final String scheme, final String host, final String groupKey) {
+        this.scheme = scheme;
+        this.host = host;
+        this.groupKey = groupKey;
+    }
+
+    static MatcherInfo parse(String groupKey) {
+        if (groupKey.matches("[12][0-9]{3}/[01][0-9]")) {
+            return new MatcherInfo("https", "agile.egloos.com/archives/", groupKey);
+        }
+        return new MatcherInfo("https", "aeternum.egloos.com/category/", groupKey);
+    }
+
+    String url() {
+        return scheme + "://" + host;
+    }
+
+    String urlNoScheme() {
+        return host;
     }
 }
