@@ -43,7 +43,7 @@ class BulkRequestSenderTest {
             });
 
         Integer requestTotalCnt = requestGroups.stream()
-            .map(requestGroup -> requestGroup.size())
+            .map(List::size)
             .reduce(0, (acc, reqGroupSize) -> acc + reqGroupSize);
         verify(sender, times(requestTotalCnt)).findBlogPageLink(any());
     }
