@@ -14,6 +14,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FakeWebArchiveServer {
 
@@ -117,49 +122,80 @@ public class FakeWebArchiveServer {
         respondItHasNoArchivedPageFor("1999/07");
     }
 
-    public void hasReceivedMultipleRequests(int requestCount) {
-        hasReceivedMultipleAccessUrlRequests(requestCount);
-        hasReceivedMultiplePostListPageRequests(requestCount);
+    public void hasReceivedMultipleRequests(List<String> requests) {
+        hasReceivedMultipleAccessUrlRequests(requests);
+        hasReceivedMultiplePostListPageRequests(requests);
     }
 
-    public void hasReceivedMultipleRequests(int accessUrlReqCnt, int listPageReqCnt) {
-        hasReceivedMultipleAccessUrlRequests(accessUrlReqCnt);
-        hasReceivedMultiplePostListPageRequests(listPageReqCnt);
+    public void hasReceivedMultipleRequests(List<String> failedRequests,
+        List<String> passedRequests) {
+        List<String> allRequests = Stream.concat(
+            passedRequests.stream(),
+            Stream.concat(failedRequests.stream(), failedRequests.stream())
+        ).collect(Collectors.toList());
+
+        // 접근 url을 가져오는 요청 중 비정상 응답받은 경우는 재시도한다
+        // passRequests + failRequests.size() * 2,
+        hasReceivedMultipleAccessUrlRequests(allRequests);
+        // 블로그 목록 페이지를 가져오는 요청 중 재시도한 요청은 또 다시 실패한다
+        // passRequests
+        hasReceivedMultiplePostListPageRequests(passedRequests);
     }
 
-    public void hasReceivedMultipleAccessUrlRequests(int requestCount) {
-        instance.verify(requestCount, getRequestedFor(urlPathTemplate("/wayback/available"))
-            .withQueryParam("url",
-                matching("http[s]?://agile.egloos.com/archives/[12][0-9]{3}/[01][0-9]"))
-            .withQueryParam("timestamp", matching("[0-9]{8}"))
-        );
+    public void hasReceivedMultipleAccessUrlRequests(List<String> requests) {
+        String regex = "[12][0-9]{3}/[01][0-9]";
+        Map<Boolean, List<String>> groupByGroupKey =
+            requests.stream()
+                .collect(Collectors.groupingBy(groupKey -> Pattern.matches(regex, groupKey)));
+
+        for (Map.Entry<Boolean, List<String>> entry : groupByGroupKey.entrySet()) {
+            MatcherInfo mi = MatcherInfo.parse(entry.getValue().get(0));
+
+            instance.verify(entry.getValue().size(),
+                getRequestedFor(urlPathTemplate("/wayback/available"))
+                    .withQueryParam("url",
+                        matching(String.format(mi.url() + mi.getPattern())))
+                    .withQueryParam("timestamp", matching("[0-9]{8}"))
+            );
+        }
     }
 
-    public void hasReceivedMultiplePostListPageRequests(int requestCount) {
-        instance.verify(requestCount,
-            getRequestedFor(urlPathTemplate("/web/{timestamp}/archives"))
-                .withQueryParam("groupKey", matching("[12][0-9]{3}/[01][0-9]"))
-                .withPathParam("timestamp", matching("[0-9]{14}"))
-        );
+    public void hasReceivedMultiplePostListPageRequests(List<String> requests) {
+        String regex = "[12][0-9]{3}/[01][0-9]";
+        Map<Boolean, List<String>> groupByGroupKey =
+            requests.stream()
+                .collect(Collectors.groupingBy(groupKey -> Pattern.matches(regex, groupKey)));
+
+        for (Map.Entry<Boolean, List<String>> entry : groupByGroupKey.entrySet()) {
+            MatcherInfo mi = MatcherInfo.parse(entry.getValue().get(0));
+
+            instance.verify(entry.getValue().size(),
+                getRequestedFor(urlPathTemplate("/web/{timestamp}/archives"))
+                    .withQueryParam("groupKey", matching(mi.getPattern()))
+                    .withPathParam("timestamp", matching("[0-9]{14}"))
+            );
+        }
     }
 }
 
 class MatcherInfo {
+
     private final String scheme;
     private final String host;
-    private final String groupKey;
+    private final String pattern;
 
-    public MatcherInfo(final String scheme, final String host, final String groupKey) {
+    public MatcherInfo(final String scheme, final String host, String pattern) {
         this.scheme = scheme;
         this.host = host;
-        this.groupKey = groupKey;
+        this.pattern = pattern;
     }
 
     static MatcherInfo parse(String groupKey) {
         if (groupKey.matches("[12][0-9]{3}/[01][0-9]")) {
-            return new MatcherInfo("https", "agile.egloos.com/archives/", groupKey);
+            return new MatcherInfo("https", "agile.egloos.com/archives/",
+                "[12][0-9]{3}/[01][0-9]");
         }
-        return new MatcherInfo("https", "aeternum.egloos.com/category/", groupKey);
+        return new MatcherInfo("https", "aeternum.egloos.com/category/", ".*");
     }
 
     String url() {
@@ -168,5 +204,9 @@ class MatcherInfo {
 
     String urlNoScheme() {
         return host;
+    }
+
+    public String getPattern() {
+        return pattern;
     }
 }
