@@ -175,37 +175,37 @@ public class FakeWebArchiveServer {
             );
         }
     }
-}
 
-class MatcherInfo {
+    private static class MatcherInfo {
 
-    private final String scheme;
-    private final String host;
-    private final String pattern;
+        private final String scheme;
+        private final String host;
+        private final String pattern;
 
-    public MatcherInfo(final String scheme, final String host, String pattern) {
-        this.scheme = scheme;
-        this.host = host;
-        this.pattern = pattern;
-    }
-
-    static MatcherInfo parse(String groupKey) {
-        if (groupKey.matches("[12][0-9]{3}/[01][0-9]")) {
-            return new MatcherInfo("https", "agile.egloos.com/archives/",
-                "[12][0-9]{3}/[01][0-9]");
+        public MatcherInfo(final String scheme, final String host, String pattern) {
+            this.scheme = scheme;
+            this.host = host;
+            this.pattern = pattern;
         }
-        return new MatcherInfo("https", "aeternum.egloos.com/category/", ".*");
-    }
 
-    String url() {
-        return scheme + "://" + host;
-    }
+        static MatcherInfo parse(String groupKey) {
+            if (groupKey.matches("[12][0-9]{3}/[01][0-9]")) {
+                return new MatcherInfo("https", "agile.egloos.com/archives/",
+                    "[12][0-9]{3}/[01][0-9]");
+            }
+            return new MatcherInfo("https", "aeternum.egloos.com/category/", ".*");
+        }
 
-    String urlNoScheme() {
-        return host;
-    }
+        String url() {
+            return scheme + "://" + host;
+        }
 
-    public String getPattern() {
-        return pattern;
+        String urlNoScheme() {
+            return host;
+        }
+
+        public String getPattern() {
+            return pattern;
+        }
     }
 }
