@@ -3,8 +3,8 @@ package org.gsh.genidxpage.scheduler;
 import org.gsh.genidxpage.common.exception.ErrorCode;
 import org.gsh.genidxpage.exception.FailToReadRequestInputFileException;
 import org.gsh.genidxpage.service.ArchivePageService;
+import org.gsh.genidxpage.service.dto.CheckCategoryPostArchivedDto;
 import org.gsh.genidxpage.service.dto.CheckPostArchived;
-import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -19,11 +19,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class YearMonthBulkRequestSender implements BulkRequestSender {
+public class CategoryBulkRequestSender implements BulkRequestSender {
 
     private final String inputPath;
 
-    public YearMonthBulkRequestSender(@Value("${bulk-request.input-path.year-month}") final String inputPath) {
+    public CategoryBulkRequestSender(@Value("${bulk-request.input-path.category}") final String inputPath) {
         this.inputPath = inputPath;
     }
 
@@ -44,10 +44,9 @@ public class YearMonthBulkRequestSender implements BulkRequestSender {
     }
 
     @Override
-    public void sendAll(List<String> yearMonths, ArchivePageService sender) {
-        yearMonths.forEach(yearMonth -> {
-            CheckPostArchived dto = new CheckYearMonthPostArchivedDto(yearMonth);
-
+    public void sendAll(List<String> categories, ArchivePageService sender) {
+        categories.forEach(category -> {
+            CheckPostArchived dto = new CheckCategoryPostArchivedDto(category);
             sender.findBlogPageLink(dto);
         });
     }

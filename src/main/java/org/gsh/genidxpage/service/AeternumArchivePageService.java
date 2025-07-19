@@ -16,15 +16,14 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class AgileStoryArchivePageService implements ArchivePageService {
-
+public class AeternumArchivePageService implements ArchivePageService {
     private final WebArchiveApiCaller webArchiveApiCaller;
     private final ArchiveStatusReporter reporter;
     private final PostListPageRecorder listPageRecorder;
     private final PostRecorder postRecorder;
     private final WebPageParser webPageParser;
 
-    public AgileStoryArchivePageService(WebArchiveApiCaller webArchiveApiCaller,
+    public AeternumArchivePageService(WebArchiveApiCaller webArchiveApiCaller,
         ArchiveStatusReporter reporter, PostListPageRecorder listPageRecorder, PostRecorder postRecorder,
         WebPageParser webPageParser) {
         this.webArchiveApiCaller = webArchiveApiCaller;
@@ -93,6 +92,7 @@ public class AgileStoryArchivePageService implements ArchivePageService {
     }
 
     String buildPageLinks(final String blogPost) {
-        return webPageParser.parse(blogPost);
+        //TODO 새로운 블로그에 맞는 로직을 만들어야 한다
+        return "";
     }
 }

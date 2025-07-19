@@ -24,7 +24,9 @@ web-archive:
   check-archived-uri: /wayback/available?url={url}
 
 bulk-request:
-  input-path: static/year-month-list
+  input-path:
+    year-month: static/year-month-list
+    category: static/category-list
 index-page:
   path: /app/static
 

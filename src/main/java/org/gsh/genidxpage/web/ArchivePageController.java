@@ -3,6 +3,7 @@ package org.gsh.genidxpage.web;
 import org.gsh.genidxpage.service.ArchivePageService;
 import org.gsh.genidxpage.service.dto.CheckPostArchived;
 import org.gsh.genidxpage.service.dto.CheckYearMonthPostArchivedDto;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,9 @@ public class ArchivePageController {
 
     private final ArchivePageService service;
 
-    public ArchivePageController(final ArchivePageService service) {
+    public ArchivePageController(
+        @Qualifier("agileStoryArchivePageService") final ArchivePageService service
+    ) {
         this.service = service;
     }
 
