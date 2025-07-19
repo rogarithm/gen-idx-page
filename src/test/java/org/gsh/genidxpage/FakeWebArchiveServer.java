@@ -42,13 +42,13 @@ public class FakeWebArchiveServer {
             .withQueryParam("groupKey", matching(groupKey))
             .willReturn(aResponse().withStatus(200)
                 .withBody(
-                    buildPostListPage(groupKey, hasManyPost)
+                    buildPostListPage(hasManyPost) // TODO groupKey에 따라 다른 페이지를 반환하도록 변경해야 한다
                 ).withHeader("Content-Type", "text/html; charset=utf-8")
             )
         );
     }
 
-    private String buildPostListPage(String groupKey, boolean hasManyPost) {
+    private String buildPostListPage(boolean hasManyPost) {
         String stringPath;
         if (hasManyPost) {
             stringPath = "src/test/resources/year-month-multiple-post-list-page.html";
@@ -58,8 +58,7 @@ public class FakeWebArchiveServer {
 
         try {
             Path path = Paths.get(stringPath);
-            String fileContent = Files.readString(path, StandardCharsets.UTF_8);
-            return fileContent;
+            return Files.readString(path, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
